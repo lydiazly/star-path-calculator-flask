@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Equinoxes and Solstices ICRS Coordinates Calculator</title>
+    <title>Equinox and Solstice ICRS Coordinates Calculator</title>
 
     <script>
         function clearForm() {
@@ -13,8 +13,8 @@
 
         async function handleFormSubmit(event) {
             event.preventDefault(); // Prevent the form from submitting the traditional way
-            const year = document.getElementById('year').value;
-            const apiUrl = `/get_coords?year=${year}`;
+            const year = parseInt(document.getElementById('year').value || new Date().getFullYear());
+            const apiUrl = `/coords?year=${year}`;
 
             try {
                 const response = await fetch(apiUrl);
@@ -26,10 +26,10 @@
                 } else {
                     const results = data.results;
                     const resultsHtml = `
-                        <h2>Results for the year ${year}</h2>
-                        <table border="1">
+                        <h2>ICRS Coordinates (J2000) of Equinoxes and Solstices in the Year ${year}</h2>
+                        <table border="1" style="margin-left: auto; margin-right: auto;">
                             <tr>
-                                <th>Event</th>
+                                <th></th>
                                 <th>Right Ascension (RA)</th>
                                 <th>Declination (Dec)</th>
                             </tr>
@@ -66,11 +66,13 @@
     </script>
 </head>
 <body>
-    <main>
-        <h1>Equinoxes & Solstices ICRS Coordinates Calculator</h1>
+    <main style="text-align: center">
+        <h1>Equinoxes & Solstices Coordinates Calculator</h1>
+        <h2>International Celestial Reference System (ICRS)</h2>
+        <hr>
         <form id="queryForm" onsubmit="handleFormSubmit(event)">
-            <label for="year">Enter Year:</label>
-            <input type="number" id="year" name="year" required>
+            <label for="year">Enter a year between -3000 and 3000:</label>
+            <input type="number" id="year" name="year" min="-3000" max="3000" placeholder="yyyy">
             <button type="submit">Calculate</button>
             <button type="button" onclick="clearForm()">Clear</button>
         </form>
