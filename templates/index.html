@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Equinoxes and Solstices ICRS Coordinates Calculator</title>
+
+    <script>
+        function clearForm() {
+            document.getElementById('year').value = '';
+            document.getElementById('results').innerHTML = '';
+            document.getElementById('error').innerHTML = '';
+        }
+
+        async function handleFormSubmit(event) {
+            event.preventDefault(); // Prevent the form from submitting the traditional way
+            const year = document.getElementById('year').value;
+            const apiUrl = `/get_coords?year=${year}`;
+
+            try {
+                const response = await fetch(apiUrl);
+                const data = await response.json();
+
+                if (data.error) {
+                    document.getElementById('error').innerHTML = `<p>${data.error}</p>`;
+                    document.getElementById('results').innerHTML = '';
+                } else {
+                    const results = data.results;
+                    const resultsHtml = `
+                        <h2>Results for the year ${year}</h2>
+                        <table border="1">
+                            <tr>
+                                <th>Event</th>
+                                <th>Right Ascension (RA)</th>
+                                <th>Declination (Dec)</th>
+                            </tr>
+                            <tr>
+                                <td>Vernal Equinox</td>
+                                <td>${results.vernal_ra}</td>
+                                <td>${results.vernal_dec}</td>
+                            </tr>
+                            <tr>
+                                <td>Autumnal Equinox</td>
+                                <td>${results.autumnal_ra}</td>
+                                <td>${results.autumnal_dec}</td>
+                            </tr>
+                            <tr>
+                                <td>Summer Solstice</td>
+                                <td>${results.summer_ra}</td>
+                                <td>${results.summer_dec}</td>
+                            </tr>
+                            <tr>
+                                <td>Winter Solstice</td>
+                                <td>${results.winter_ra}</td>
+                                <td>${results.winter_dec}</td>
+                            </tr>
+                        </table>
+                    `;
+                    document.getElementById('results').innerHTML = resultsHtml;
+                    document.getElementById('error').innerHTML = '';
+                }
+            } catch (error) {
+                document.getElementById('error').innerHTML = `<p>There was an error processing your request.</p>`;
+                document.getElementById('results').innerHTML = '';
+            }
+        }
+    </script>
+</head>
+<body>
+    <main>
+        <h1>Equinoxes & Solstices ICRS Coordinates Calculator</h1>
+        <form id="queryForm" onsubmit="handleFormSubmit(event)">
+            <label for="year">Enter Year:</label>
+            <input type="number" id="year" name="year" required>
+            <button type="submit">Calculate</button>
+            <button type="button" onclick="clearForm()">Clear</button>
+        </form>
+    
+        <div id="error" style="color:red;">
+            <!-- Error messages will be injected here by JavaScript -->
+        </div>
+        
+        <div id="results">
+            <!-- Results will be injected here by JavaScript -->
+        </div>
+    </main>
+</body>
+</html>
