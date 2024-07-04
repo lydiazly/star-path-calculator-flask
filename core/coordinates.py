@@ -3,12 +3,18 @@ from typing import Tuple
 from skyfield.api import load, Star, Angle, Timescale
 from skyfield.framelib import ecliptic_frame
 from scipy.optimize import root
+import os
 
+DATA_DIR = 'data'
+DATA_FILE = 'de406.bsp'
 
 # Load the ephemeris data (global)
-DATA_FILE = 'de406.bsp'
+if not os.path.exists(DATA_DIR):
+    os.makedirs(DATA_DIR)
+os.chdir(DATA_DIR)
 eph = load(DATA_FILE)
 earth = eph['earth']
+os.chdir('..')
 
 
 # The basic idea of determining the ICRS coordinates of equinoxes of date is to
