@@ -26,7 +26,7 @@ def main():
         print (f'  ra = {results["winter_ra"]}, dec = {results["winter_dec"]}')
     
     except Exception as e:
-        print(f'Error: {e}')
+        print(f'Error: {str(e)}')
 
 if __name__ == "__main__":
     main()

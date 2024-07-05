@@ -20,7 +20,7 @@ try:
     eph = load(DATA_FILE)
     earth = eph['earth']
 except Exception as e:
-    raise Exception(f"Failed to load ephemeris file: {e}")
+    raise Exception(f"Failed to load ephemeris file: {str(e)}")
 
 os.chdir(original_dir)
 
