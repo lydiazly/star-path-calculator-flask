@@ -18,7 +18,7 @@ def coords():
     try:
         results = get_coords(year)
     except Exception as e:
-        return jsonify({'error': f'Error: {e}'}), 500
+        return jsonify({'error': e}), 500
 
     return jsonify({'year': year, 'results': results}), 200
 

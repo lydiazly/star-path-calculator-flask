@@ -5,16 +5,24 @@ from skyfield.framelib import ecliptic_frame
 from scipy.optimize import root
 import os
 
-DATA_DIR = 'data'
+# Set the path of the ephemeris data (global)
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+DATA_DIR = os.path.join(CURRENT_DIR, '../data')
 DATA_FILE = 'de406.bsp'
 
 # Load the ephemeris data (global)
 if not os.path.exists(DATA_DIR):
     os.makedirs(DATA_DIR)
+original_dir = os.getcwd()
 os.chdir(DATA_DIR)
-eph = load(DATA_FILE)
-earth = eph['earth']
-os.chdir('..')
+
+try:
+    eph = load(DATA_FILE)
+    earth = eph['earth']
+except Exception as e:
+    raise Exception(f"Failed to load ephemeris file: {e}")
+
+os.chdir(original_dir)
 
 
 # The basic idea of determining the ICRS coordinates of equinoxes of date is to
