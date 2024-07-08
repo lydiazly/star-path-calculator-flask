@@ -1,28 +1,35 @@
 # core/coordinates.py
 from typing import Tuple
-from skyfield.api import load, Star, Angle, Timescale
+from skyfield.api import load, load_file, Star, Angle, Timescale
 from skyfield.framelib import ecliptic_frame
 from scipy.optimize import root
 import os
 
-# Set the path of the ephemeris data (global)
-CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-DATA_DIR = os.path.join(CURRENT_DIR, '../data')
 DATA_FILE = 'de406.bsp'
 
-# Load the ephemeris data (global)
-if not os.path.exists(DATA_DIR):
-    os.makedirs(DATA_DIR)
-original_dir = os.getcwd()
-os.chdir(DATA_DIR)
 
-try:
-    eph = load(DATA_FILE)
-    earth = eph['earth']
-except Exception as e:
-    raise Exception(f"Failed to load ephemeris file: {str(e)}")
+# Load the ephemeris data
+def load_data():
+    global eph, earth
+    
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    data_dir = os.path.join(current_dir, '../data')
+    data_full_path = os.path.join(data_dir, DATA_FILE)
+    
+    if not os.path.exists(data_dir):
+        os.makedirs(data_dir)
 
-os.chdir(original_dir)
+    try:
+        if not os.path.isfile(data_full_path):
+            original_dir = os.getcwd()
+            os.chdir(data_dir)
+            eph = load(DATA_FILE)
+            os.chdir(original_dir)
+        else:
+            eph = load_file(data_full_path)
+        earth = eph['earth']
+    except Exception as e:
+        raise Exception(f"Failed to load ephemeris data: {str(e)}")
 
 
 # The basic idea of determining the ICRS coordinates of equinoxes of date is to
