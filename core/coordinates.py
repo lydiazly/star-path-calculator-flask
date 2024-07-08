@@ -15,9 +15,7 @@ def load_data():
     current_dir = os.path.dirname(os.path.abspath(__file__))
     data_dir = os.path.join(current_dir, '../data')
     data_full_path = os.path.join(data_dir, DATA_FILE)
-    
-    if not os.path.exists(data_dir):
-        os.makedirs(data_dir)
+    os.makedirs(data_dir, exist_ok=True)
 
     try:
         if not os.path.isfile(data_full_path):
