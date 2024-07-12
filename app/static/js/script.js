@@ -1,9 +1,9 @@
 // app/static/js/script.js
 "use strict";
 
-const EPH_DATE_MIN = [-3000, 1, 29];  // January 29, 3001 BCE
-const EPH_DATE_MAX = [3000, 5, 6];  // May 6, 3000 CE
-const DATE_IDS = ['year', 'month', 'day', 'hour', 'minute'];
+const EPH_DATE_MIN = [-3000, 1, 29];  // 29 January 3001 BCE
+const EPH_DATE_MAX = [3000, 5, 6];  // 6 May 3000 CE
+const DATE_IDS = ['year', 'month', 'day', 'hour'];
 const MONTHS = [
     { abbr: '', name: '' },
     { abbr: 'Jan', name: 'January' },
@@ -142,7 +142,7 @@ async function handleFormSubmit(event) {
     let   month  = parseInt(document.getElementById('month').value)  || 1;
     let   day    = parseInt(document.getElementById('day').value)    || 1;
     const hour   = parseInt(document.getElementById('hour').value)   || 12;
-    const minute = parseInt(document.getElementById('minute').value) || 0;
+    const minute = 0;
     const second = 0;
     
     if (!year && year !== 0) {
@@ -172,7 +172,7 @@ async function handleFormSubmit(event) {
     document.getElementById('month').value  = `${month}`;
     document.getElementById('day').value    = `${day}`;
     document.getElementById('hour').value   = `${hour}`;
-    document.getElementById('minute').value = `${minute}`;
+    // document.getElementById('minute').value = `${minute}`;
     // document.getElementById('second').value = `${second}`;
 
     const apiUrl = `/coords?year=${year}&month=${month}&day=${day}&hour=${hour}&minute=${minute}&second=${second}`;
@@ -193,7 +193,7 @@ async function handleFormSubmit(event) {
             const resultsHtml = `
                 <h3>ICRS Coordinates (J2000) of Equinoxes and Solstices
                     on <span style="color: blue;">${datetimeStr[0]}</span>,
-                    at <span style="color: blue;">${datetimeStr[1]}</span>
+                    at <span style="color: blue;">${datetimeStr[1]}</span>:
                 </h3>
                 <table border="1" style="margin-left: auto; margin-right: auto;">
                     <tr>
@@ -242,7 +242,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById(id).addEventListener('change', adjustDate);
     });
 
-    // DATE_IDS.slice(0, 5).forEach((id, index) => {
+    // DATE_IDS.slice(0, 4).forEach((id, index) => {
     //     document.getElementById(id).addEventListener('change', function() {
     //         disableNextInput(id, index + 1);
     //         if (['year', 'month'].includes(id)) {adjustDate();}

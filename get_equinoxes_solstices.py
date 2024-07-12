@@ -13,8 +13,8 @@ from core import get_coords
 
 
 # Ephemeris date range
-EPH_DATE_MIN = [-3000, 1, 29]  # January 29, 3001 BCE
-EPH_DATE_MAX = [3000, 5, 6]  # May 6, 3000 CE
+EPH_DATE_MIN = [-3000, 1, 29]  # 29 January 3001 BCE
+EPH_DATE_MAX = [3000, 5, 6]  # 6 May 3000 CE
 
 
 def format_datetime(year: int, month: int, day: int,
@@ -30,16 +30,16 @@ EPH_DATE_MIN_STR, _ = format_datetime(*EPH_DATE_MIN)
 EPH_DATE_MAX_STR, _ = format_datetime(*EPH_DATE_MAX)
 
 prog = f"python {os.path.basename(__file__)}"
-description = f"Specify a date between {EPH_DATE_MIN_STR} and {EPH_DATE_MAX_STR}) to get the coordinates. The default time is 12:00:00."
-examples = f"""date range:
-  {EPH_DATE_MIN_STR} -- {EPH_DATE_MAX_STR}
+description = "Specify a date and time to get the equinox and solstice coordinates in RA and DEC. The default time is 12:00:00."
+epilog = f"""date range:
+  {EPH_DATE_MIN_STR} \u2013 {EPH_DATE_MAX_STR}
 examples:
   # The current coordinates:
   {prog}\n
   # The coordinates on 1 Jan 3001 BCE, at 12:00:00:
   {prog} -3000\n
-  # The coordinates on 1 Feb 3001 BCE, at 21:00:00:
-  {prog} -3000 2 1 -t 21:00:00
+  # The coordinates on 5 April 3000 CE, at 18:00:00:
+  {prog} 3000 Apr 5 -t 18
 """
 
 
@@ -72,13 +72,13 @@ def check_datetime_ranges(year: int, month: int, day: int,
 
 
 def main():
-    parser = argparse.ArgumentParser(prog=prog, description=description, epilog=examples, formatter_class=argparse.RawTextHelpFormatter)
+    parser = argparse.ArgumentParser(prog=prog, description=description, epilog=epilog, formatter_class=argparse.RawTextHelpFormatter)
     parser.add_argument("year", type=int, nargs="?",
                         help="int, 0 is 1 BCE (default: this year)")
     parser.add_argument("month", type=str, nargs="?",
-        help="e.g., January|Jan|1 (default: this month or January if year is provided)",)
+        help="e.g., January|Jan|1 (default: this month, or January if the year is provided)",)
     parser.add_argument("day", type=int, nargs="?",
-        help="int, (default: today or 1 if year is provided)",)
+        help="int, (default: today, or 1 if the year is provided)",)
     parser.add_argument("-t", dest="time", metavar="time", type=str, nargs="?",
         help="hh|hh:mm|hh:mm:ss, 24-hour format (default: 12:00:00)")
     args = parser.parse_args()

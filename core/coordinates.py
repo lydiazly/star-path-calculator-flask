@@ -81,7 +81,7 @@ def get_solstices(ts: Timescale) -> Tuple[Angle]:
 def get_coords(year: int, month: int = 1, day: int = 1,
                hour: int = 12, minute: int = 0, second: int = 0, *args) -> dict:
     ts = load.timescale()
-    t = ts.ut1(year, month, day, hour, minute, second)
+    t = ts.ut1(year, month, day, hour, minute, float(second))
     # print([year, month, day, hour, minute, second])
 
     vernal_ra_j2000, vernal_dec_j2000, autumnal_ra_j2000, autumnal_dec_j2000 = get_equinoxes(t)
