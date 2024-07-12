@@ -3,67 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Equinox and Solstice ICRS Coordinates Calculator</title>
-
-    <script>
-        function clearForm() {
-            document.getElementById('year').value = '';
-            document.getElementById('results').innerHTML = '';
-            document.getElementById('error').innerHTML = '';
-        }
-
-        async function handleFormSubmit(event) {
-            event.preventDefault(); // Prevent the form from submitting the traditional way
-            const year = parseInt(document.getElementById('year').value || new Date().getFullYear());
-            const apiUrl = `/coords?year=${year}`;
-
-            try {
-                const response = await fetch(apiUrl);
-                const data = await response.json();
-
-                if (data.error) {
-                    document.getElementById('error').innerHTML = `<p>${data.error}</p>`;
-                    document.getElementById('results').innerHTML = '';
-                } else {
-                    const results = data.results;
-                    const resultsHtml = `
-                        <h2>ICRS Coordinates (J2000) of Equinoxes and Solstices in the Year ${year}</h2>
-                        <table border="1" style="margin-left: auto; margin-right: auto;">
-                            <tr>
-                                <th></th>
-                                <th>Right Ascension (RA)</th>
-                                <th>Declination (Dec)</th>
-                            </tr>
-                            <tr>
-                                <td>Vernal Equinox</td>
-                                <td>${results.vernal_ra}</td>
-                                <td>${results.vernal_dec}</td>
-                            </tr>
-                            <tr>
-                                <td>Autumnal Equinox</td>
-                                <td>${results.autumnal_ra}</td>
-                                <td>${results.autumnal_dec}</td>
-                            </tr>
-                            <tr>
-                                <td>Summer Solstice</td>
-                                <td>${results.summer_ra}</td>
-                                <td>${results.summer_dec}</td>
-                            </tr>
-                            <tr>
-                                <td>Winter Solstice</td>
-                                <td>${results.winter_ra}</td>
-                                <td>${results.winter_dec}</td>
-                            </tr>
-                        </table>
-                    `;
-                    document.getElementById('results').innerHTML = resultsHtml;
-                    document.getElementById('error').innerHTML = '';
-                }
-            } catch (error) {
-                document.getElementById('error').innerHTML = `<p>There was an error processing your request.</p>`;
-                document.getElementById('results').innerHTML = '';
-            }
-        }
-    </script>
+    <!-- Use url_for to generate the correct URL for the static JavaScript file -->
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </head>
 <body>
     <main style="text-align: center">
@@ -71,16 +12,34 @@
         <h2>International Celestial Reference System (ICRS)</h2>
         <hr>
         <form id="queryForm" onsubmit="handleFormSubmit(event)">
-            <label for="year">Enter a year between -3000 and 3000:</label>
-            <input type="number" id="year" name="year" min="-3000" max="3000" placeholder="yyyy">
+            <label for="year">Year:</label>
+            <input type="number" id="year" name="year" min="-5000" max="5000">
+
+            <label for="month">Month:</label>
+            <select id="month" name="month">
+                <option value="" hidden disabled selected></option>
+            </select>
+
+            <label for="day">Day:</label>
+            <input type="number" id="day" name="day" min="1" max="31">
+
+            <label for="hour">Hour:</label>
+            <input type="number" id="hour" name="hour" min="0" max="23">
+
+            <label for="minute">Minute:</label>
+            <input type="number" id="minute" name="minute" min="0" max="59">
+
+            <!-- <label for="second">Second:</label>
+            <input type="number" id="second" name="second" min="0" max="59"> -->
+
             <button type="submit">Calculate</button>
             <button type="button" onclick="clearForm()">Clear</button>
         </form>
-    
+
         <div id="error" style="color:red;">
             <!-- Error messages will be injected here by JavaScript -->
         </div>
-        
+
         <div id="results">
             <!-- Results will be injected here by JavaScript -->
         </div>

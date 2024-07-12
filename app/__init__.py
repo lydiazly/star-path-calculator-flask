@@ -1,6 +1,11 @@
 # app/__init__.py
 from flask import Flask
 
-app = Flask(__name__, template_folder='templates')
+def create_app():
+    app = Flask(__name__, template_folder='templates', static_folder='static')
 
-from app import views
+    with app.app_context():
+        from . import views
+        views.init_limiter(app)  # Initialize the limiter with the app context
+    
+    return app
