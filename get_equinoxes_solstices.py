@@ -30,9 +30,9 @@ EPH_DATE_MIN_STR, _ = format_datetime(*EPH_DATE_MIN)
 EPH_DATE_MAX_STR, _ = format_datetime(*EPH_DATE_MAX)
 
 prog = f"python {os.path.basename(__file__)}"
-description = "Specify a date and time to get the equinox and solstice coordinates in RA and DEC. The default time is 12:00:00."
+description = "Specify a date and time in UT1 to get the equinox and solstice coordinates in RA and DEC. The default time is 12:00:00."
 epilog = f"""date range:
-  {EPH_DATE_MIN_STR} \u2013 {EPH_DATE_MAX_STR}
+  {EPH_DATE_MIN_STR} \u2013 {EPH_DATE_MAX_STR} (UT1)
 examples:
   # The current coordinates:
   {prog}\n
