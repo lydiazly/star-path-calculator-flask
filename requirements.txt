@@ -1,3 +1,2 @@
-Flask
-scipy
-skyfield
+scipy==1.14.0
+skyfield==1.49

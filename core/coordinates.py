@@ -1,20 +1,34 @@
+# -*- coding: utf-8 -*-
 # core/coordinates.py
 from typing import Tuple
-from skyfield.api import load, Star, Angle, Timescale
+from skyfield.api import load, load_file, Star, Angle, Timescale
 from skyfield.framelib import ecliptic_frame
 from scipy.optimize import root
 import os
 
-DATA_DIR = 'data'
 DATA_FILE = 'de406.bsp'
 
-# Load the ephemeris data (global)
-if not os.path.exists(DATA_DIR):
-    os.makedirs(DATA_DIR)
-os.chdir(DATA_DIR)
-eph = load(DATA_FILE)
-earth = eph['earth']
-os.chdir('..')
+
+# Load the ephemeris data
+def load_data():
+    global eph, earth
+    
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    data_dir = os.path.join(current_dir, '../data')
+    data_full_path = os.path.join(data_dir, DATA_FILE)
+    os.makedirs(data_dir, exist_ok=True)
+
+    try:
+        if not os.path.isfile(data_full_path):
+            original_dir = os.getcwd()
+            os.chdir(data_dir)
+            eph = load(DATA_FILE)
+            os.chdir(original_dir)
+        else:
+            eph = load_file(data_full_path)
+        earth = eph['earth']
+    except Exception as e:
+        raise Exception(f"Failed to load ephemeris data: {str(e)}")
 
 
 # The basic idea of determining the ICRS coordinates of equinoxes of date is to
@@ -64,9 +78,11 @@ def get_solstices(ts: Timescale) -> Tuple[Angle]:
     return (summer_ra_j2000, summer_dec_j2000, winter_ra_j2000, winter_dec_j2000)
 
 
-def get_coords(year: int) -> dict:
+def get_coords(year: int, month: int = 1, day: int = 1,
+               hour: int = 12, minute: int = 0, second: int = 0, *args) -> dict:
     ts = load.timescale()
-    t = ts.ut1(year, 1, 1, 12, 0, 0)
+    t = ts.ut1(year, month, day, hour, minute, second)
+    # print([year, month, day, hour, minute, second])
 
     vernal_ra_j2000, vernal_dec_j2000, autumnal_ra_j2000, autumnal_dec_j2000 = get_equinoxes(t)
     summer_ra_j2000, summer_dec_j2000, winter_ra_j2000, winter_dec_j2000 = get_solstices(t)
