@@ -204,22 +204,22 @@ async function handleFormSubmit(event) {
                     <tr>
                         <td>Vernal Equinox</td>
                         <td>${results.vernal_ra}</td>
-                        <td>${results.vernal_dec}</td>
+                        <td>${results.vernal_dec.replace(/deg/, '&deg;')}</td>
                     </tr>
                     <tr>
                         <td>Autumnal Equinox</td>
                         <td>${results.autumnal_ra}</td>
-                        <td>${results.autumnal_dec}</td>
+                        <td>${results.autumnal_dec.replace(/deg/, '&deg;')}</td>
                     </tr>
                     <tr>
                         <td>Summer Solstice</td>
                         <td>${results.summer_ra}</td>
-                        <td>${results.summer_dec}</td>
+                        <td>${results.summer_dec.replace(/deg/, '&deg;')}</td>
                     </tr>
                     <tr>
                         <td>Winter Solstice</td>
                         <td>${results.winter_ra}</td>
-                        <td>${results.winter_dec}</td>
+                        <td>${results.winter_dec.replace(/deg/, '&deg;')}</td>
                     </tr>
                 </table>
             `;
