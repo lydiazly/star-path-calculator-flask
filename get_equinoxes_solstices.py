@@ -36,9 +36,9 @@ examples = f"""date range:
 examples:
   # The current coordinates:
   {prog}\n
-  # The coordinates on 1 Jan 1 3001 BCE, at 12:00:00:
+  # The coordinates on 1 Jan 3001 BCE, at 12:00:00:
   {prog} -3000\n
-  # The coordinates on 1 Feb 1 3001 BCE, at 21:00:00:
+  # The coordinates on 1 Feb 3001 BCE, at 21:00:00:
   {prog} -3000 2 1 -t 21:00:00
 """
 
