@@ -19,6 +19,8 @@ python3 run.py
 python3 -m pip install scipy skyfield
 ```
 
+Example:
+
 ```bash
 python3 get_equinoxes_solstices.py 2000
 ```
@@ -37,11 +39,7 @@ Winter solstice:
   ra = 18h 00m 01.01s, dec = -23deg 26' 21.4"
 ```
 
-```bash
-python3 get_equinoxes_solstices.py -h
-```
-
-Output:
+Usage:
 
 ```text
 usage: python get_equinoxes_solstices.py [-h] [-t [time]] [year] [month] [day]
