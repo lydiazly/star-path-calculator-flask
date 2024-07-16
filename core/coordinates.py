@@ -1,44 +1,37 @@
 # -*- coding: utf-8 -*-
 # core/coordinates.py
+"""
+Functions to calculate the coordinates of equinoxes and solstices.
+
+Use global variables eph and earth by referencing, e.g.:
+```
+import core.data_loader as dl
+some_value = dl.eph.some_method()
+```
+"""
+
 from typing import Tuple
-from skyfield.api import load, load_file, Star, Angle, Timescale
+from skyfield.api import load, Star, Angle, Timescale
 from skyfield.framelib import ecliptic_frame
 from scipy.optimize import root
-import os
+import core.data_loader as dl
 
-DATA_FILE = 'de406.bsp'
-
-
-# Load the ephemeris data
-def load_data():
-    global eph, earth
-    
-    current_dir = os.path.dirname(os.path.abspath(__file__))
-    data_dir = os.path.join(current_dir, '../data')
-    data_full_path = os.path.join(data_dir, DATA_FILE)
-    os.makedirs(data_dir, exist_ok=True)
-
-    try:
-        if not os.path.isfile(data_full_path):
-            original_dir = os.getcwd()
-            os.chdir(data_dir)
-            eph = load(DATA_FILE)
-            os.chdir(original_dir)
-        else:
-            eph = load_file(data_full_path)
-        earth = eph['earth']
-    except Exception as e:
-        raise Exception(f"Failed to load ephemeris data: {str(e)}")
+__all__ = ["get_coords",]
 
 
-# The basic idea of determining the ICRS coordinates of equinoxes of date is to
-# find the points which have the of-date ecliptic coordinates of (0,0), (180,0).
-# For solstices, it is to
-# find the points which have the of-date ecliptic coordinates of (90,0), (270,0).
+if dl.eph is None:
+    dl.load_data()
+    # print("Warning: Ephemeris data was not loaded. `core.data_loader.load_data()` is called.")
+
+
+# The basic idea of determining the ICRS coordinates of equinoxes of a date is to
+# find the points with the ecliptic coordinates of (0,0) and (180,0).
+# For solstices, the idea is to find the points with the ecliptic coordinates
+# of (90,0) and (270,0).
 def get_ecliptic_coord(positions_j2000, ts: Timescale) -> Tuple[Angle]:
     ra_j2000, dec_j2000 = positions_j2000
     star = Star(ra_hours=ra_j2000/15, dec_degrees=dec_j2000)
-    position = earth.at(ts).observe(star)
+    position = dl.earth.at(ts).observe(star)
     lat, lon, _ = position.frame_latlon(ecliptic_frame)
     return (lat.degrees, lon._degrees)
 

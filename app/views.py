@@ -2,7 +2,7 @@
 from flask import request, jsonify, render_template, current_app as app
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
-from core import get_coords
+from core.coordinates import get_coords
 
 # Initialize the limiter
 limiter = Limiter(
