@@ -1,6 +1,7 @@
 *.bsp
 tmp
 *.bk
+st_*.svg
 
 # Ignore system-specific files
 .DS_Store

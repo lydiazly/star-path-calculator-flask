@@ -1,62 +1,48 @@
-from skyfield.api import N, Star, W, wgs84, load, Timescale
-from skyfield import almanac
-import pytz
-import datetime
-from timezonefinder import TimezoneFinder
+# -*- coding: utf-8 -*-
+# core/star_trail.py
+"""
+Functions to plot star trails.
+
+Use global variables eph and earth by referencing, e.g.:
+```
+import core.data_loader as dl
+some_value = dl.eph.some_method()
+```
+"""
+
+from typing import Tuple
 import numpy as np
 import matplotlib.pyplot as plt
+from datetime import datetime
+from skyfield.api import N, Star, W, wgs84, load, Timescale
+from skyfield import almanac
 from adjustText import adjust_text
 import os
-import calendar
-import argparse
-import sys
+import core.data_loader as dl
+from utils.time_utils import get_standard_offset, ut1_to_local_standard_time
 
+__all__ = ["get_star_trail_diagram", "get_annotations"]
 
-eph = load('de406.bsp')
-earth = eph['earth']
+# TODO: use a global ts
+# ts = load.timescale()
 
-
-
-def get_standard_offset(lng, lat):
-    """
-    returns a location's standard offset from UTC in minutes.
-    The daylight savings time is disregarded.
-    """
-
-    tf = TimezoneFinder()
-    timezone_name = tf.timezone_at(lng=lng, lat=lat)
-    tz = pytz.timezone(timezone_name)
-    
-    now = datetime.datetime.now()
-    return (tz.utcoffset(now) - tz.dst(now)).total_seconds() / 60
-
-
-
-def ut1_to_local_standard_time(t, lng, lat):
-    '''
-    add the offset to get the twilight times list in local standard time
-    '''
-    ts = load.timescale()
-    offset_in_minutes = get_standard_offset(lng, lat)
-    temp_t = (t[0], t[1], t[2], t[3], t[4]+offset_in_minutes, t[5])
-    temp_t_local = ts.ut1(*temp_t)
-    return temp_t_local.ut1_calendar()
-
+if dl.eph is None:
+    dl.load_data()
+    # print("Warning: Ephemeris data was not loaded. `core.data_loader.load_data()` is called.")
 
 
 def get_twilight_time(starting_ts: Timescale, lng: float, lat: float):
-    
     ts = load.timescale()
     t0 = starting_ts
     t1 = ts.ut1_jd(t0.ut1 + 1)
     
     loc = wgs84.latlon(longitude_degrees=lng, latitude_degrees=lat)
     
-    f = almanac.dark_twilight_day(eph, loc)
+    f = almanac.dark_twilight_day(dl.eph, loc)
     times, events = almanac.find_discrete(t0, t1, f)
-    # f will return (events) — when the time is:
+    # f returns a tuple of events when the time is:
     # 0 — Dark of night.
-    # 1 — Astronomical twilight. (less than 18 degreess below the horizon)
+    # 1 — Astronomical twilight. (less than 18 degrees below the horizon)
     # 2 — Nautical twilight.  (less than 12 degrees below the horizon)
     # 3 — Civil twilight.  (less than 6 degrees below the horizon)
     # 4 — Sun is up.
@@ -79,26 +65,24 @@ def get_twilight_time(starting_ts: Timescale, lng: float, lat: float):
     return times_ut1, events
 
 
-
 def get_star_altaz(s, ts: Timescale, lng: float, lat: float):
-    '''
+    """
     Get the altazimuth coordinates of a star at a specific moment.
     The horizon angles are not considered.
     The atmospheric refraction is disregarded, neither.
-    '''
-    
+    """
+
     loc = wgs84.latlon(longitude_degrees=lng, latitude_degrees=lat)
-    observer = earth + loc
+    observer = dl.earth + loc
     alt, az, dist = observer.at(ts).observe(s).apparent().altaz()
     
     return (alt, az)
 
 
-
 def get_star_rising_time(s, ts: Timescale, lng: float, lat: float):
-    '''
+    """
     The star rising time is also the starting of the 1-day period for calculation.
-    '''
+    """
     
     year, month, day, _, _, _ = ts.ut1_calendar()
     
@@ -108,37 +92,35 @@ def get_star_rising_time(s, ts: Timescale, lng: float, lat: float):
     t1 = tst.ut1(year, month, day+1, 0, 0-offset_in_minutes, 0)
     
     loc = wgs84.latlon(longitude_degrees=lng, latitude_degrees=lat)
-    observer = earth + loc
+    observer = dl.earth + loc
     
     t_risings, y_risings = almanac.find_risings(observer, s, t0, t1)
     
     return t_risings, y_risings
 
 
-
 def get_star_setting_time(s, starting_ts: Timescale, lng: float, lat: float):
-    '''
+    """
     Search for the star setting time during this 1-day period since star rising.
-    '''
+    """
     
-    tst = load.timescale()
+    ts = load.timescale()
     t0 = starting_ts
-    t1 = tst.ut1_jd(starting_ts.ut1 + 1)
+    t1 = ts.ut1_jd(starting_ts.ut1 + 1)
     
     loc = wgs84.latlon(longitude_degrees=lng, latitude_degrees=lat)
-    observer = earth + loc
+    observer = dl.earth + loc
     
     t_settings, y_settings = almanac.find_settings(observer, s, t0, t1)
     
     return t_settings, y_settings
 
 
-
-def plot_in_style(ax, event, t0, t1, s, lng, lat):
-    '''
+def plot_in_style(ax, event, t0, t1, s, lng: float, lat: float):
+    """
     Plot star trails in different styles for different twilight conditions.
     t0 and t1 are both in units of Julian days.
-    '''
+    """
     
     ts = load.timescale()
     t = np.linspace(t0, t1, 100)
@@ -165,15 +147,14 @@ def plot_in_style(ax, event, t0, t1, s, lng, lat):
         line.set_dashes([1,4])
 
 
-
-def get_twilight_transition_points(times, events, s, lng, lat):
-    '''
+def get_twilight_transition_points(times, events, s, lng: float, lat: float):
+    """
     Find transition points between different twilight conditions.
-    '''
+    """
     
     altitudes = []
     azimuths = []
-    tx = []
+    annotations = []
     ptimes = []
     for i in range(1, len(times)-1):
         alt, az = get_star_altaz(s, times[i], lng, lat)
@@ -181,42 +162,41 @@ def get_twilight_transition_points(times, events, s, lng, lat):
         if events[i-1] == 4 and events[i] == 3 and alt.degrees>-0.5666:
             altitudes.append(alt.degrees)
             azimuths.append(az.degrees)
-            tx.append('N1')
+            annotations.append('N1')
             ptimes.append(times[i])
         if events[i-1] == 3 and events[i] == 2 and alt.degrees>-0.5666:
             altitudes.append(alt.degrees)
             azimuths.append(az.degrees)
-            tx.append('N2')
+            annotations.append('N2')
             ptimes.append(times[i])
         if events[i-1] == 2 and events[i] == 1 and alt.degrees>-0.5666:
             altitudes.append(alt.degrees)
             azimuths.append(az.degrees)
-            tx.append('N3')
+            annotations.append('N3')
             ptimes.append(times[i])
         if events[i-1] == 1 and events[i] == 2 and alt.degrees>-0.5666:
             altitudes.append(alt.degrees)
             azimuths.append(az.degrees)
-            tx.append('D1')
+            annotations.append('D1')
             ptimes.append(times[i])
         if events[i-1] == 2 and events[i] == 3 and alt.degrees>-0.5666:
             altitudes.append(alt.degrees)
             azimuths.append(az.degrees)
-            tx.append('D2')
+            annotations.append('D2')
             ptimes.append(times[i])
         if events[i-1] == 3 and events[i] == 4 and alt.degrees>-0.5666:
             altitudes.append(alt.degrees)
             azimuths.append(az.degrees)
-            tx.append('D3')
+            annotations.append('D3')
             ptimes.append(times[i])
 
-    return altitudes, azimuths, tx, ptimes
+    return altitudes, azimuths, annotations, ptimes
 
 
-
-def plot_twilight_transition_points(ax, altitudes, azimuths, tx, t_interp, s, lng, lat):
-    '''
+def plot_twilight_transition_points(ax, altitudes, azimuths, annotations, t_interp, s, lng: float, lat: float):
+    """
     Plot the twilight transition points as well as their labels.
-    '''
+    """
     
     ts = load.timescale()
     alt_interp = []
@@ -232,24 +212,23 @@ def plot_twilight_transition_points(ax, altitudes, azimuths, tx, t_interp, s, ln
     theta_interp =  np.radians(az_interp)
     
     texts = []
-    for i, j, k in zip(theta, r, tx):
+    for i, j, k in zip(theta, r, annotations):
         ax.plot(i, j, 'ro', ms=6)
         texts.append(plt.text(i, j, k, ha='center', va='center'))
-    adjust_text(texts, x=theta_interp, y=r_interp, arrowprops=dict(arrowstyle="->", color='r', lw=0.5));
+    adjust_text(texts, x=theta_interp, y=r_interp, arrowprops=dict(arrowstyle="->", color='r', lw=0.5))
     # try:
-    #     ax.annotate(tx, (theta, r), textcoords="offset points", xytext=(0, -10), ha='center',va='top',
+    #     ax.annotate(annotations, (theta, r), textcoords="offset points", xytext=(0, -10), ha='center',va='top',
     #                 fontsize=10, color='r')
     # except:
     #     pass
 
 
-
-def plot_rising_and_setting_points(fig, ax, t0, t1, s, lng, lat):
-    '''
+def plot_rising_and_setting_points(fig, ax, t0, t1, s, lng:float, lat:float):
+    """
     Plot the star rising and setting points.
     They are outside the plotting range, so they are both plotted on the ax2 layer 
     which is above the ax layer where the star trails are drawn on.
-    '''
+    """
     
     ts = load.timescale()
     alt0, az0 = get_star_altaz(s, ts.ut1_jd(t0), lng, lat)
@@ -283,15 +262,22 @@ def plot_rising_and_setting_points(fig, ax, t0, t1, s, lng, lat):
     return [alt0.degrees, alt1.degrees], [az0.degrees, az1.degrees], [ts.ut1_jd(t0), ts.ut1_jd(t1)]
 
 
-
-def get_star_trail_diagram(ts: Timescale, lng: float, lat: float, planet=None, radec=None):
+def get_star_trail_diagram(ts: Timescale, lng: float, lat: float,
+                           planet = None, hipp: int = -1, radec: Tuple[float, float] = None,
+                           fig_dir = '.'):
+    s = None
+    if planet is not None:
+        # TODO: check planet string
+        s = dl.eph[planet]
+    elif hipp > 0:
+        # TODO: handel Hipparchus (remove `pass` after complete)
+        # s = ...
+        pass
+    elif radec is not None and len(radec) == 2:
+        s = Star(ra_hours=float(radec[0]), dec_degrees=float(radec[1]))
     
-    if planet is not None and radec is None:
-        s = eph[planet]
-    if radec is not None and planet is None:
-        s = Star(ra_hours=radec[0], dec_degrees=radec[1])
-    if radec is not None and planet is not None:
-        raise ValueError("Only one of 'planet' or 'radec' should be provided, not both.")
+    if s is None:
+        raise ValueError("Either planet, Hipparchus, or (ra, dec) is invalid.")
     
     t_risings, y_risings = get_star_rising_time(s, ts, lng, lat)
     starting_ts = t_risings[0]
@@ -310,9 +296,9 @@ def get_star_trail_diagram(ts: Timescale, lng: float, lat: float, planet=None, r
     ax.set_theta_offset(np.pi/2)
     for i in range(len(times_combined)-1):
         plot_in_style(ax, events_combined[i], times_combined[i], times_combined[i+1], s, lng, lat)
-    ttp_alt, ttp_az, ttp_tx, ttp_times = get_twilight_transition_points(times, events, s, lng, lat)
+    ttp_alt, ttp_az, ttp_anno, ttp_times = get_twilight_transition_points(times, events, s, lng, lat)
     t_interp = np.linspace(times[0].ut1, times[-1].ut1, 1000)
-    plot_twilight_transition_points(ax, ttp_alt, ttp_az, ttp_tx, t_interp, s, lng, lat)
+    plot_twilight_transition_points(ax, ttp_alt, ttp_az, ttp_anno, t_interp, s, lng, lat)
     
     if y_risings[0] and y_settings[0]:
         rsp_alt, rsp_az, rsp_times = plot_rising_and_setting_points(fig, ax, starting_ts.ut1, tst, s, lng, lat)
@@ -320,14 +306,14 @@ def get_star_trail_diagram(ts: Timescale, lng: float, lat: float, planet=None, r
         rsp_alt = []
         rsp_az = []
         rsp_times = []
-        print ('This star never rises on this day.')
+        raise ValueError('This star never rises on this day.')
     else:
         rsp_alt = []
         rsp_az = []
         rsp_times = []
     
-    r_ticks = [0,10,20,30,40,50,60,70,80,90]
-    r_tick_labels=['90°','','','60°','','','30°','','','0°']
+    r_ticks = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90]
+    r_tick_labels=['90°', '', '', '60°', '', '', '30°', '', '', '0°']
     ax.set_yticks(r_ticks)
     ax.set_yticklabels([])
     
@@ -335,21 +321,25 @@ def get_star_trail_diagram(ts: Timescale, lng: float, lat: float, planet=None, r
         ax.annotate(str(r_tick_labels[i]), (np.pi, r_ticks[i]), textcoords="offset points", xytext=(3, 3),
                     ha='left', va='bottom', fontsize=10, color='gray')
     
+    now = datetime.now()
+    unix_timestamp = now.timestamp()
+    filename = os.path.join(fig_dir, f"st_{unix_timestamp:.3f}.svg")
+    
+
     ax.set_thetagrids(angles=[0, 90, 180, 270], labels=['N', 'E', 'S', 'W'])
     ax.grid(color='gray', alpha=0.1)
-    plt.savefig("result.svg")
+    plt.savefig(filename)
     
-    return (ttp_alt, ttp_az, ttp_tx, ttp_times), (rsp_alt, rsp_az, rsp_times)
+    return filename, (ttp_alt, ttp_az, ttp_anno, ttp_times), (rsp_alt, rsp_az, rsp_times)
 
 
-
-def get_output(ttp, rsp, lng, lat):
+def get_annotations(ttp, rsp, lng:float, lat:float):
     
-    ttp_alt, ttp_az, ttp_tx, ttp_times = ttp
+    ttp_alt, ttp_az, ttp_anno, ttp_times = ttp
     rsp_alt, rsp_az, rsp_times = rsp
     
     name_list = ['D1', 'D2', 'D3', 'N1', 'N2', 'N3', 'R', 'S']
-    results = []
+    annotations = []
     for i in name_list:
         z = {}
         z['name'] = i
@@ -359,52 +349,28 @@ def get_output(ttp, rsp, lng, lat):
         z['time_ut1'] = None
         z['time_local'] = None
         z['time_zone'] = None
-        results.append(z)
+        annotations.append(z)
     
-    for i in range(len(ttp_tx)):
-        ind = np.where(np.array(name_list) == ttp_tx[i])[0][0]
-        results[ind]['is_displayed'] = True
-        results[ind]['alt'] = ttp_alt[i]
-        results[ind]['az'] = ttp_az[i]
-        results[ind]['time_ut1'] = ttp_times[i].ut1_calendar()
-        results[ind]['time_local'] = ut1_to_local_standard_time(ttp_times[i].ut1_calendar(), lng, lat)
-        results[ind]['time_zone'] = get_standard_offset(lng, lat) / 60
+    for i in range(len(ttp_anno)):
+        ind = np.where(np.array(name_list) == ttp_anno[i])[0][0]
+        _time_ut1 = ttp_times[i].ut1_calendar()
+        _time_local = ut1_to_local_standard_time(ttp_times[i].ut1_calendar(), lng, lat)
+        annotations[ind]['is_displayed'] = True
+        annotations[ind]['alt'] = float(ttp_alt[i])
+        annotations[ind]['az'] = float(ttp_az[i])
+        annotations[ind]['time_ut1'] = (*map(int, _time_ut1[0:5]), float(_time_ut1[-1]))
+        annotations[ind]['time_local'] = (*map(int, _time_local[0:5]), float(_time_local[-1]))
+        annotations[ind]['time_zone'] = get_standard_offset(lng, lat) / 60
     
-    tx = ['R', 'S']
+    _anno = ['R', 'S']
     if len(rsp_alt) > 0:
-        for i in range(len(tx)):
-            ind = np.where(np.array(name_list) == tx[i])[0][0]
-            results[ind]['is_displayed'] = True
-            results[ind]['alt'] = rsp_alt[i]
-            results[ind]['az'] = rsp_az[i]
-            results[ind]['time_ut1'] = rsp_times[i].ut1_calendar()
-            results[ind]['time_local'] = ut1_to_local_standard_time(rsp_times[i].ut1_calendar(), lng, lat)
-            results[ind]['time_zone'] = get_standard_offset(lng, lat) / 60
+        for i in range(len(_anno)):
+            ind = np.where(np.array(name_list) == _anno[i])[0][0]
+            annotations[ind]['is_displayed'] = True
+            annotations[ind]['alt'] = rsp_alt[i]
+            annotations[ind]['az'] = rsp_az[i]
+            annotations[ind]['time_ut1'] = rsp_times[i].ut1_calendar()
+            annotations[ind]['time_local'] = ut1_to_local_standard_time(rsp_times[i].ut1_calendar(), lng, lat)
+            annotations[ind]['time_zone'] = get_standard_offset(lng, lat) / 60
     
-    return results
-
-
-
-def main():
-    
-    year = 2024
-    month = 3
-    day = 1
-    
-    lng = -140
-    lat = 50
-    
-    ra = 10
-    dec = 10
-    
-    ts = load.timescale()
-    ts1 = ts.ut1(year, month, day)
-    ttp, rsp = get_star_trail_diagram(ts=ts1, lng=lng, lat=lat, radec=(ra, dec))
-    results = get_output(ttp, rsp, lng, lat)
-    
-    print (results)
-
-
-
-if __name__ == '__main__':
-    main()
+    return annotations
