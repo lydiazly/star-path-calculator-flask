@@ -14,7 +14,7 @@ import os
 # Add the parent directory to the Python path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from core.star_trail import get_star_trail_diagram, get_annotations
+from core.star_trail import get_diagram, sanitize_svg
 from utils.script_utils import format_datetime, check_datetime_ranges, EPH_DATE_MIN_STR, EPH_DATE_MAX_STR
 
 
@@ -108,22 +108,22 @@ def main():
         print(f"{planet}")
 
     # Plot star trail ---------------------------------------------------------|
-    ts = load.timescale()
-    ts1 = ts.ut1(year, month, day)
     try:
-        os.makedirs(fig_dir, exist_ok=True)
         check_datetime_ranges(year, month, day)
-        filename, ttp, rsp = get_star_trail_diagram(ts=ts1, lng=lng, lat=lat,
-                                                    planet=planet, hipp=hipp, radec=radec,
-                                                    fig_dir=fig_dir)
+        results = get_diagram(year, month, day, lat=lat, lng=lng, planet=planet, hipp=hipp, radec=radec)
     except Exception as e:
         print(str(e), file=sys.stderr)
         sys.exit(1)
     
-    annotations = get_annotations(ttp, rsp, lng, lat)
+    # Write the sanitized SVG data to a file
+    os.makedirs(fig_dir, exist_ok=True)
+    filename = os.path.join(fig_dir, f'st_{results["diagram_id"]}.svg')
 
+    with open(filename, 'w') as file:
+        file.write(results["svg"])
+    
     print("\n[Annotations]")
-    for item in annotations:
+    for item in results["annotations"]:
         if item['is_displayed']:
             _formatted_time_ut1   = ', '.join([f'{item["time_ut1"][0]:5d}']   + [f'{value:02d}' for value in item["time_ut1"][1:-1]]   + [f'{item["time_ut1"][-1]:06.3f}'])
             _formatted_time_local = ', '.join([f'{item["time_local"][0]:5d}'] + [f'{value:02d}' for value in item["time_local"][1:-1]] + [f'{item["time_local"][-1]:06.3f}'])
@@ -134,7 +134,7 @@ def main():
             print(f'  time_local = ({_formatted_time_local})')
             print(f'  time_zone  = {item["time_zone"]}')
     
-    print(f"\nSVG saved: {filename}")
+    print(f"\nSVG has been saved to {filename}")
 
 
 if __name__ == "__main__":

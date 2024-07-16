@@ -17,7 +17,9 @@ from datetime import datetime
 from skyfield.api import N, Star, W, wgs84, load, Timescale
 from skyfield import almanac
 from adjustText import adjust_text
-import os
+import io
+import defusedxml.ElementTree as ET
+# from lxml import etree
 import core.data_loader as dl
 from utils.time_utils import get_standard_offset, ut1_to_local_standard_time
 
@@ -29,6 +31,18 @@ __all__ = ["get_star_trail_diagram", "get_annotations"]
 if dl.eph is None:
     dl.load_data()
     # print("Warning: Ephemeris data was not loaded. `core.data_loader.load_data()` is called.")
+
+
+def sanitize_svg(svg_data):
+    # Using lxml
+    # parser = etree.XMLParser(resolve_entities=False)
+    # _tree = etree.fromstring(svg_data.encode(), parser)
+    # sanitized_svg = etree.tostring(_tree, encoding='unicode')
+
+    # Using defusedxml
+    _tree = ET.fromstring(svg_data.encode())
+    sanitized_svg = ET.tostring(_tree, encoding='unicode')
+    return sanitized_svg
 
 
 def get_twilight_time(starting_ts: Timescale, lng: float, lat: float):
@@ -263,12 +277,11 @@ def plot_rising_and_setting_points(fig, ax, t0, t1, s, lng:float, lat:float):
 
 
 def get_star_trail_diagram(ts: Timescale, lng: float, lat: float,
-                           planet = None, hipp: int = -1, radec: Tuple[float, float] = None,
-                           fig_dir = '.'):
+                           planet = None, hipp: int = -1, radec: Tuple[float, float] = None):
     s = None
     if planet is not None:
         # TODO: check planet string
-        s = dl.eph[planet]
+        s = dl.eph[str(planet)]
     elif hipp > 0:
         # TODO: handel Hipparchus (remove `pass` after complete)
         # s = ...
@@ -322,15 +335,20 @@ def get_star_trail_diagram(ts: Timescale, lng: float, lat: float,
                     ha='left', va='bottom', fontsize=10, color='gray')
     
     now = datetime.now()
-    unix_timestamp = now.timestamp()
-    filename = os.path.join(fig_dir, f"st_{unix_timestamp:.3f}.svg")
-    
+    diagram_id = f"{now.timestamp():.3f}"  # unix timestamp -> str
 
     ax.set_thetagrids(angles=[0, 90, 180, 270], labels=['N', 'E', 'S', 'W'])
     ax.grid(color='gray', alpha=0.1)
-    plt.savefig(filename)
+
+    # Save the diagram as an SVG to an io.BytesIO object
+    svg_io = io.BytesIO()
+    plt.savefig(svg_io, format='svg')
+    plt.close()
+    svg_data = svg_io.getvalue().decode()
+    # Sanitize the SVG data
+    sanitized_svg = sanitize_svg(svg_data)
     
-    return filename, (ttp_alt, ttp_az, ttp_anno, ttp_times), (rsp_alt, rsp_az, rsp_times)
+    return diagram_id, sanitized_svg, (ttp_alt, ttp_az, ttp_anno, ttp_times), (rsp_alt, rsp_az, rsp_times)
 
 
 def get_annotations(ttp, rsp, lng:float, lat:float):
@@ -374,3 +392,19 @@ def get_annotations(ttp, rsp, lng:float, lat:float):
             annotations[ind]['time_zone'] = get_standard_offset(lng, lat) / 60
     
     return annotations
+
+def get_diagram(year: int, month: int, day: int, lat: float, lng: float,
+                planet, hipp: int, radec: Tuple[float, float]) -> dict:
+    ts = load.timescale()
+    ts1 = ts.ut1(year, month, day)
+
+    diagram_id, sanitized_svg, ttp, rsp = get_star_trail_diagram(ts=ts1, lng=lng, lat=lat,
+                                                                 planet=planet, hipp=hipp, radec=radec)
+    
+    annotations = get_annotations(ttp=ttp, rsp=rsp, lng=lng, lat=lat)
+
+    return {
+      "diagram_id": diagram_id,
+      "svg": sanitized_svg,
+      "annotations": annotations,
+    }
