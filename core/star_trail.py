@@ -394,9 +394,10 @@ def get_annotations(ttp, rsp, lng:float, lat:float):
     return annotations
 
 def get_diagram(year: int, month: int, day: int, lat: float, lng: float,
-                planet, hipp: int, radec: Tuple[float, float]) -> dict:
+                planet = None, hipp: int = -1, radec: Tuple[float, float] = None) -> dict:
     ts = load.timescale()
     ts1 = ts.ut1(year, month, day)
+    # print([year, month, day, hour, lat, lng])
 
     diagram_id, sanitized_svg, ttp, rsp = get_star_trail_diagram(ts=ts1, lng=lng, lat=lat,
                                                                  planet=planet, hipp=hipp, radec=radec)
@@ -405,6 +406,6 @@ def get_diagram(year: int, month: int, day: int, lat: float, lng: float,
 
     return {
       "diagram_id": diagram_id,
-      "svg": sanitized_svg,
+      "svg_data": sanitized_svg,
       "annotations": annotations,
     }

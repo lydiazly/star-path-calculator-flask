@@ -3,7 +3,7 @@ from flask import request, jsonify, render_template, current_app as app
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from core.coordinates import get_coords
-from core.star_trail import get_star_trail_diagram
+from core.star_trail import get_diagram
 
 # Initialize the limiter
 limiter = Limiter(
@@ -65,11 +65,14 @@ def coords():
 @app.route("/diagram", methods=["GET"])
 @limiter.limit("4/second", override_defaults=False)
 def diagram():
-    year  = request.args.get("year")
-    month = request.args.get("month")
-    day   = request.args.get("day")
-    lat   = request.args.get("lat")
-    lng   = request.args.get("lng")
+    year   = request.args.get("year")
+    month  = request.args.get("month")
+    day    = request.args.get("day")
+    lat    = request.args.get("lat")
+    lng    = request.args.get("lng")
+    planet = "Mars"
+    hipp   = -1
+    radec  = None
 
     try:
         year  = int(year)
@@ -85,7 +88,8 @@ def diagram():
         return jsonify({"error": "Longitude and latitude must be floats."}), 400
 
     try:
-        svg_data = get_star_trail_diagram(year, month, day, lng, lat)
+        results = get_diagram(year, month, day, lat=lat, lng=lng, planet=planet, hipp=hipp, radec=radec)
+        svg_data = results["svg_data"]
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 

@@ -40,11 +40,11 @@ def main():
                         help="e.g., January|Jan|1 (default: this month, or January if the year is provided)")
     parser.add_argument("day", type=int, nargs="?",
                         help="int (default: today, or 1 if the year is provided)")
-    parser.add_argument("--lng", "--lon", dest="lng", metavar="float", type=float, default=-140,
-                        help="longitude (default: %(default)s)")
     parser.add_argument("--lat", metavar="float", type=float, default=50,
                         help="latitude (default: %(default)s)")
-    parser.add_argument("-o", "--obj", metavar="str", type=str, default="10,10",
+    parser.add_argument("--lng", "--lon", dest="lng", metavar="float", type=float, default=-140,
+                        help="longitude (default: %(default)s)")
+    parser.add_argument("-o", "--obj", metavar="str", type=str, default="Mars",
                         help="planet, Hipparchus, or a 'ra,dec' pair (default: %(default)s)")
     parser.add_argument('-l', '--local', action='store_true',
                         help='use local time (default: False)')
@@ -82,9 +82,9 @@ def main():
     print(f"[Date]             {format_datetime(year, month, day)[0]}")
 
     # Set location ------------------------------------------------------------|
-    lng = args.lng
     lat = args.lat
-    print(f"[Location]         ({lng}, {lat})")
+    lng = args.lng
+    print(f"[Location]         (lat, lng) = ({lat}, {lng})")
     
     # Set the celestial object ------------------------------------------------|
     planet, hipp, radec = [None, -1, None]
@@ -106,6 +106,10 @@ def main():
         planet = args.obj.capitalize()
         # TODO: check planet names here
         print(f"{planet}")
+    
+    if (planet is None and hipp < 0 and radec is None):
+        print("Either planet, Hipparchus, or (ra, dec) is invalid.", file=sys.stderr)
+        sys.exit(1)
 
     # Plot star trail ---------------------------------------------------------|
     try:
@@ -120,7 +124,7 @@ def main():
     filename = os.path.join(fig_dir, f'st_{results["diagram_id"]}.svg')
 
     with open(filename, 'w') as file:
-        file.write(results["svg"])
+        file.write(results["svg_data"])
     
     print("\n[Annotations]")
     for item in results["annotations"]:
@@ -134,7 +138,7 @@ def main():
             print(f'  time_local = ({_formatted_time_local})')
             print(f'  time_zone  = {item["time_zone"]}')
     
-    print(f"\nSVG has been saved to {filename}")
+    print(f"\nSVG has been saved to '{filename}'")
 
 
 if __name__ == "__main__":
