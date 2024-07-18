@@ -18,7 +18,6 @@ from core.star_trail import get_diagram
 from utils.script_utils import format_datetime, check_datetime_ranges, EPH_DATE_MIN_STR, EPH_DATE_MAX_STR
 
 
-# TODO: edit help text
 prog = f"python {os.path.basename(__file__)}"
 description = "Specify a date to .... The input date is in UT1 by default."
 epilog = f"""date range:
@@ -26,7 +25,9 @@ epilog = f"""date range:
 examples:
   # Plot the star trail of Mars:
   {prog} -o mars\n
-  # Plot the star trail of ...:
+  # Plot the star trail by giving the star's Hipparcos Catalog number:
+  {prog} -o 87937\n
+  # Plot the star trail by giving the star's ICRS coordinates:
   {prog} -o 10,10
 """
 
@@ -40,9 +41,9 @@ def main():
                         help="e.g., January|Jan|1 (default: this month, or January if the year is provided)")
     parser.add_argument("day", type=int, nargs="?",
                         help="int (default: today, or 1 if the year is provided)")
-    parser.add_argument("--lat", metavar="float", type=float, default=50,
+    parser.add_argument("--lat", metavar="float", type=float, default=39.9042,
                         help="latitude (default: %(default)s)")
-    parser.add_argument("--lng", "--lon", dest="lng", metavar="float", type=float, default=-140,
+    parser.add_argument("--lng", "--lon", dest="lng", metavar="float", type=float, default=116.4074,
                         help="longitude (default: %(default)s)")
     parser.add_argument("-o", "--obj", metavar="str", type=str, default="Mars",
                         help="planet, Hipparchus, or a 'ra,dec' pair (default: %(default)s)")
@@ -98,7 +99,7 @@ def main():
             sys.exit(1)
         print(f"(ra, dec): ({radec[0]}, {radec[1]})")
     elif args.obj.isdigit():
-        # Hipparchus code
+        # Hipparchus catalogue number
         hip = int(args.obj)
         print(f"Hipparchus: {hip}")
     else:
