@@ -27,13 +27,13 @@ def ratelimit_error(e):
 @limiter.limit("4/second", override_defaults=False)
 def coords():
     year   = request.args.get("year")
-    month  = request.args.get("month")
-    day    = request.args.get("day")
-    hour   = request.args.get("hour")
-    minute = request.args.get("minute")
-    second = request.args.get("second")
+    month  = request.args.get("month", default=1, type=int)
+    day    = request.args.get("day", default=1, type=int)
+    hour   = request.args.get("hour", default=12, type=int)
+    minute = request.args.get("minute", default=0, type=int)
+    second = request.args.get("second", default=0, type=float)
 
-    if not year and year != 0:
+    if year is None:
         return jsonify({"error": "Year is required."}), 400
 
     try:
@@ -66,12 +66,12 @@ def coords():
 @limiter.limit("4/second", override_defaults=False)
 def diagram():
     year   = request.args.get("year")
-    month  = request.args.get("month")
-    day    = request.args.get("day")
-    lat    = request.args.get("lat")
-    lng    = request.args.get("lng")
+    month  = request.args.get("month", default=1, type=int)
+    day    = request.args.get("day", default=1, type=int)
+    lat    = request.args.get("lat", default=50, type=float)
+    lng    = request.args.get("lng", default=-140, type=float)
     planet = "Mars"
-    hipp   = -1
+    hip    = -1
     radec  = None
 
     try:
@@ -88,7 +88,8 @@ def diagram():
         return jsonify({"error": "Longitude and latitude must be floats."}), 400
 
     try:
-        results = get_diagram(year, month, day, lat=lat, lng=lng, planet=planet, hipp=hipp, radec=radec)
+        results = get_diagram(year, month, day, lat=lat, lng=lng, planet=planet, hip=hip, radec=radec)
+        print(results["diagram_id"])
         svg_data = results["svg_data"]
     except Exception as e:
         return jsonify({"error": str(e)}), 500

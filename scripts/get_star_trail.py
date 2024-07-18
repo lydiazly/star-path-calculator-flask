@@ -5,16 +5,16 @@ The main script to plot the star trail from the terminal.
 """
 
 import argparse
-from skyfield.api import load
 from datetime import datetime
 import calendar
 import sys
 import os
+import base64
 
 # Add the parent directory to the Python path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from core.star_trail import get_diagram, sanitize_svg
+from core.star_trail import get_diagram
 from utils.script_utils import format_datetime, check_datetime_ranges, EPH_DATE_MIN_STR, EPH_DATE_MAX_STR
 
 
@@ -87,7 +87,7 @@ def main():
     print(f"[Location]         (lat, lng) = ({lat}, {lng})")
     
     # Set the celestial object ------------------------------------------------|
-    planet, hipp, radec = [None, -1, None]
+    planet, hip, radec = [None, -1, None]
     print("[Celestial Object]", end=" ")
     if ',' in args.obj:
         # (ra, dec)
@@ -99,22 +99,22 @@ def main():
         print(f"(ra, dec): ({radec[0]}, {radec[1]})")
     elif args.obj.isdigit():
         # Hipparchus code
-        hipp = int(args.obj)
-        print(f"Hipparchus: {hipp}")
+        hip = int(args.obj)
+        print(f"Hipparchus: {hip}")
     else:
         # Planet name
         planet = args.obj.capitalize()
         # TODO: check planet names here
         print(f"{planet}")
     
-    if (planet is None and hipp < 0 and radec is None):
+    if (planet is None and hip < 0 and radec is None):
         print("Either planet, Hipparchus, or (ra, dec) is invalid.", file=sys.stderr)
         sys.exit(1)
 
     # Plot star trail ---------------------------------------------------------|
     try:
         check_datetime_ranges(year, month, day)
-        results = get_diagram(year, month, day, lat=lat, lng=lng, planet=planet, hipp=hipp, radec=radec)
+        results = get_diagram(year, month, day, lat=lat, lng=lng, planet=planet, hip=hip, radec=radec)
     except Exception as e:
         print(str(e), file=sys.stderr)
         sys.exit(1)
@@ -123,8 +123,10 @@ def main():
     os.makedirs(fig_dir, exist_ok=True)
     filename = os.path.join(fig_dir, f'st_{results["diagram_id"]}.svg')
 
+    # Decode the base64 data to get the SVG content
+    svg_data = base64.b64decode(results["svg_data"]).decode('utf-8')
     with open(filename, 'w') as file:
-        file.write(results["svg_data"])
+        file.write(svg_data)
     
     print("\n[Annotations]")
     for item in results["annotations"]:

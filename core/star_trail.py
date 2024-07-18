@@ -10,6 +10,9 @@ some_value = dl.eph.some_method()
 ```
 """
 
+import matplotlib
+matplotlib.use('Agg')  # Use the Agg backend for non-interactive plotting
+
 from typing import Tuple
 import numpy as np
 import matplotlib.pyplot as plt
@@ -18,31 +21,21 @@ from skyfield.api import N, Star, W, wgs84, load, Timescale
 from skyfield import almanac
 from adjustText import adjust_text
 import io
-import defusedxml.ElementTree as ET
-# from lxml import etree
+import base64
+import re
 import core.data_loader as dl
 from utils.time_utils import get_standard_offset, ut1_to_local_standard_time
 
 __all__ = ["get_star_trail_diagram", "get_annotations"]
 
+
 # TODO: use a global ts
 # ts = load.timescale()
+
 
 if dl.eph is None:
     dl.load_data()
     # print("Warning: Ephemeris data was not loaded. `core.data_loader.load_data()` is called.")
-
-
-def sanitize_svg(svg_data):
-    # Using lxml
-    # parser = etree.XMLParser(resolve_entities=False)
-    # _tree = etree.fromstring(svg_data.encode(), parser)
-    # sanitized_svg = etree.tostring(_tree, encoding='unicode')
-
-    # Using defusedxml
-    _tree = ET.fromstring(svg_data.encode())
-    sanitized_svg = ET.tostring(_tree, encoding='unicode')
-    return sanitized_svg
 
 
 def get_twilight_time(starting_ts: Timescale, lng: float, lat: float):
@@ -277,12 +270,12 @@ def plot_rising_and_setting_points(fig, ax, t0, t1, s, lng:float, lat:float):
 
 
 def get_star_trail_diagram(ts: Timescale, lng: float, lat: float,
-                           planet = None, hipp: int = -1, radec: Tuple[float, float] = None):
+                           planet = None, hip: int = -1, radec: Tuple[float, float] = None):
     s = None
     if planet is not None:
         # TODO: check planet string
         s = dl.eph[str(planet)]
-    elif hipp > 0:
+    elif hip > 0:
         # TODO: handel Hipparchus (remove `pass` after complete)
         # s = ...
         pass
@@ -303,6 +296,9 @@ def get_star_trail_diagram(ts: Timescale, lng: float, lat: float,
     ind_tst = len(times_jd[(times_jd - tst) < 0])
     times_combined = np.insert(times_jd, ind_tst, tst)
     events_combined = np.insert(events, ind_tst, events[ind_tst-1])
+    
+    # Adjusting Matplotlib rcParams to ensure text is not converted to paths
+    plt.rcParams['svg.fonttype'] = 'none'
     
     fig, ax = plt.subplots(figsize=(10, 10), subplot_kw={'projection': 'polar'})
     ax.set_ylim(0, 90)
@@ -340,15 +336,29 @@ def get_star_trail_diagram(ts: Timescale, lng: float, lat: float,
     ax.set_thetagrids(angles=[0, 90, 180, 270], labels=['N', 'E', 'S', 'W'])
     ax.grid(color='gray', alpha=0.1)
 
+    # Set the background color of the figure to transparent
+    fig.patch.set_facecolor('none')
+    fig.patch.set_alpha(0.0)
+
+    # Set the background color of the polar plot to light gray
+    ax.patch.set_facecolor('lavender')
+    ax.patch.set_alpha(1.0)
+
     # Save the diagram as an SVG to an io.BytesIO object
     svg_io = io.BytesIO()
     plt.savefig(svg_io, format='svg')
     plt.close()
-    svg_data = svg_io.getvalue().decode()
-    # Sanitize the SVG data
-    sanitized_svg = sanitize_svg(svg_data)
+
+    # Get the SVG data from the BytesIO object
+    svg_data = svg_io.getvalue().decode('utf-8')
+    # Replace 'standalone="no"' with 'standalone="yes"'
+    svg_data = svg_data.replace('standalone="no"', 'standalone="yes"')
+    # Remove the DOCTYPE declaration if present
+    svg_data = re.sub(r'<!DOCTYPE svg .+?>', '', svg_data, flags=re.DOTALL)
+    # Encode the SVG data to Base64
+    svg_base64 = base64.b64encode(svg_data.encode('utf-8')).decode('utf-8')
     
-    return diagram_id, sanitized_svg, (ttp_alt, ttp_az, ttp_anno, ttp_times), (rsp_alt, rsp_az, rsp_times)
+    return diagram_id, svg_base64, (ttp_alt, ttp_az, ttp_anno, ttp_times), (rsp_alt, rsp_az, rsp_times)
 
 
 def get_annotations(ttp, rsp, lng:float, lat:float):
@@ -394,18 +404,18 @@ def get_annotations(ttp, rsp, lng:float, lat:float):
     return annotations
 
 def get_diagram(year: int, month: int, day: int, lat: float, lng: float,
-                planet = None, hipp: int = -1, radec: Tuple[float, float] = None) -> dict:
+                planet = None, hip: int = -1, radec: Tuple[float, float] = None) -> dict:
     ts = load.timescale()
     ts1 = ts.ut1(year, month, day)
     # print([year, month, day, hour, lat, lng])
 
-    diagram_id, sanitized_svg, ttp, rsp = get_star_trail_diagram(ts=ts1, lng=lng, lat=lat,
-                                                                 planet=planet, hipp=hipp, radec=radec)
+    diagram_id, svg_data, ttp, rsp = get_star_trail_diagram(ts=ts1, lng=lng, lat=lat,
+                                                                 planet=planet, hip=hip, radec=radec)
     
     annotations = get_annotations(ttp=ttp, rsp=rsp, lng=lng, lat=lat)
 
     return {
       "diagram_id": diagram_id,
-      "svg_data": sanitized_svg,
+      "svg_data": svg_data,
       "annotations": annotations,
     }
