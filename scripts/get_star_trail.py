@@ -104,9 +104,8 @@ def main():
         print(f"Hipparchus: {hip}")
     else:
         # Planet name
-        planet = args.obj.capitalize()
-        # TODO: check planet names here
-        print(f"{planet}")
+        planet = args.obj.lower()
+        print(f"{planet.capitalize()}")
 
     # Plot star trail ---------------------------------------------------------|
     tisca = load.timescale()
@@ -128,12 +127,16 @@ def main():
         if item['is_displayed']:
             _formatted_time_ut1   = ', '.join([f'{item["time_ut1"][0]:5d}']   + [f'{value:02d}' for value in item["time_ut1"][1:-1]]   + [f'{item["time_ut1"][-1]:06.3f}'])
             _formatted_time_local = ', '.join([f'{item["time_local"][0]:5d}'] + [f'{value:02d}' for value in item["time_local"][1:-1]] + [f'{item["time_local"][-1]:06.3f}'])
+            _formatted_time_ut1_julian   = ', '.join([f'{item["time_ut1_julian"][0]:5d}']   + [f'{value:02d}' for value in item["time_ut1_julian"][1:-1]]   + [f'{item["time_ut1_julian"][-1]:06.3f}'])
+            _formatted_time_local_julian = ', '.join([f'{item["time_local_julian"][0]:5d}'] + [f'{value:02d}' for value in item["time_local_julian"][1:-1]] + [f'{item["time_local_julian"][-1]:06.3f}'])
             print(f'{item["name"]}:')
             print(f'  alt = {item["alt"]}')
             print(f'  az  = {item["az"]}')
             print(f'  time_ut1   = ({_formatted_time_ut1})')
             print(f'  time_local = ({_formatted_time_local})')
             print(f'  time_zone  = {item["time_zone"]}')
+            print(f'  time_ut1_in_Julian_calendar  = ({_formatted_time_ut1_julian})')
+            print(f'  time_local_in_Julian_calendar = ({_formatted_time_local_julian})')
     
     print(f"\nSVG saved: {filename}")
 
