@@ -121,7 +121,7 @@ def main():
 
     # Decode the base64 data to get the SVG content
     svg_data = base64.b64decode(results["svg_data"]).decode('utf-8')
-    with open(filename, 'w') as file:
+    with open(filename, 'w', encoding='utf-8') as file:
         file.write(svg_data)
     
     print("\n[Annotations]")

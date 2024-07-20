@@ -297,6 +297,7 @@ def get_star_trail_diagram(t: Time, lng: float, lat: float,
     
     # Adjusting Matplotlib rcParams to ensure text is not converted to paths
     plt.rcParams['svg.fonttype'] = 'none'
+    # plt.rcParams['font.family'] = 'Arial'
     
     fig, ax = plt.subplots(figsize=(10, 10), subplot_kw={'projection': 'polar'})
     ax.set_ylim(0, 90)
