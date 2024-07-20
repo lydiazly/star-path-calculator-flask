@@ -46,7 +46,7 @@ def main():
     parser.add_argument("--lng", "--lon", dest="lng", metavar="float", type=float, default=116.4074,
                         help="longitude (default: %(default)s)")
     parser.add_argument("-o", "--obj", metavar="str", type=str, default="Mars",
-                        help="planet, Hipparchus, or a 'ra,dec' pair (default: %(default)s)")
+                        help="planet name, Hipparchus catalogue number, or 'ra,dec' (default: %(default)s)")
     parser.add_argument('-l', '--local', action='store_true',
                         help='use local time (default: False)')
     parser.add_argument('-d', '--dir', metavar="path", type=str, default=".",
@@ -121,7 +121,7 @@ def main():
 
     # Decode the base64 data to get the SVG content
     svg_data = base64.b64decode(results["svg_data"]).decode('utf-8')
-    with open(filename, 'w') as file:
+    with open(filename, 'w', encoding='utf-8') as file:
         file.write(svg_data)
     
     print("\n[Annotations]")

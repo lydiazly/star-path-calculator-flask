@@ -70,9 +70,10 @@ def diagram():
     day    = request.args.get("day", default=1, type=int)
     lat    = request.args.get("lat", default=50, type=float)
     lng    = request.args.get("lng", default=-140, type=float)
-    planet = "Mars"
-    hip    = -1
-    radec  = None
+    planet = request.args.get("planet")
+    hip    = request.args.get("hip", default=-1, type=int)
+    ra     = request.args.get("ra")
+    dec    = request.args.get("dec")
 
     try:
         year  = int(year)
@@ -87,9 +88,18 @@ def diagram():
     except ValueError:
         return jsonify({"error": "Longitude and latitude must be floats."}), 400
 
+    if (planet):
+        obj = {"planet": str(planet).lower()}
+    elif (hip > 0):
+        obj = {"hip": hip}
+    elif (ra and dec):
+        try:
+            obj = {"radec": (float(ra), float(dec))}
+        except ValueError:
+            return jsonify({"error": "(ra, dec) must be floats."}), 400
+    
     try:
-        results = get_diagram(year, month, day, lat=lat, lng=lng, planet=planet, hip=hip, radec=radec)
-        # print(results["diagram_id"])
+        results = get_diagram(year, month, day, lat=lat, lng=lng, **obj)
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 

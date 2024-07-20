@@ -278,7 +278,7 @@ def get_star_trail_diagram(t: Time, lng: float, lat: float,
         s = Star(ra_hours=float(radec[0]), dec_degrees=float(radec[1]))
     
     if s is None:
-        raise ValueError("Either planet, Hipparchus, or (ra, dec) is invalid.")
+        raise ValueError("Either planet name, Hipparchus catalogue number, or (ra, dec) is invalid.")
     
     t_risings, y_risings = get_star_rising_time(s, t, lng, lat)
     t_starting = t_risings[0]
@@ -297,6 +297,7 @@ def get_star_trail_diagram(t: Time, lng: float, lat: float,
     
     # Adjusting Matplotlib rcParams to ensure text is not converted to paths
     plt.rcParams['svg.fonttype'] = 'none'
+    # plt.rcParams['font.family'] = 'Arial'
     
     fig, ax = plt.subplots(figsize=(10, 10), subplot_kw={'projection': 'polar'})
     ax.set_ylim(0, 90)
