@@ -388,11 +388,13 @@ def get_annotations(ttp, rsp, lng:float, lat:float):
     if len(rsp_alt) > 0:
         for i in range(len(_anno)):
             ind = np.where(np.array(name_list) == _anno[i])[0][0]
+            _time_ut1 = rsp_times[i].ut1_calendar()
+            _time_local = ut1_to_local_standard_time(rsp_times[i].ut1_calendar(), lng, lat)
             annotations[ind]['is_displayed'] = True
-            annotations[ind]['alt'] = rsp_alt[i]
-            annotations[ind]['az'] = rsp_az[i]
-            annotations[ind]['time_ut1'] = rsp_times[i].ut1_calendar()
-            annotations[ind]['time_local'] = ut1_to_local_standard_time(rsp_times[i].ut1_calendar(), lng, lat)
+            annotations[ind]['alt'] = float(rsp_alt[i])
+            annotations[ind]['az'] = float(rsp_az[i])
+            annotations[ind]['time_ut1'] = (*map(int, _time_ut1[0:5]), float(_time_ut1[-1]))
+            annotations[ind]['time_local'] = (*map(int, _time_local[0:5]), float(_time_local[-1]))
             annotations[ind]['time_zone'] = get_standard_offset(lng, lat) / 60
     
     return annotations

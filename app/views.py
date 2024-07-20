@@ -89,12 +89,15 @@ def diagram():
 
     try:
         results = get_diagram(year, month, day, lat=lat, lng=lng, planet=planet, hip=hip, radec=radec)
-        print(results["diagram_id"])
-        svg_data = results["svg_data"]
+        # print(results["diagram_id"])
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-    return jsonify({'svgData': svg_data}), 200
+    return jsonify({
+      'diagramId':   str(results["diagram_id"]),
+      'svgData':     results["svg_data"],
+      'annotations': results["annotations"]
+    }), 200
 
 
 @app.route("/")
