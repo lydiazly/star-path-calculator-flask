@@ -17,7 +17,7 @@ from typing import Tuple
 import numpy as np
 import matplotlib.pyplot as plt
 from datetime import datetime
-from skyfield.api import N, Star, W, wgs84, load, Timescale
+from skyfield.api import Star, wgs84, load
 from skyfield.timelib import Time
 from skyfield import almanac
 from skyfield.data import hipparcos
@@ -273,11 +273,7 @@ def get_star_trail_diagram(t: Time, lng: float, lat: float,
         else:
             raise ValueError(f"Wrong planet name: {planet}")
     elif hip > 0:
-        # TODO: after downloading the Hipparcos data frame, change the URL in
-        # the "open" function's parenthesis into a local path where the data is stored.
-        with load.open(hipparcos.URL) as f:
-            df = hipparcos.load_dataframe(f)
-        s = Star.from_dataframe(df.loc[hip])
+        s = Star.from_dataframe(dl.hip_df.loc[hip])
     elif radec is not None and len(radec) == 2:
         s = Star(ra_hours=float(radec[0]), dec_degrees=float(radec[1]))
     

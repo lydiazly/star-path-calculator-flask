@@ -106,10 +106,6 @@ def main():
         # Planet name
         planet = args.obj.lower()
         print(f"{planet.capitalize()}")
-    
-    if (not planet and hip < 0 and not radec):
-        print("Either planet, Hipparchus, or (ra, dec) is invalid.", file=sys.stderr)
-        sys.exit(1)
 
     # Plot star trail ---------------------------------------------------------|
     try:
@@ -119,7 +115,7 @@ def main():
         print(str(e), file=sys.stderr)
         sys.exit(1)
     
-    # Write the sanitized SVG data to a file
+    # Write the SVG data to a file
     os.makedirs(fig_dir, exist_ok=True)
     filename = os.path.join(fig_dir, f'st_{results["diagram_id"]}.svg')
 
@@ -138,11 +134,11 @@ def main():
             print(f'{item["name"]}:')
             print(f'  alt = {item["alt"]}')
             print(f'  az  = {item["az"]}')
-            print(f'  time_zone  = {item["time_zone"]}')
-            print(f'  time_ut1_in_Julian_calendar  = ({_formatted_time_ut1_julian})')
-            print(f'  time_local = ({_formatted_time_local})')
-            print(f'  time_local_in_Julian_calendar = ({_formatted_time_local_julian})')
-            print(f'  time_ut1   = ({_formatted_time_ut1})')
+            print(f'  time_ut1            = ({_formatted_time_ut1})')
+            print(f'  time_ut1 (Julian)   = ({_formatted_time_ut1_julian})')
+            print(f'  time_local          = ({_formatted_time_local})')
+            print(f'  time_local (Julian) = ({_formatted_time_local_julian})')
+            print(f'  time_zone = {item["time_zone"]}')
     
     print(f"\nSVG has been saved to '{filename}'")
 
