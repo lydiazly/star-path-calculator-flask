@@ -17,15 +17,17 @@ from typing import Tuple
 import numpy as np
 import matplotlib.pyplot as plt
 from datetime import datetime
-from skyfield.api import N, Star, W, wgs84, load, Timescale
+from skyfield.api import Star, wgs84, load
 from skyfield.timelib import Time
 from skyfield import almanac
+from skyfield.data import hipparcos
 from adjustText import adjust_text
 import io
 import base64
 import re
 import core.data_loader as dl
 from utils.time_utils import get_standard_offset, ut1_to_local_standard_time
+import juliandate
 
 __all__ = ["get_star_trail_diagram", "get_annotations"]
 
@@ -263,12 +265,19 @@ def get_star_trail_diagram(t: Time, lng: float, lat: float,
                            planet = None, hip: int = -1, radec: Tuple[float, float] = None):
     s = None
     if planet is not None:
-        # TODO: check planet string
-        s = dl.eph[str(planet)]
+        planet = str(planet)
+        if planet in ['mercury', 'venus', 'mars']:
+            s = dl.eph[planet]
+        elif planet in ['jupiter', 'saturn', 'uranus', 'neptune', 'pluto']:
+            s = dl.eph[planet + ' barycenter']
+        else:
+            raise ValueError(f"Wrong planet name: {planet}")
     elif hip > 0:
-        # TODO: handel Hipparchus (remove `pass` after complete)
-        # s = ...
-        pass
+        # TODO: after downloading the Hipparcos data frame, change the URL in
+        # the "open" function's parenthesis into a local path where the data is stored.
+        with load.open(hipparcos.URL) as f:
+            df = hipparcos.load_dataframe(f)
+        s = Star.from_dataframe(df.loc[hip])
     elif radec is not None and len(radec) == 2:
         s = Star(ra_hours=float(radec[0]), dec_degrees=float(radec[1]))
     
@@ -371,17 +380,23 @@ def get_annotations(ttp, rsp, lng:float, lat:float):
         z['time_ut1'] = None
         z['time_local'] = None
         z['time_zone'] = None
+        z['time_ut1_julian'] = None
+        z['time_local_julian'] = None
         annotations.append(z)
     
     for i in range(len(ttp_anno)):
         ind = np.where(np.array(name_list) == ttp_anno[i])[0][0]
         _time_ut1 = ttp_times[i].ut1_calendar()
         _time_local = ut1_to_local_standard_time(ttp_times[i].ut1_calendar(), lng, lat)
+        _time_ut1_julian = juliandate.to_julian(juliandate.from_gregorian(*_time_ut1))
+        _time_local_julian = juliandate.to_julian(juliandate.from_gregorian(*_time_local))
         annotations[ind]['is_displayed'] = True
         annotations[ind]['alt'] = float(ttp_alt[i])
         annotations[ind]['az'] = float(ttp_az[i])
         annotations[ind]['time_ut1'] = (*map(int, _time_ut1[0:5]), float(_time_ut1[-1]))
+        annotations[ind]['time_ut1_julian'] = (*map(int, _time_ut1_julian[0:5]), float(_time_ut1_julian[-2]+_time_ut1_julian[-1]/1e6))
         annotations[ind]['time_local'] = (*map(int, _time_local[0:5]), float(_time_local[-1]))
+        annotations[ind]['time_local_julian'] = (*map(int, _time_local_julian[0:5]), float(_time_local_julian[-2]+_time_local_julian[-1]/1e6))
         annotations[ind]['time_zone'] = get_standard_offset(lng, lat) / 60
     
     _anno = ['R', 'S']
@@ -390,11 +405,15 @@ def get_annotations(ttp, rsp, lng:float, lat:float):
             ind = np.where(np.array(name_list) == _anno[i])[0][0]
             _time_ut1 = rsp_times[i].ut1_calendar()
             _time_local = ut1_to_local_standard_time(rsp_times[i].ut1_calendar(), lng, lat)
+            _time_ut1_julian = juliandate.to_julian(juliandate.from_gregorian(*_time_ut1))
+            _time_local_julian = juliandate.to_julian(juliandate.from_gregorian(*_time_local))
             annotations[ind]['is_displayed'] = True
             annotations[ind]['alt'] = float(rsp_alt[i])
             annotations[ind]['az'] = float(rsp_az[i])
             annotations[ind]['time_ut1'] = (*map(int, _time_ut1[0:5]), float(_time_ut1[-1]))
+            annotations[ind]['time_ut1_julian'] = (*map(int, _time_ut1_julian[0:5]), float(_time_ut1_julian[-2]+_time_ut1_julian[-1])/1e6)
             annotations[ind]['time_local'] = (*map(int, _time_local[0:5]), float(_time_local[-1]))
+            annotations[ind]['time_local_julian'] = (*map(int, _time_local_julian[0:5]), float(_time_local_julian[-2]+_time_local_julian[-1]/1e6))
             annotations[ind]['time_zone'] = get_standard_offset(lng, lat) / 60
     
     return annotations

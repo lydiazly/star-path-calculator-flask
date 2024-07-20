@@ -94,23 +94,18 @@ def main():
         # (ra, dec)
         try:
             radec = tuple(map(float, args.obj.split(',')))
+            print(f"(ra, dec): ({radec[0]}, {radec[1]})")
         except ValueError:
             print(f"Invalid (ra, dec) format: '{args.obj}'", file=sys.stderr)
             sys.exit(1)
-        print(f"(ra, dec): ({radec[0]}, {radec[1]})")
     elif args.obj.isdigit():
         # Hipparchus catalogue number
         hip = int(args.obj)
         print(f"Hipparchus: {hip}")
     else:
         # Planet name
-        planet = args.obj.capitalize()
-        # TODO: check planet names here
-        print(f"{planet}")
-    
-    if (planet is None and hip < 0 and radec is None):
-        print("Either planet, Hipparchus, or (ra, dec) is invalid.", file=sys.stderr)
-        sys.exit(1)
+        planet = args.obj.lower()
+        print(f"{planet.capitalize()}")
 
     # Plot star trail ---------------------------------------------------------|
     try:
@@ -120,7 +115,7 @@ def main():
         print(str(e), file=sys.stderr)
         sys.exit(1)
     
-    # Write the sanitized SVG data to a file
+    # Write the SVG data to a file
     os.makedirs(fig_dir, exist_ok=True)
     filename = os.path.join(fig_dir, f'st_{results["diagram_id"]}.svg')
 
@@ -134,12 +129,16 @@ def main():
         if item['is_displayed']:
             _formatted_time_ut1   = ', '.join([f'{item["time_ut1"][0]:5d}']   + [f'{value:02d}' for value in item["time_ut1"][1:-1]]   + [f'{item["time_ut1"][-1]:06.3f}'])
             _formatted_time_local = ', '.join([f'{item["time_local"][0]:5d}'] + [f'{value:02d}' for value in item["time_local"][1:-1]] + [f'{item["time_local"][-1]:06.3f}'])
+            _formatted_time_ut1_julian   = ', '.join([f'{item["time_ut1_julian"][0]:5d}']   + [f'{value:02d}' for value in item["time_ut1_julian"][1:-1]]   + [f'{item["time_ut1_julian"][-1]:06.3f}'])
+            _formatted_time_local_julian = ', '.join([f'{item["time_local_julian"][0]:5d}'] + [f'{value:02d}' for value in item["time_local_julian"][1:-1]] + [f'{item["time_local_julian"][-1]:06.3f}'])
             print(f'{item["name"]}:')
             print(f'  alt = {item["alt"]}')
             print(f'  az  = {item["az"]}')
-            print(f'  time_ut1   = ({_formatted_time_ut1})')
-            print(f'  time_local = ({_formatted_time_local})')
-            print(f'  time_zone  = {item["time_zone"]}')
+            print(f'  time_ut1            = ({_formatted_time_ut1})')
+            print(f'  time_ut1 (Julian)   = ({_formatted_time_ut1_julian})')
+            print(f'  time_local          = ({_formatted_time_local})')
+            print(f'  time_local (Julian) = ({_formatted_time_local_julian})')
+            print(f'  time_zone = {item["time_zone"]}')
     
     print(f"\nSVG has been saved to '{filename}'")
 
