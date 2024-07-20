@@ -20,7 +20,6 @@ from datetime import datetime
 from skyfield.api import Star, wgs84, load
 from skyfield.timelib import Time
 from skyfield import almanac
-from skyfield.data import hipparcos
 from adjustText import adjust_text
 import io
 import base64
