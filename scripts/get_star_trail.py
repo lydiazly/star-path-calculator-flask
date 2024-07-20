@@ -5,16 +5,16 @@ The main script to plot the star trail from the terminal.
 """
 
 import argparse
-from skyfield.api import load
 from datetime import datetime
 import calendar
 import sys
 import os
+import base64
 
 # Add the parent directory to the Python path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from core.star_trail import get_star_trail_diagram, get_annotations
+from core.star_trail import get_diagram
 from utils.script_utils import format_datetime, check_datetime_ranges, EPH_DATE_MIN_STR, EPH_DATE_MAX_STR
 
 
@@ -41,11 +41,11 @@ def main():
                         help="e.g., January|Jan|1 (default: this month, or January if the year is provided)")
     parser.add_argument("day", type=int, nargs="?",
                         help="int (default: today, or 1 if the year is provided)")
-    parser.add_argument("--lng", "--lon", dest="lng", metavar="float", type=float, default=116.4074,
-                        help="longitude (default: %(default)s)")
     parser.add_argument("--lat", metavar="float", type=float, default=39.9042,
                         help="latitude (default: %(default)s)")
-    parser.add_argument("-o", "--obj", metavar="str", type=str, default="10,10",
+    parser.add_argument("--lng", "--lon", dest="lng", metavar="float", type=float, default=116.4074,
+                        help="longitude (default: %(default)s)")
+    parser.add_argument("-o", "--obj", metavar="str", type=str, default="Mars",
                         help="planet, Hipparchus, or a 'ra,dec' pair (default: %(default)s)")
     parser.add_argument('-l', '--local', action='store_true',
                         help='use local time (default: False)')
@@ -83,9 +83,9 @@ def main():
     print(f"[Date]             {format_datetime(year, month, day)[0]}")
 
     # Set location ------------------------------------------------------------|
-    lng = args.lng
     lat = args.lat
-    print(f"[Location]         ({lng}, {lat})")
+    lng = args.lng
+    print(f"[Location]         (lat, lng) = ({lat}, {lng})")
     
     # Set the celestial object ------------------------------------------------|
     planet, hip, radec = [None, -1, None]
@@ -94,36 +94,42 @@ def main():
         # (ra, dec)
         try:
             radec = tuple(map(float, args.obj.split(',')))
+            print(f"(ra, dec): ({radec[0]}, {radec[1]})")
         except ValueError:
             print(f"Invalid (ra, dec) format: '{args.obj}'", file=sys.stderr)
             sys.exit(1)
-        print(f"(ra, dec): ({radec[0]}, {radec[1]})")
     elif args.obj.isdigit():
-        # Hipparchus catelogue number
+        # Hipparchus catalogue number
         hip = int(args.obj)
         print(f"Hipparchus: {hip}")
     else:
         # Planet name
         planet = args.obj.lower()
         print(f"{planet.capitalize()}")
+    
+    if (not planet and hip < 0 and not radec):
+        print("Either planet, Hipparchus, or (ra, dec) is invalid.", file=sys.stderr)
+        sys.exit(1)
 
     # Plot star trail ---------------------------------------------------------|
-    tisca = load.timescale()
-    t1 = tisca.ut1(year, month, day)
-    # try:
-    os.makedirs(fig_dir, exist_ok=True)
-    check_datetime_ranges(year, month, day)
-    filename, ttp, rsp = get_star_trail_diagram(t=t1, lng=lng, lat=lat,
-                                                planet=planet, hip=hip, radec=radec,
-                                                fig_dir=fig_dir)
-    # except Exception as e:
-    #     print(str(e), file=sys.stderr)
-    #     sys.exit(1)
+    try:
+        check_datetime_ranges(year, month, day)
+        results = get_diagram(year, month, day, lat=lat, lng=lng, planet=planet, hip=hip, radec=radec)
+    except Exception as e:
+        print(str(e), file=sys.stderr)
+        sys.exit(1)
     
-    annotations = get_annotations(ttp, rsp, lng, lat)
+    # Write the sanitized SVG data to a file
+    os.makedirs(fig_dir, exist_ok=True)
+    filename = os.path.join(fig_dir, f'st_{results["diagram_id"]}.svg')
 
+    # Decode the base64 data to get the SVG content
+    svg_data = base64.b64decode(results["svg_data"]).decode('utf-8')
+    with open(filename, 'w') as file:
+        file.write(svg_data)
+    
     print("\n[Annotations]")
-    for item in annotations:
+    for item in results["annotations"]:
         if item['is_displayed']:
             _formatted_time_ut1   = ', '.join([f'{item["time_ut1"][0]:5d}']   + [f'{value:02d}' for value in item["time_ut1"][1:-1]]   + [f'{item["time_ut1"][-1]:06.3f}'])
             _formatted_time_local = ', '.join([f'{item["time_local"][0]:5d}'] + [f'{value:02d}' for value in item["time_local"][1:-1]] + [f'{item["time_local"][-1]:06.3f}'])
@@ -132,13 +138,13 @@ def main():
             print(f'{item["name"]}:')
             print(f'  alt = {item["alt"]}')
             print(f'  az  = {item["az"]}')
-            print(f'  time_ut1   = ({_formatted_time_ut1})')
-            print(f'  time_local = ({_formatted_time_local})')
             print(f'  time_zone  = {item["time_zone"]}')
             print(f'  time_ut1_in_Julian_calendar  = ({_formatted_time_ut1_julian})')
+            print(f'  time_local = ({_formatted_time_local})')
             print(f'  time_local_in_Julian_calendar = ({_formatted_time_local_julian})')
+            print(f'  time_ut1   = ({_formatted_time_ut1})')
     
-    print(f"\nSVG saved: {filename}")
+    print(f"\nSVG has been saved to '{filename}'")
 
 
 if __name__ == "__main__":

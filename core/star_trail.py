@@ -10,6 +10,9 @@ some_value = dl.eph.some_method()
 ```
 """
 
+import matplotlib
+matplotlib.use('Agg')  # Use the Agg backend for non-interactive plotting
+
 from typing import Tuple
 import numpy as np
 import matplotlib.pyplot as plt
@@ -19,15 +22,19 @@ from skyfield.timelib import Time
 from skyfield import almanac
 from skyfield.data import hipparcos
 from adjustText import adjust_text
-import os
+import io
+import base64
+import re
 import core.data_loader as dl
 from utils.time_utils import get_standard_offset, ut1_to_local_standard_time
 import juliandate
 
 __all__ = ["get_star_trail_diagram", "get_annotations"]
 
+
 tisca = load.timescale()
 refraction_limit = -0.5666
+
 
 if dl.eph is None:
     dl.load_data()
@@ -144,7 +151,7 @@ def plot_in_style(ax, event, t_jd0, t_jd1, s, lng: float, lat: float):
     if event == 4:
         line, = ax.plot(theta, r, 'k--', lw=0.5)
         line.set_dashes([1,4])
-        
+    
     return altitudes, azimuths
 
 
@@ -255,16 +262,16 @@ def plot_rising_and_setting_points(fig, ax, t0, t1, s, lng:float, lat:float):
 
 
 def get_star_trail_diagram(t: Time, lng: float, lat: float,
-                           planet = None, hip: int = -1, radec: Tuple[float, float] = None,
-                           fig_dir = '.'):
+                           planet = None, hip: int = -1, radec: Tuple[float, float] = None):
     s = None
     if planet is not None:
+        planet = str(planet)
         if planet in ['mercury', 'venus', 'mars']:
             s = dl.eph[planet]
         elif planet in ['jupiter', 'saturn', 'uranus', 'neptune', 'pluto']:
             s = dl.eph[planet + ' barycenter']
         else:
-            raise ValueError("Wrong planet name.")
+            raise ValueError(f"Wrong planet name: {planet}")
     elif hip > 0:
         # TODO: after downloading the Hipparcos data frame, change the URL in
         # the "open" function's parenthesis into a local path where the data is stored.
@@ -288,8 +295,12 @@ def get_star_trail_diagram(t: Time, lng: float, lat: float,
     ind_tst = len(t_jds[(t_jds - t_jd_setting) < 0])
     ts_combined = np.insert(t_jds, ind_tst, t_jd_setting)
     events_combined = np.insert(events, ind_tst, events[ind_tst-1])
+
     alt_interp = []
     az_interp = []
+    
+    # Adjusting Matplotlib rcParams to ensure text is not converted to paths
+    plt.rcParams['svg.fonttype'] = 'none'
     
     fig, ax = plt.subplots(figsize=(10, 10), subplot_kw={'projection': 'polar'})
     ax.set_ylim(0, 90)
@@ -323,14 +334,34 @@ def get_star_trail_diagram(t: Time, lng: float, lat: float,
                     ha='left', va='bottom', fontsize=10, color='gray')
     
     now = datetime.now()
-    unix_timestamp = now.timestamp()
-    filename = os.path.join(fig_dir, f"st_{unix_timestamp:.3f}.svg")
-    
+    diagram_id = f"{now.timestamp():.3f}"  # unix timestamp -> str
+
     ax.set_thetagrids(angles=[0, 90, 180, 270], labels=['N', 'E', 'S', 'W'])
     ax.grid(color='gray', alpha=0.1)
-    plt.savefig(filename)
+
+    # Set the background color of the figure to transparent
+    fig.patch.set_facecolor('none')
+    fig.patch.set_alpha(0.0)
+
+    # Set the background color of the polar plot to a light color
+    ax.patch.set_facecolor('lavender')
+    ax.patch.set_alpha(1.0)
+
+    # Save the diagram as an SVG to an io.BytesIO object
+    svg_io = io.BytesIO()
+    plt.savefig(svg_io, format='svg')
+    plt.close()
+
+    # Get the SVG data from the BytesIO object
+    svg_data = svg_io.getvalue().decode('utf-8')
+    # Replace 'standalone="no"' with 'standalone="yes"'
+    svg_data = svg_data.replace('standalone="no"', 'standalone="yes"')
+    # Remove the DOCTYPE declaration if present
+    svg_data = re.sub(r'<!DOCTYPE svg .+?>', '', svg_data, flags=re.DOTALL)
+    # Encode the SVG data to Base64
+    svg_base64 = base64.b64encode(svg_data.encode('utf-8')).decode('utf-8')
     
-    return filename, (ttp_alt, ttp_az, ttp_anno, ttp_ts), (rsp_alt, rsp_az, rsp_ts)
+    return diagram_id, svg_base64, (ttp_alt, ttp_az, ttp_anno, ttp_ts), (rsp_alt, rsp_az, rsp_ts)
 
 
 def get_annotations(ttp, rsp, lng:float, lat:float):
@@ -363,10 +394,10 @@ def get_annotations(ttp, rsp, lng:float, lat:float):
         annotations[ind]['alt'] = float(ttp_alt[i])
         annotations[ind]['az'] = float(ttp_az[i])
         annotations[ind]['time_ut1'] = (*map(int, _time_ut1[0:5]), float(_time_ut1[-1]))
-        annotations[ind]['time_local'] = (*map(int, _time_local[0:5]), float(_time_local[-1]))
-        annotations[ind]['time_zone'] = get_standard_offset(lng, lat) / 60
         annotations[ind]['time_ut1_julian'] = (*map(int, _time_ut1_julian[0:5]), float(_time_ut1_julian[-2]+_time_ut1_julian[-1]/1e6))
+        annotations[ind]['time_local'] = (*map(int, _time_local[0:5]), float(_time_local[-1]))
         annotations[ind]['time_local_julian'] = (*map(int, _time_local_julian[0:5]), float(_time_local_julian[-2]+_time_local_julian[-1]/1e6))
+        annotations[ind]['time_zone'] = get_standard_offset(lng, lat) / 60
     
     _anno = ['R', 'S']
     if len(rsp_alt) > 0:
@@ -380,9 +411,26 @@ def get_annotations(ttp, rsp, lng:float, lat:float):
             annotations[ind]['alt'] = float(rsp_alt[i])
             annotations[ind]['az'] = float(rsp_az[i])
             annotations[ind]['time_ut1'] = (*map(int, _time_ut1[0:5]), float(_time_ut1[-1]))
-            annotations[ind]['time_local'] = (*map(int, _time_local[0:5]), float(_time_local[-1]))
-            annotations[ind]['time_zone'] = get_standard_offset(lng, lat) / 60
             annotations[ind]['time_ut1_julian'] = (*map(int, _time_ut1_julian[0:5]), float(_time_ut1_julian[-2]+_time_ut1_julian[-1])/1e6)
+            annotations[ind]['time_local'] = (*map(int, _time_local[0:5]), float(_time_local[-1]))
             annotations[ind]['time_local_julian'] = (*map(int, _time_local_julian[0:5]), float(_time_local_julian[-2]+_time_local_julian[-1]/1e6))
+            annotations[ind]['time_zone'] = get_standard_offset(lng, lat) / 60
     
     return annotations
+
+def get_diagram(year: int, month: int, day: int, lat: float, lng: float,
+                planet = None, hip: int = -1, radec: Tuple[float, float] = None) -> dict:
+    tisca = load.timescale()
+    t1 = tisca.ut1(year, month, day)
+    # print([year, month, day, hour, lat, lng])
+
+    diagram_id, svg_data, ttp, rsp = get_star_trail_diagram(t=t1, lng=lng, lat=lat,
+                                                            planet=planet, hip=hip, radec=radec)
+    
+    annotations = get_annotations(ttp=ttp, rsp=rsp, lng=lng, lat=lat)
+
+    return {
+      "diagram_id": diagram_id,
+      "svg_data": svg_data,
+      "annotations": annotations,
+    }
