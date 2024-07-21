@@ -22,22 +22,23 @@ const MONTHS = [
 
 
 /**
- * Formats the date and time into strings.
+ * Formats the date and time into strings as '1 Jan 2000 CE' and '12:00:00[.000]'
  *
  * @param {Number} year - 0 is 1 BCE
- * @param {Number} month - starts from 1, default is 1
- * @param {Number} day - default is 1
- * @param {Number} hour - 24-hour format, default is 12
- * @param {Number} minute - default is 0
- * @param {Number} second - default is 0
- * @returns {Array.<string>} An array containing two strings: the formatted date and the formatted time.
+ * @param {number} [month=1] - Starts from 1
+ * @param {number} [day=1] - Day of the month
+ * @param {number} [hour=12] - 24-hour format
+ * @param {number} [minute=0] - Minutes
+ * @param {number} [second=0] - Seconds (can be an integer or float)
+ * @returns {string[]} An array containing two strings: the formatted date and the formatted time.
  */
-function formatTime(year, month = 1, day = 1, hour = 12, minute = 0, second = 0) {
+function formatDateTime(year, month = 1, day = 1, hour = 12, minute = 0, second = 0) {
     const pad = number => number.toString().padStart(2, '0');
     const yearStr = year > 0 ? `${year} CE` : `${-year + 1} BCE`;
     const monthStr = MONTHS[month].abbr;
     const dateStr = `${day} ${monthStr} ${yearStr}`;
-    const timeStr = `${pad(hour)}:${pad(minute)}:${pad(second)}`;
+    const secondStr = Number.isInteger(second) ? pad(second) : second.toFixed(3).padStart(6, '0');
+    const timeStr = `${pad(hour)}:${pad(minute)}:${secondStr}`;
     return [dateStr, timeStr];
 }
 
@@ -163,7 +164,7 @@ async function handleFormSubmit(event) {
                 (month === EPH_DATE_MAX[1] && day > EPH_DATE_MAX[2]))))
     ) {
       document.getElementById("results").innerHTML = "";
-      document.getElementById("error").innerHTML = `<p>Out of the ephemeris date range: ${formatTime(...EPH_DATE_MIN)[0]}&nbsp;\u2013&nbsp;${formatTime(...EPH_DATE_MAX)[0]}</p>`;
+      document.getElementById("error").innerHTML = `<p>Out of the ephemeris date range: ${formatDateTime(...EPH_DATE_MIN)[0]}&nbsp;\u2013&nbsp;${formatDateTime(...EPH_DATE_MAX)[0]}</p>`;
       return;
     }
 
@@ -186,7 +187,7 @@ async function handleFormSubmit(event) {
             document.getElementById('error').innerHTML = `<p>${data.error}</p>`;
         } else {
             const results = data.results;
-            const datetimeStr = formatTime(
+            const datetimeStr = formatDateTime(
                 ...[data.year, data.month, data.day, data.hour, data.minute, data.second]
                 .map(v => parseInt(v))
             );
