@@ -20,7 +20,6 @@ from datetime import datetime
 from skyfield.api import Star, wgs84, load
 from skyfield.timelib import Time
 from skyfield import almanac
-from skyfield.data import hipparcos
 from adjustText import adjust_text
 import io
 import base64
@@ -278,7 +277,7 @@ def get_star_trail_diagram(t: Time, lng: float, lat: float,
         s = Star(ra_hours=float(radec[0]), dec_degrees=float(radec[1]))
     
     if s is None:
-        raise ValueError("Either planet, Hipparchus, or (ra, dec) is invalid.")
+        raise ValueError("Either planet name, Hipparchus catalogue number, or (ra, dec) is invalid.")
     
     t_risings, y_risings = get_star_rising_time(s, t, lng, lat)
     t_starting = t_risings[0]
