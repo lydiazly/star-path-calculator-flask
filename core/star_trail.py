@@ -128,7 +128,9 @@ def plot_in_style(ax, event, t_jd0, t_jd1, s, lng: float, lat: float):
     t0 and t1 are both in units of Julian days.
     """
     
-    t_jds = np.linspace(t_jd0, t_jd1, 100)
+    pts_num = int((t_jd1 - t_jd0) * 100)
+    t_jds = np.linspace(t_jd0, t_jd1, pts_num if pts_num>10 else 10)
+    
     altitudes = np.zeros(shape=(0), dtype=float)
     azimuths = np.zeros(shape=(0), dtype=float)
     for ti in t_jds:
@@ -151,7 +153,7 @@ def plot_in_style(ax, event, t_jd0, t_jd1, s, lng: float, lat: float):
         line, = ax.plot(theta, r, 'k--', lw=0.5)
         line.set_dashes([1,4])
     
-    return altitudes, azimuths
+    return list(altitudes), list(azimuths)
 
 
 def get_twilight_transition_points(ts, events, s, lng: float, lat: float):
@@ -212,9 +214,10 @@ def plot_twilight_transition_points(ax, altitudes, azimuths, annotations, alt_in
     
     texts = []
     for i, j, k in zip(theta, r, annotations):
-        ax.plot(i, j, 'ro', ms=6)
-        texts.append(plt.text(i, j, k, ha='center', va='center'))
-    adjust_text(texts, x=theta_interp, y=r_interp, arrowprops=dict(arrowstyle="->", color='r', lw=0.5))
+        ax.plot(i, j, 'ro', ms=4)
+        texts.append(plt.text(i, j, k, ha='center', va='center', color='r'))
+    adjust_text(texts, x=theta_interp, y=r_interp, expand=(2,2), force_static=(1,1), min_arrow_len=10,
+                arrowprops=dict(arrowstyle="->", color='r', lw=1, shrinkA=0, shrinkB=2, mutation_scale=10))
     # try:
     #     ax.annotate(annotations, (theta, r), textcoords="offset points", xytext=(0, -10), ha='center',va='top',
     #                 fontsize=10, color='r')
@@ -303,8 +306,8 @@ def get_star_trail_diagram(t: Time, lng: float, lat: float,
     ax.set_theta_offset(np.pi/2)
     for i in range(len(ts_combined)-1):
         alt_temp, az_temp = plot_in_style(ax, events_combined[i], ts_combined[i], ts_combined[i+1], s, lng, lat)
-        alt_interp.append(alt_temp[:-1])
-        az_interp.append(az_temp[:-1])
+        alt_interp.extend(alt_temp[:-1])
+        az_interp.extend(az_temp[:-1])
     ttp_alt, ttp_az, ttp_anno, ttp_ts = get_twilight_transition_points(ts, events, s, lng, lat)
     plot_twilight_transition_points(ax, ttp_alt, ttp_az, ttp_anno, alt_interp, az_interp)
     
