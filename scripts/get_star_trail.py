@@ -15,7 +15,7 @@ import base64
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from core.star_trail import get_diagram
-from utils.script_utils import format_datetime, check_datetime_ranges, EPH_DATE_MIN_STR, EPH_DATE_MAX_STR
+from utils.script_utils import format_datetime, check_datetime_ranges, format_timezone, EPH_DATE_MIN_STR, EPH_DATE_MAX_STR
 
 
 prog = f"python {os.path.basename(__file__)}"
@@ -127,10 +127,20 @@ def main():
     print("\n[Annotations]")
     for item in results["annotations"]:
         if item['is_displayed']:
-            _formatted_time_ut1   = ', '.join([f'{item["time_ut1"][0]:5d}']   + [f'{value:02d}' for value in item["time_ut1"][1:-1]]   + [f'{item["time_ut1"][-1]:06.3f}'])
-            _formatted_time_local = ', '.join([f'{item["time_local"][0]:5d}'] + [f'{value:02d}' for value in item["time_local"][1:-1]] + [f'{item["time_local"][-1]:06.3f}'])
-            _formatted_time_ut1_julian   = ', '.join([f'{item["time_ut1_julian"][0]:5d}']   + [f'{value:02d}' for value in item["time_ut1_julian"][1:-1]]   + [f'{item["time_ut1_julian"][-1]:06.3f}'])
-            _formatted_time_local_julian = ', '.join([f'{item["time_local_julian"][0]:5d}'] + [f'{value:02d}' for value in item["time_local_julian"][1:-1]] + [f'{item["time_local_julian"][-1]:06.3f}'])
+            _formatted_time_ut1          = ', '.join([f'{item["time_ut1"][0]:5d}']
+                                                     + [f'{value:02d}' for value in item["time_ut1"][1:-1]]
+                                                     + [f'{item["time_ut1"][-1]:06.3f}'])
+            _formatted_time_ut1_julian   = ', '.join([f'{item["time_ut1_julian"][0]:5d}']
+                                                     + [f'{value:02d}' for value in item["time_ut1_julian"][1:-1]]
+                                                     + [f'{item["time_ut1_julian"][-1]:06.3f}'])
+            _formatted_time_local        = ', '.join([f'{item["time_local"][0]:5d}']
+                                                     + [f'{value:02d}' for value in item["time_local"][1:-1]]
+                                                     + [f'{item["time_local"][-1]:06.3f}']
+                                                     + [f'{format_timezone(item["time_zone"])}'])
+            _formatted_time_local_julian = ', '.join([f'{item["time_local_julian"][0]:5d}']
+                                                     + [f'{value:02d}' for value in item["time_local_julian"][1:-1]]
+                                                     + [f'{item["time_local_julian"][-1]:06.3f}']
+                                                     + [f'{format_timezone(item["time_zone"])}'])
             print(f'{item["name"]}:')
             print(f'  alt = {item["alt"]}')
             print(f'  az  = {item["az"]}')
@@ -138,7 +148,7 @@ def main():
             print(f'  time_ut1 (Julian)   = ({_formatted_time_ut1_julian})')
             print(f'  time_local          = ({_formatted_time_local})')
             print(f'  time_local (Julian) = ({_formatted_time_local_julian})')
-            print(f'  time_zone = {item["time_zone"]}')
+            # print(f'  time_zone = {item["time_zone"]}')
     
     print(f"\nSVG has been saved to '{filename}'")
 
