@@ -46,7 +46,7 @@ def main():
     parser.add_argument("--lng", "--lon", dest="lng", metavar="float", type=float, default=116.4074,
                         help="longitude (default: %(default)s)")
     parser.add_argument("-o", "--obj", metavar="str", type=str, default="Mars",
-                        help="planet name, Hipparchus catalogue number, or 'ra,dec' (default: %(default)s)")
+                        help="name, Hipparchus catalogue number, or 'ra,dec' (default: %(default)s)")
     parser.add_argument('-l', '--local', action='store_true',
                         help='use local time (default: False)')
     parser.add_argument('-d', '--dir', metavar="path", type=str, default=".",
@@ -88,7 +88,7 @@ def main():
     print(f"[Location]         (lat, lng) = ({lat}, {lng})")
     
     # Set the celestial object ------------------------------------------------|
-    planet, hip, radec = [None, -1, None]
+    name, hip, radec = [None, -1, None]
     print("[Celestial Object]", end=" ")
     if ',' in args.obj:
         # (ra, dec)
@@ -103,14 +103,14 @@ def main():
         hip = int(args.obj)
         print(f"Hipparchus: {hip}")
     else:
-        # Planet name
-        planet = args.obj.lower()
-        print(f"{planet.capitalize()}")
+        # Name
+        name = args.obj.lower()
+        print(f"{name.capitalize()}")
 
     # Plot star trail ---------------------------------------------------------|
     try:
         check_datetime_ranges(year, month, day)
-        results = get_diagram(year, month, day, lat=lat, lng=lng, planet=planet, hip=hip, radec=radec)
+        results = get_diagram(year, month, day, lat=lat, lng=lng, name=name, hip=hip, radec=radec)
     except Exception as e:
         print(str(e), file=sys.stderr)
         sys.exit(1)

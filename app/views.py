@@ -42,7 +42,7 @@ def coords():
         day    = int(day)
         hour   = int(hour)
         minute = int(minute)
-        second = int(second)
+        second = float(second)
     except ValueError:
         return jsonify({"error": "Date and time must be integers."}), 400
 
@@ -65,15 +65,15 @@ def coords():
 @app.route("/diagram", methods=["GET"])
 @limiter.limit("4/second", override_defaults=False)
 def diagram():
-    year   = request.args.get("year")
-    month  = request.args.get("month", default=1, type=int)
-    day    = request.args.get("day", default=1, type=int)
-    lat    = request.args.get("lat", default=50, type=float)
-    lng    = request.args.get("lng", default=-140, type=float)
-    planet = request.args.get("planet")
-    hip    = request.args.get("hip", default=-1, type=int)
-    ra     = request.args.get("ra")
-    dec    = request.args.get("dec")
+    year  = request.args.get("year")
+    month = request.args.get("month", default=1, type=int)
+    day   = request.args.get("day", default=1, type=int)
+    lat   = request.args.get("lat", default=50, type=float)
+    lng   = request.args.get("lng", default=-140, type=float)
+    name  = request.args.get("name")
+    hip   = request.args.get("hip", default=-1, type=int)
+    ra    = request.args.get("ra")
+    dec   = request.args.get("dec")
 
     try:
         year  = int(year)
@@ -88,8 +88,8 @@ def diagram():
     except ValueError:
         return jsonify({"error": "Longitude and latitude must be floats."}), 400
 
-    if (planet):
-        obj = {"planet": str(planet).lower()}
+    if (name):
+        obj = {"name": str(name).lower()}
     elif (hip > 0):
         obj = {"hip": hip}
     elif (ra and dec):
@@ -104,9 +104,18 @@ def diagram():
         return jsonify({"error": str(e)}), 500
 
     return jsonify({
-      'diagramId':   str(results["diagram_id"]),
-      'svgData':     results["svg_data"],
-      'annotations': results["annotations"]
+        "year":        str(year),
+        "month":       str(month),
+        "day":         str(day),
+        "lat":         str(lat),
+        "lng":         str(lng),
+        "name":        name,
+        "hip":         hip,
+        "ra":          ra,
+        "dec":         dec,
+        'diagramId':   str(results["diagram_id"]),
+        'svgData':     results["svg_data"],
+        'annotations': results["annotations"]
     }), 200
 
 
