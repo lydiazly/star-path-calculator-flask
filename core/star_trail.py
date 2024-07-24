@@ -261,23 +261,23 @@ def plot_rising_and_setting_points(fig, ax, t0, t1, s, lng:float, lat:float):
 
 
 def get_star_trail_diagram(t: Time, lng: float, lat: float,
-                           planet = None, hip: int = -1, radec: Tuple[float, float] = None):
+                           name = None, hip: int = -1, radec: Tuple[float, float] = None):
     s = None
-    if planet is not None:
-        planet = str(planet)
-        if planet in ['mercury', 'venus', 'mars']:
-            s = dl.eph[planet]
-        elif planet in ['jupiter', 'saturn', 'uranus', 'neptune', 'pluto']:
-            s = dl.eph[planet + ' barycenter']
+    if name is not None:
+        name = str(name)
+        if name in ['mercury', 'venus', 'mars']:
+            s = dl.eph[name]
+        elif name in ['jupiter', 'saturn', 'uranus', 'neptune', 'pluto']:
+            s = dl.eph[name + ' barycenter']
         else:
-            raise ValueError(f"Wrong planet name: {planet}")
+            raise ValueError(f"Wrong name: {name}")
     elif hip > 0:
         s = Star.from_dataframe(dl.hip_df.loc[hip])
     elif radec is not None and len(radec) == 2:
         s = Star(ra_hours=float(radec[0]), dec_degrees=float(radec[1]))
     
     if s is None:
-        raise ValueError("Either planet name, Hipparchus catalogue number, or (ra, dec) is invalid.")
+        raise ValueError("Either name, Hipparchus catalogue number, or (ra, dec) is invalid.")
     
     t_risings, y_risings = get_star_rising_time(s, t, lng, lat)
     t_starting = t_risings[0]
@@ -415,13 +415,13 @@ def get_annotations(ttp, rsp, lng:float, lat:float):
     return annotations
 
 def get_diagram(year: int, month: int, day: int, lat: float, lng: float,
-                planet = None, hip: int = -1, radec: Tuple[float, float] = None) -> dict:
+                name = None, hip: int = -1, radec: Tuple[float, float] = None) -> dict:
     tisca = load.timescale()
     t1 = tisca.ut1(year, month, day)
     # print([year, month, day, hour, lat, lng])
 
     diagram_id, svg_data, ttp, rsp = get_star_trail_diagram(t=t1, lng=lng, lat=lat,
-                                                            planet=planet, hip=hip, radec=radec)
+                                                            name=name, hip=hip, radec=radec)
     
     annotations = get_annotations(ttp=ttp, rsp=rsp, lng=lng, lat=lat)
 
