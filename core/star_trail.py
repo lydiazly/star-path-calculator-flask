@@ -303,11 +303,13 @@ def plot_celestial_poles(ax, lat):
     if lat>0:
         r = 90 - lat
         theta = 0
-        ax.plot(theta, r, 'k+', ms=10, alpha=0.5)
+        ax.plot(theta, r, 'b+', ms=8)
+        ax.annotate('NCP', (theta, r), textcoords="offset points", xytext=(-6, 0), ha='right', va='center', fontsize=10, color='b')
     elif lat<0:
         r = 90 + lat
         theta = np.radians(180)
-        ax.plot(theta, r, 'k+', ms=10, alpha=0.5)
+        ax.plot(theta, r, 'b+', ms=8)
+        ax.annotate('SCP', (theta, r), textcoords="offset points", xytext=(-6, 0), ha='right', va='center', fontsize=10, color='b')
 
 
 def get_star_trail_diagram(t: Time, lng: float, lat: float,
@@ -386,6 +388,9 @@ def get_star_trail_diagram(t: Time, lng: float, lat: float,
     for i in range(len(r_ticks)):
         ax.annotate(str(r_tick_labels[i]), (np.pi, r_ticks[i]), textcoords="offset points", xytext=(3, 3),
                     ha='left', va='bottom', fontsize=10, color='gray')
+    ax.plot(0, 0, 'bo', ms=2, mec='b')
+    ax.annotate('Z', (0, 0), textcoords="offset points", xytext=(-3, 0), ha='right', va='center', fontsize=10, color='b')
+
     
     now = datetime.now()
     diagram_id = f"{now.timestamp():.3f}"  # unix timestamp -> str
