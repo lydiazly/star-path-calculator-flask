@@ -28,7 +28,7 @@ def get_standard_offset(lng: float, lat: float) -> float:
 
 def ut1_to_local_standard_time(t: Tuple, lng: float, lat: float):
     '''
-    add the offset to get the twilight times list in local standard time
+    Adds the offset to get the twilight times list in local standard time
     '''
     ts = load.timescale()
     offset_in_minutes = get_standard_offset(lng, lat)

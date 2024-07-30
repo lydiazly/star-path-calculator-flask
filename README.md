@@ -9,61 +9,59 @@ A Flask [demo website](https://equinoxcoord.pythonanywhere.com/) of [EquinoxCoor
 - Run the Flask app locally in development mode
 
 ```sh
-python3 -m pip install scipy skyfield Flask
+python3 -m pip install adjusttext juliandate pandas pytz scipy skyfield timezonefinder Flask
 python3 run.py
 ```
 
-- Use the script to get the coordinates (same as in [EquinoxCoord](https://github.com/claude-hao/equinox-coord.git))
+- Use the script to get the equinoxes and solstices (same as in [EquinoxCoord](https://github.com/claude-hao/equinox-coord.git))
 
 ```sh
-python3 -m pip install scipy skyfield
+python3 -m pip install adjusttext juliandate pandas pytz scipy skyfield timezonefinder
 ```
 
 Example:
 
 ```bash
-python3 get_equinoxes_solstices.py 2000
+python3 get_equinoxes_solstices.py -2000
 ```
 
 Output:
 
 ```text
-ICRS coordinates (J2000) of equinoxes and solstices on 1 Jan 2000 CE, at 12:00:00:
-Vernal Equinox:
-  ra = 00h 00m 00.85s, dec = 00deg 00' 05.6"
-Autumnal Equinox:
-  ra = 12h 00m 00.85s, dec = -00deg 00' 05.6"
-Summer solstice:
-  ra = 06h 00m 01.01s, dec = 23deg 26' 21.4"
-Winter solstice:
-  ra = 18h 00m 01.01s, dec = -23deg 26' 21.4"
+Dates, times, and ICRS coordinates (J2000) for the equinoxes and solstices of 2001 BCE:
+
+[Vernal Equinox] -2000-03-21 04:40:19.602
+  ra = 52.962, dec = 19.517
+
+[Summer Solstice] -2000-06-23 11:32:34.141
+  ra = 147.791, dec = 13.371
+
+[Autumnal Equinox] -2000-09-22 05:50:58.094
+  ra = 232.955, dec = -19.515
+
+[Winter Solstice] -2000-12-19 15:18:26.852
+  ra = 327.784, dec = -13.373
 ```
 
 Usage:
 
 ```text
-usage: python get_equinoxes_solstices.py [-h] [-t [time]] [year] [month] [day]
+usage: python get_equinoxes_solstices.py [-h] [year]
 
-Specify a date and time to get the equinox and solstice coordinates in RA and DEC. The default time is 12:00:00.
+Specify a year to obtain the dates, times, and coordinates in RA and Dec for the equinoxes and solstices of that year.
 
 positional arguments:
   year        int, 0 is 1 BCE (default: this year)
-  month       e.g., January|Jan|1 (default: this month, or January if the year is provided)
-  day         int, (default: today, or 1 if the year is provided)
 
 options:
   -h, --help  show this help message and exit
-  -t [time]   hh|hh:mm|hh:mm:ss, 24-hour format (default: 12:00:00)
 
-date range:
-  29 Jan 3001 BCE – 6 May 3000 CE
+year range:
+  -3000-01-29 – 3000-05-06 (UT1)
 examples:
-  # The current coordinates:
+  # The current year:
   python get_equinoxes_solstices.py
 
-  # The coordinates on 1 Jan 3001 BCE, at 12:00:00:
-  python get_equinoxes_solstices.py -3000
-
-  # The coordinates on 5 April 3000 CE, at 21:00:00:
-  python get_equinoxes_solstices.py 3000 Apr 5 -t 21
+  # The equinoxes and solstices of 2001 BCE:
+  python get_equinoxes_solstices.py -2000
 ```
