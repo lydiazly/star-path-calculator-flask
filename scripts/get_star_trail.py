@@ -15,7 +15,7 @@ import base64
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from core.star_trail import get_diagram
-from utils.script_utils import format_datetime, check_datetime_ranges, EPH_DATE_MIN_STR, EPH_DATE_MAX_STR
+from utils.script_utils import format_datetime, check_datetime_ranges, format_timezone, EPH_DATE_MIN_STR, EPH_DATE_MAX_STR
 
 
 prog = f"python {os.path.basename(__file__)}"
@@ -74,21 +74,21 @@ def main():
         except ValueError:
             print(f"Invalid month name: '{args.month}'", file=sys.stderr)
             sys.exit(1)
-    
+
     # Convert from local time to UT1 ------------------------------------------|
     if args.local:
         # TODO: call the function to convert (remove `pass` after complete)
         pass
-    
+
     print(f"[Date]             {format_datetime(year, month, day)[0]}")
 
     # Set location ------------------------------------------------------------|
     lat = args.lat
     lng = args.lng
     print(f"[Location]         (lat, lng) = ({lat}, {lng})")
-    
+
     # Set the celestial object ------------------------------------------------|
-    planet, hip, radec = [None, -1, None]
+    name, hip, radec = [None, -1, None]
     print("[Celestial Object]", end=" ")
     if ',' in args.obj:
         # (ra, dec)
@@ -104,17 +104,17 @@ def main():
         print(f"Hipparchus: {hip}")
     else:
         # Planet name
-        planet = args.obj.lower()
-        print(f"{planet.capitalize()}")
+        name = args.obj.lower()
+        print(f"{name.capitalize()}")
 
     # Plot star trail ---------------------------------------------------------|
     try:
         check_datetime_ranges(year, month, day)
-        results = get_diagram(year, month, day, lat=lat, lng=lng, planet=planet, hip=hip, radec=radec)
+        results = get_diagram(year, month, day, lat=lat, lng=lng, name=name, hip=hip, radec=radec)
     except Exception as e:
         print(str(e), file=sys.stderr)
         sys.exit(1)
-    
+
     # Write the SVG data to a file
     os.makedirs(fig_dir, exist_ok=True)
     filename = os.path.join(fig_dir, f'st_{results["diagram_id"]}.svg')
@@ -123,14 +123,24 @@ def main():
     svg_data = base64.b64decode(results["svg_data"]).decode('utf-8')
     with open(filename, 'w', encoding='utf-8') as file:
         file.write(svg_data)
-    
+
     print("\n[Annotations]")
     for item in results["annotations"]:
         if item['is_displayed']:
-            _formatted_time_ut1   = ', '.join([f'{item["time_ut1"][0]:5d}']   + [f'{value:02d}' for value in item["time_ut1"][1:-1]]   + [f'{item["time_ut1"][-1]:06.3f}'])
-            _formatted_time_local = ', '.join([f'{item["time_local"][0]:5d}'] + [f'{value:02d}' for value in item["time_local"][1:-1]] + [f'{item["time_local"][-1]:06.3f}'])
-            _formatted_time_ut1_julian   = ', '.join([f'{item["time_ut1_julian"][0]:5d}']   + [f'{value:02d}' for value in item["time_ut1_julian"][1:-1]]   + [f'{item["time_ut1_julian"][-1]:06.3f}'])
-            _formatted_time_local_julian = ', '.join([f'{item["time_local_julian"][0]:5d}'] + [f'{value:02d}' for value in item["time_local_julian"][1:-1]] + [f'{item["time_local_julian"][-1]:06.3f}'])
+            _formatted_time_ut1          = ', '.join([f'{item["time_ut1"][0]:5d}']
+                                                     + [f'{value:02d}' for value in item["time_ut1"][1:-1]]
+                                                     + [f'{item["time_ut1"][-1]:06.3f}'])
+            _formatted_time_ut1_julian   = ', '.join([f'{item["time_ut1_julian"][0]:5d}']
+                                                     + [f'{value:02d}' for value in item["time_ut1_julian"][1:-1]]
+                                                     + [f'{item["time_ut1_julian"][-1]:06.3f}'])
+            _formatted_time_local        = ', '.join([f'{item["time_local"][0]:5d}']
+                                                     + [f'{value:02d}' for value in item["time_local"][1:-1]]
+                                                     + [f'{item["time_local"][-1]:06.3f}']
+                                                     + [f'{format_timezone(item["time_zone"])}'])
+            _formatted_time_local_julian = ', '.join([f'{item["time_local_julian"][0]:5d}']
+                                                     + [f'{value:02d}' for value in item["time_local_julian"][1:-1]]
+                                                     + [f'{item["time_local_julian"][-1]:06.3f}']
+                                                     + [f'{format_timezone(item["time_zone"])}'])
             print(f'{item["name"]}:')
             print(f'  alt = {item["alt"]}')
             print(f'  az  = {item["az"]}')
@@ -138,8 +148,8 @@ def main():
             print(f'  time_ut1 (Julian)   = ({_formatted_time_ut1_julian})')
             print(f'  time_local          = ({_formatted_time_local})')
             print(f'  time_local (Julian) = ({_formatted_time_local_julian})')
-            print(f'  time_zone = {item["time_zone"]}')
-    
+            # print(f'  time_zone = {item["time_zone"]}')
+
     print(f"\nSVG has been saved to '{filename}'")
 
 

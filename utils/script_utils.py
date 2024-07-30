@@ -10,6 +10,7 @@ from config import EPH_DATE_MIN, EPH_DATE_MAX
 __all__ = ["format_datetime", "check_datetime_ranges"]
 
 
+# Formats the date and time into strings as '1 Jan 2000 CE' and '12:00:00[.000]'
 def format_datetime(year: int, month: int, day: int,
                     hour: int = 12, minute: int = 0, second: float = 0):
     year_str = f"{year} CE" if year > 0 else f"{-year + 1} BCE"
@@ -50,3 +51,17 @@ def check_datetime_ranges(year: int, month: int, day: int,
                 or (month == EPH_DATE_MAX[1] and day > EPH_DATE_MAX[2])))
     ):
         raise ValueError(f"Out of the ephemeris date range: {EPH_DATE_MIN_STR} \u2013 {EPH_DATE_MAX_STR}")
+
+
+# Converts decimal time to HMS (Hours, Minutes, Seconds).
+def decimal_to_hms(t):
+    hours = int(t)
+    minutes = int((t - hours) * 60)
+    seconds = round(((t - hours) * 60 - minutes) * 60)
+    return {'hours': hours, 'minutes': minutes, 'seconds': seconds}
+
+
+# Formats a decimal UTC offset into a string.
+def format_timezone(tz):
+    hms = decimal_to_hms(abs(tz))
+    return f"{'-' if tz < 0 else '+'}{hms['hours']:02d}{hms['minutes']:02d}"

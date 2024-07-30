@@ -21,7 +21,7 @@ def get_standard_offset(lng: float, lat: float) -> float:
     tf = TimezoneFinder()
     timezone_name = tf.timezone_at(lng=lng, lat=lat)
     tz = timezone(timezone_name)
-    
+
     now = datetime.now()
     return (tz.utcoffset(now) - tz.dst(now)).total_seconds() / 60
 

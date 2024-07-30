@@ -25,24 +25,24 @@ if dl.eph is None:
 
 
 def get_coords(year: int, month: int = 1, day: int = 1,
-               hour: int = 12, minute: int = 0, second: int = 0, *args) -> dict:
+               hour: int = 12, minute: int = 0, second: float = 0, *args) -> dict:
     """
     The input year is the year in Gregorian calendar.
     """
-        
+
     tisca = load.timescale()
     t0 = tisca.ut1(year, 1, 1, 0, 0, 0)
     t1 = tisca.ut1(year+1, 1, 1, 0, 0, 0)
-    
+
     ts, ys = find_discrete(t0, t1, seasons(dl.eph))
-    
+
     sun = dl.eph['sun']
     coord_j2000 = np.zeros(shape=(0,2), dtype=float)
     for ti in ts:
         astrometric = dl.earth.at(ti).observe(sun)
         ra_j2000, dec_j2000, _ = astrometric.radec()
         coord_j2000 = np.append(coord_j2000, [[ra_j2000._degrees, dec_j2000._degrees]], axis=0)
-    
+
     results = {
         'vernal_ra': str(coord_j2000[0,0]), 'vernal_dec': str(coord_j2000[0,1]),
         'summer_ra': str(coord_j2000[1,0]), 'summer_dec': str(coord_j2000[1,1]),
@@ -53,5 +53,5 @@ def get_coords(year: int, month: int = 1, day: int = 1,
         'autumnal_time': ts[2].ut1_calendar(),
         'winter_time': ts[3].ut1_calendar()
     }
-    
+
     return results
