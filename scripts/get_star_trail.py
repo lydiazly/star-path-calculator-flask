@@ -46,7 +46,7 @@ def main():
     parser.add_argument("--lng", "--lon", dest="lng", metavar="float", type=float, default=116.4074,
                         help="longitude (default: %(default)s)")
     parser.add_argument("-o", "--obj", metavar="str", type=str, default="Mars",
-                        help="name, Hipparchus catalogue number, or 'ra,dec' (default: %(default)s)")
+                        help="planet name, Hipparchus catalogue number, or 'ra,dec' (default: %(default)s)")
     parser.add_argument('-l', '--local', action='store_true',
                         help='use local time (default: False)')
     parser.add_argument('-d', '--dir', metavar="path", type=str, default=".",
@@ -74,19 +74,19 @@ def main():
         except ValueError:
             print(f"Invalid month name: '{args.month}'", file=sys.stderr)
             sys.exit(1)
-    
+
     # Convert from local time to UT1 ------------------------------------------|
     if args.local:
         # TODO: call the function to convert (remove `pass` after complete)
         pass
-    
+
     print(f"[Date]             {format_datetime(year, month, day)[0]}")
 
     # Set location ------------------------------------------------------------|
     lat = args.lat
     lng = args.lng
     print(f"[Location]         (lat, lng) = ({lat}, {lng})")
-    
+
     # Set the celestial object ------------------------------------------------|
     name, hip, radec = [None, -1, None]
     print("[Celestial Object]", end=" ")
@@ -103,7 +103,7 @@ def main():
         hip = int(args.obj)
         print(f"Hipparchus: {hip}")
     else:
-        # Name
+        # Planet name
         name = args.obj.lower()
         print(f"{name.capitalize()}")
 
@@ -114,7 +114,7 @@ def main():
     except Exception as e:
         print(str(e), file=sys.stderr)
         sys.exit(1)
-    
+
     # Write the SVG data to a file
     os.makedirs(fig_dir, exist_ok=True)
     filename = os.path.join(fig_dir, f'st_{results["diagram_id"]}.svg')
@@ -123,7 +123,7 @@ def main():
     svg_data = base64.b64decode(results["svg_data"]).decode('utf-8')
     with open(filename, 'w', encoding='utf-8') as file:
         file.write(svg_data)
-    
+
     print("\n[Annotations]")
     for item in results["annotations"]:
         if item['is_displayed']:
@@ -149,7 +149,7 @@ def main():
             print(f'  time_local          = ({_formatted_time_local})')
             print(f'  time_local (Julian) = ({_formatted_time_local_julian})')
             # print(f'  time_zone = {item["time_zone"]}')
-    
+
     print(f"\nSVG has been saved to '{filename}'")
 
 

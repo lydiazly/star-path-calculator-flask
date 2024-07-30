@@ -43,9 +43,9 @@ if dl.eph is None:
 def get_twilight_time(t: Time, lng: float, lat: float):
     t0 = t
     t1 = tisca.ut1_jd(t0.ut1 + 1)
-    
+
     loc = wgs84.latlon(longitude_degrees=lng, latitude_degrees=lat)
-    
+
     f = almanac.dark_twilight_day(dl.eph, loc)
     ts, events = almanac.find_discrete(t0, t1, f)
     # f returns a tuple of events when the time is:
@@ -54,14 +54,14 @@ def get_twilight_time(t: Time, lng: float, lat: float):
     # 2 — Nautical twilight.  (less than 12 degrees below the horizon)
     # 3 — Civil twilight.  (less than 6 degrees below the horizon)
     # 4 — Sun is up.
-    
+
     ts1 = []
     t_cals = ts.ut1_calendar()
     for i in range(len(ts)):
-        t_cal = (t_cals[0][i], t_cals[1][i], t_cals[2][i], 
+        t_cal = (t_cals[0][i], t_cals[1][i], t_cals[2][i],
                  t_cals[3][i], t_cals[4][i], t_cals[5][i])
         ts1.append(tisca.ut1(*t_cal))
-    
+
     # add t0 before the beginning of the list and
     # add t1 behind the ending of the list
     ts1.insert(0, t0)
@@ -69,7 +69,7 @@ def get_twilight_time(t: Time, lng: float, lat: float):
     events = list(events)
     events.insert(0, f(t0).item())
     events.insert(len(events), f(t1).item())
-        
+
     return ts1, events
 
 
@@ -83,7 +83,7 @@ def get_star_altaz(s, t: Time, lng: float, lat: float):
     loc = wgs84.latlon(longitude_degrees=lng, latitude_degrees=lat)
     observer = dl.earth + loc
     alt, az, dist = observer.at(t).observe(s).apparent().altaz()
-    
+
     return (alt, az)
 
 
@@ -91,18 +91,18 @@ def get_star_rising_time(s, t: Time, lng: float, lat: float):
     """
     The star rising time is also the starting of the 1-day period for calculation.
     """
-    
+
     year, month, day, _, _, _ = t.ut1_calendar()
-    
+
     offset_in_minutes = get_standard_offset(lng, lat)
     t0 = tisca.ut1(year, month, day, 0, 0-offset_in_minutes, 0)
     t1 = tisca.ut1(year, month, day+1, 0, 0-offset_in_minutes, 0)
-    
+
     loc = wgs84.latlon(longitude_degrees=lng, latitude_degrees=lat)
     observer = dl.earth + loc
-    
+
     t_risings, y_risings = almanac.find_risings(observer, s, t0, t1)
-    
+
     return t_risings, y_risings
 
 
@@ -110,16 +110,29 @@ def get_star_setting_time(s, t: Time, lng: float, lat: float):
     """
     Search for the star setting time during this 1-day period since star rising.
     """
-    
+
     t0 = t
     t1 = tisca.ut1_jd(t0.ut1 + 1)
-    
+
     loc = wgs84.latlon(longitude_degrees=lng, latitude_degrees=lat)
     observer = dl.earth + loc
-    
+
     t_settings, y_settings = almanac.find_settings(observer, s, t0, t1)
-    
+
     return t_settings, y_settings
+
+
+def get_star_meridian_transit_time(s, t: Time, lng: float, lat: float):
+
+    t0 = t
+    t1 = tisca.ut1_jd(t0.ut1 + 1)
+
+    loc = wgs84.latlon(longitude_degrees=lng, latitude_degrees=lat)
+    observer = dl.earth + loc
+
+    t_transits = almanac.find_transits(observer, s, t0, t1)
+
+    return t_transits
 
 
 def plot_in_style(ax, event, t_jd0, t_jd1, s, lng: float, lat: float):
@@ -127,18 +140,20 @@ def plot_in_style(ax, event, t_jd0, t_jd1, s, lng: float, lat: float):
     Plot star trails in different styles for different twilight conditions.
     t0 and t1 are both in units of Julian days.
     """
-    
-    t_jds = np.linspace(t_jd0, t_jd1, 100)
+
+    pts_num = int((t_jd1 - t_jd0) * 100)
+    t_jds = np.linspace(t_jd0, t_jd1, pts_num if pts_num>10 else 10)
+
     altitudes = np.zeros(shape=(0), dtype=float)
     azimuths = np.zeros(shape=(0), dtype=float)
     for ti in t_jds:
         alt, az = get_star_altaz(s, tisca.ut1_jd(ti), lng, lat)
         altitudes = np.append(altitudes, [alt.degrees])
         azimuths = np.append(azimuths, [az.degrees])
-    
+
     r = 90 - altitudes
     theta = np.radians(azimuths)
-    
+
     if event == 0 or event == 1:
         line, = ax.plot(theta, r, 'k-', lw=2)
     if event == 2:
@@ -150,22 +165,23 @@ def plot_in_style(ax, event, t_jd0, t_jd1, s, lng: float, lat: float):
     if event == 4:
         line, = ax.plot(theta, r, 'k--', lw=0.5)
         line.set_dashes([1,4])
-    
-    return altitudes, azimuths
+
+    return list(altitudes), list(azimuths)
 
 
 def get_twilight_transition_points(ts, events, s, lng: float, lat: float):
     """
     Find transition points between different twilight conditions.
     """
-    
+
     altitudes = []
     azimuths = []
     annotations = []
     pts = []
+
     for i in range(1, len(ts)-1):
         alt, az = get_star_altaz(s, ts[i], lng, lat)
-        
+
         if events[i-1] == 4 and events[i] == 3 and alt.degrees>refraction_limit:
             altitudes.append(alt.degrees)
             azimuths.append(az.degrees)
@@ -200,21 +216,39 @@ def get_twilight_transition_points(ts, events, s, lng: float, lat: float):
     return altitudes, azimuths, annotations, pts
 
 
+def plot_meridian_transit_points(ax, t, s, lng: float, lat: float):
+    """
+    Find meridian transit points (once in a day).
+    """
+
+    alt, az = get_star_altaz(s, t, lng, lat)
+
+    r = 90 - alt.degrees
+    theta = np.radians(az.degrees)
+
+    ax.plot(theta, r, 'ro', ms=4)
+    ax.annotate('T', (theta, r), textcoords="offset points", xytext=(0, 13), ha='center',va='top',
+                fontsize=10, color='r')
+
+    return alt.degrees, az.degrees
+
+
 def plot_twilight_transition_points(ax, altitudes, azimuths, annotations, alt_interp, az_interp):
     """
     Plot the twilight transition points as well as their labels.
     """
-    
+
     r = 90 - np.array(altitudes)
     theta = np.radians(azimuths)
     r_interp = 90 - np.array(alt_interp)
     theta_interp =  np.radians(az_interp)
-    
+
     texts = []
     for i, j, k in zip(theta, r, annotations):
-        ax.plot(i, j, 'ro', ms=6)
-        texts.append(plt.text(i, j, k, ha='center', va='center'))
-    adjust_text(texts, x=theta_interp, y=r_interp, arrowprops=dict(arrowstyle="->", color='r', lw=0.5))
+        ax.plot(i, j, 'ro', ms=4)
+        texts.append(plt.text(i, j, k, ha='center', va='center', color='r'))
+    adjust_text(texts, x=theta_interp, y=r_interp, expand=(2,2), force_static=(1,1), min_arrow_len=10,
+                arrowprops=dict(arrowstyle="->", color='r', lw=1, shrinkA=0, shrinkB=2, mutation_scale=10))
     # try:
     #     ax.annotate(annotations, (theta, r), textcoords="offset points", xytext=(0, -10), ha='center',va='top',
     #                 fontsize=10, color='r')
@@ -225,18 +259,18 @@ def plot_twilight_transition_points(ax, altitudes, azimuths, annotations, alt_in
 def plot_rising_and_setting_points(fig, ax, t0, t1, s, lng:float, lat:float):
     """
     Plot the star rising and setting points, whose latitudes are both at the refraction limit.
-    They are outside the plotting range, so they are both plotted on the ax2 layer 
+    They are outside the plotting range, so they are both plotted on the ax2 layer
     which is above the ax layer where the star trails are drawn on.
     """
-    
+
     alt0, az0 = get_star_altaz(s, t0, lng, lat)
     alt1, az1 = get_star_altaz(s, t1, lng, lat)
-    
+
     r0 = 90 - alt0.degrees
     theta0 = np.radians(az0.degrees)
     r1 = 90 - alt1.degrees
     theta1 = np.radians(az1.degrees)
-    
+
     # Get the coordinates of the points on fig layer, which are originally drawn on the ax layer.
     # Deliver the obtained coordinates to ax2 layer by dividing them with fig's width and height.
     pcoord0 = ax.transData.transform((theta0, r0))
@@ -245,19 +279,37 @@ def plot_rising_and_setting_points(fig, ax, t0, t1, s, lng:float, lat:float):
     pcoord1 = ax.transData.transform((theta1, r1))
     x1 = pcoord1[0]/fig.bbox.width
     y1 = pcoord1[1]/fig.bbox.height
-    
+
     ax2 = fig.add_axes([0,0,1,1], facecolor=(1,1,1,0))
     ax2.set_xlim(0, 1)
     ax2.set_ylim(0, 1)
-    
+
     ax2.plot(x0, y0, 'ro', ms=6)
-    ax2.annotate('RISING\nPOINT', (x0, y0), textcoords="offset points", xytext=(-20, 0), ha='right', 
+    ax2.annotate('R', (x0, y0), textcoords="offset points", xytext=(-10, 0), ha='right',
                   va='center', fontsize=10, color='r')
     ax2.plot(x1, y1, 'ro', ms=6)
-    ax2.annotate('SETTING\nPOINT', (x1, y1), textcoords="offset points", xytext=(20, 0), ha='left', 
+    ax2.annotate('S', (x1, y1), textcoords="offset points", xytext=(10, 0), ha='left',
                      va='center', fontsize=10, color='r')
-    
+    ax2.axis('off')
+
     return [alt0.degrees, alt1.degrees], [az0.degrees, az1.degrees], [t0, t1]
+
+
+def plot_celestial_poles(ax, lat):
+    """
+    Plot the north celestial pole or the south celestial pole.
+    """
+
+    if lat>0:
+        r = 90 - lat
+        theta = 0
+        ax.plot(theta, r, 'b+', ms=8)
+        ax.annotate('NCP', (theta, r), textcoords="offset points", xytext=(-6, 0), ha='right', va='center', fontsize=10, color='b')
+    elif lat<0:
+        r = 90 + lat
+        theta = np.radians(180)
+        ax.plot(theta, r, 'b+', ms=8)
+        ax.annotate('SCP', (theta, r), textcoords="offset points", xytext=(-6, 0), ha='right', va='center', fontsize=10, color='b')
 
 
 def get_star_trail_diagram(t: Time, lng: float, lat: float,
@@ -270,22 +322,24 @@ def get_star_trail_diagram(t: Time, lng: float, lat: float,
         elif name in ['jupiter', 'saturn', 'uranus', 'neptune', 'pluto']:
             s = dl.eph[name + ' barycenter']
         else:
-            raise ValueError(f"Wrong name: {name}")
+            raise ValueError(f"Wrong planet name: {name}")
     elif hip > 0:
         s = Star.from_dataframe(dl.hip_df.loc[hip])
     elif radec is not None and len(radec) == 2:
         s = Star(ra_hours=float(radec[0]), dec_degrees=float(radec[1]))
-    
+
     if s is None:
-        raise ValueError("Either name, Hipparchus catalogue number, or (ra, dec) is invalid.")
-    
+        raise ValueError("Either planet name, Hipparchus catalogue number, or (ra, dec) is invalid.")
+
     t_risings, y_risings = get_star_rising_time(s, t, lng, lat)
     t_starting = t_risings[0]
     t_settings, y_settings = get_star_setting_time(s, t_starting, lng, lat)
     ts, events = get_twilight_time(t_starting, lng, lat)
-    
+    t_transits = get_star_meridian_transit_time(s, t_starting, lng, lat)
+
     t_jds = np.array([t.ut1 for t in ts])
-    
+
+    # Insert the setting point to the array representing twilight transition points
     t_jd_setting = t_settings[0].ut1
     ind_tst = len(t_jds[(t_jds - t_jd_setting) < 0])
     ts_combined = np.insert(t_jds, ind_tst, t_jd_setting)
@@ -293,47 +347,57 @@ def get_star_trail_diagram(t: Time, lng: float, lat: float,
 
     alt_interp = []
     az_interp = []
-    
+
     # Adjusting Matplotlib rcParams to ensure text is not converted to paths
     plt.rcParams['svg.fonttype'] = 'none'
     # plt.rcParams['font.family'] = 'Arial'
-    
+
     fig, ax = plt.subplots(figsize=(10, 10), subplot_kw={'projection': 'polar'})
     ax.set_ylim(0, 90)
     ax.set_theta_offset(np.pi/2)
     for i in range(len(ts_combined)-1):
         alt_temp, az_temp = plot_in_style(ax, events_combined[i], ts_combined[i], ts_combined[i+1], s, lng, lat)
-        alt_interp.append(alt_temp[:-1])
-        az_interp.append(az_temp[:-1])
+        alt_interp.extend(alt_temp[:-1])
+        az_interp.extend(az_temp[:-1])
     ttp_alt, ttp_az, ttp_anno, ttp_ts = get_twilight_transition_points(ts, events, s, lng, lat)
     plot_twilight_transition_points(ax, ttp_alt, ttp_az, ttp_anno, alt_interp, az_interp)
-    
+    plot_celestial_poles(ax, lat)
+
     if y_risings[0] and y_settings[0]:
-        rsp_alt, rsp_az, rsp_ts = plot_rising_and_setting_points(fig, ax, t_risings[0], t_settings[0], s, lng, lat)
+        rts_alt, rts_az, rts_ts = plot_rising_and_setting_points(fig, ax, t_risings[0], t_settings[0], s, lng, lat)
+        mtp_alt, mtp_az = plot_meridian_transit_points(ax, t_transits[0], s, lng, lat)
+        rts_alt.insert(1, mtp_alt)
+        rts_az.insert(1, mtp_az)
+        rts_ts.insert(1, t_transits[0])
     elif not y_risings[0] and get_star_altaz(s, t_risings[0], lng, lat)[0].degrees<refraction_limit:
-        rsp_alt = []
-        rsp_az = []
-        rsp_ts = []
+        rts_alt = []
+        rts_az = []
+        rts_ts = []
         raise ValueError('This star never rises on this day.')
     else:
-        rsp_alt = []
-        rsp_az = []
-        rsp_ts = []
-    
+        mtp_alt, mtp_az = plot_meridian_transit_points(ax, t_transits[0], s, lng, lat)
+        rts_alt = [mtp_alt]
+        rts_az = [mtp_az]
+        rts_ts = [t_transits[0]]
+
     r_ticks = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90]
     r_tick_labels=['90°', '', '', '60°', '', '', '30°', '', '', '0°']
     ax.set_yticks(r_ticks)
     ax.set_yticklabels([])
-    
+
     for i in range(len(r_ticks)):
         ax.annotate(str(r_tick_labels[i]), (np.pi, r_ticks[i]), textcoords="offset points", xytext=(3, 3),
                     ha='left', va='bottom', fontsize=10, color='gray')
-    
+    ax.plot(0, 0, 'bo', ms=2, mec='b')
+    ax.annotate('Z', (0, 0), textcoords="offset points", xytext=(-3, 0), ha='right', va='center', fontsize=10, color='b')
+
+
     now = datetime.now()
     diagram_id = f"{now.timestamp():.3f}"  # unix timestamp -> str
 
-    ax.set_thetagrids(angles=[0, 90, 180, 270], labels=['N', 'E', 'S', 'W'])
+    ax.set_thetagrids(angles=[0, 90, 180, 270], labels=['N\n(0°)', 'E\n(90°)', 'S\n(180°)', 'W\n(270°)'])
     ax.grid(color='gray', alpha=0.1)
+    ax.tick_params(axis='x', pad=15, labelsize=10)
 
     # Set the background color of the figure to transparent
     fig.patch.set_facecolor('none')
@@ -356,16 +420,16 @@ def get_star_trail_diagram(t: Time, lng: float, lat: float,
     svg_data = re.sub(r'<!DOCTYPE svg .+?>', '', svg_data, flags=re.DOTALL)
     # Encode the SVG data to Base64
     svg_base64 = base64.b64encode(svg_data.encode('utf-8')).decode('utf-8')
-    
-    return diagram_id, svg_base64, (ttp_alt, ttp_az, ttp_anno, ttp_ts), (rsp_alt, rsp_az, rsp_ts)
+
+    return diagram_id, svg_base64, (ttp_alt, ttp_az, ttp_anno, ttp_ts), (rts_alt, rts_az, rts_ts)
 
 
-def get_annotations(ttp, rsp, lng:float, lat:float):
-    
+def get_annotations(ttp, rts, lng:float, lat:float):
+
     ttp_alt, ttp_az, ttp_anno, ttp_times = ttp
-    rsp_alt, rsp_az, rsp_times = rsp
-    
-    name_list = ['D1', 'D2', 'D3', 'N1', 'N2', 'N3', 'R', 'S']
+    rts_alt, rts_az, rts_times = rts
+
+    name_list = ['D1', 'D2', 'D3', 'N1', 'N2', 'N3', 'R', 'T', 'S']
     annotations = []
     for i in name_list:
         z = {}
@@ -379,7 +443,7 @@ def get_annotations(ttp, rsp, lng:float, lat:float):
         z['time_ut1_julian'] = None
         z['time_local_julian'] = None
         annotations.append(z)
-    
+
     for i in range(len(ttp_anno)):
         ind = np.where(np.array(name_list) == ttp_anno[i])[0][0]
         _time_ut1 = ttp_times[i].ut1_calendar()
@@ -394,24 +458,38 @@ def get_annotations(ttp, rsp, lng:float, lat:float):
         annotations[ind]['time_local'] = (*map(int, _time_local[0:5]), float(_time_local[-1]))
         annotations[ind]['time_local_julian'] = (*map(int, _time_local_julian[0:5]), float(_time_local_julian[-2]+_time_local_julian[-1]/1e6))
         annotations[ind]['time_zone'] = get_standard_offset(lng, lat) / 60
-    
-    _anno = ['R', 'S']
-    if len(rsp_alt) > 0:
+
+    _anno = ['R', 'T', 'S']
+    if len(rts_alt) > 1:
         for i in range(len(_anno)):
             ind = np.where(np.array(name_list) == _anno[i])[0][0]
-            _time_ut1 = rsp_times[i].ut1_calendar()
-            _time_local = ut1_to_local_standard_time(rsp_times[i].ut1_calendar(), lng, lat)
+            _time_ut1 = rts_times[i].ut1_calendar()
+            _time_local = ut1_to_local_standard_time(rts_times[i].ut1_calendar(), lng, lat)
             _time_ut1_julian = juliandate.to_julian(juliandate.from_gregorian(*_time_ut1))
             _time_local_julian = juliandate.to_julian(juliandate.from_gregorian(*_time_local))
             annotations[ind]['is_displayed'] = True
-            annotations[ind]['alt'] = float(rsp_alt[i])
-            annotations[ind]['az'] = float(rsp_az[i])
+            annotations[ind]['alt'] = float(rts_alt[i])
+            annotations[ind]['az'] = float(rts_az[i])
             annotations[ind]['time_ut1'] = (*map(int, _time_ut1[0:5]), float(_time_ut1[-1]))
-            annotations[ind]['time_ut1_julian'] = (*map(int, _time_ut1_julian[0:5]), float(_time_ut1_julian[-2]+_time_ut1_julian[-1])/1e6)
+            annotations[ind]['time_ut1_julian'] = (*map(int, _time_ut1_julian[0:5]), float(_time_ut1_julian[-2]+_time_ut1_julian[-1]/1e6))
             annotations[ind]['time_local'] = (*map(int, _time_local[0:5]), float(_time_local[-1]))
             annotations[ind]['time_local_julian'] = (*map(int, _time_local_julian[0:5]), float(_time_local_julian[-2]+_time_local_julian[-1]/1e6))
             annotations[ind]['time_zone'] = get_standard_offset(lng, lat) / 60
-    
+    elif len(rts_alt) == 1:
+        ind = np.where(np.array(name_list) == 'T')[0][0]
+        _time_ut1 = rts_times[0].ut1_calendar()
+        _time_local = ut1_to_local_standard_time(rts_times[0].ut1_calendar(), lng, lat)
+        _time_ut1_julian = juliandate.to_julian(juliandate.from_gregorian(*_time_ut1))
+        _time_local_julian = juliandate.to_julian(juliandate.from_gregorian(*_time_local))
+        annotations[ind]['is_displayed'] = True
+        annotations[ind]['alt'] = float(rts_alt[0])
+        annotations[ind]['az'] = float(rts_az[0])
+        annotations[ind]['time_ut1'] = (*map(int, _time_ut1[0:5]), float(_time_ut1[-1]))
+        annotations[ind]['time_ut1_julian'] = (*map(int, _time_ut1_julian[0:5]), float(_time_ut1_julian[-2]+_time_ut1_julian[-1]/1e6))
+        annotations[ind]['time_local'] = (*map(int, _time_local[0:5]), float(_time_local[-1]))
+        annotations[ind]['time_local_julian'] = (*map(int, _time_local_julian[0:5]), float(_time_local_julian[-2]+_time_local_julian[-1]/1e6))
+        annotations[ind]['time_zone'] = get_standard_offset(lng, lat) / 60
+
     return annotations
 
 def get_diagram(year: int, month: int, day: int, lat: float, lng: float,
@@ -420,10 +498,10 @@ def get_diagram(year: int, month: int, day: int, lat: float, lng: float,
     t1 = tisca.ut1(year, month, day)
     # print([year, month, day, hour, lat, lng])
 
-    diagram_id, svg_data, ttp, rsp = get_star_trail_diagram(t=t1, lng=lng, lat=lat,
+    diagram_id, svg_data, ttp, rts = get_star_trail_diagram(t=t1, lng=lng, lat=lat,
                                                             name=name, hip=hip, radec=radec)
-    
-    annotations = get_annotations(ttp=ttp, rsp=rsp, lng=lng, lat=lat)
+
+    annotations = get_annotations(ttp=ttp, rts=rts, lng=lng, lat=lat)
 
     return {
       "diagram_id": diagram_id,
