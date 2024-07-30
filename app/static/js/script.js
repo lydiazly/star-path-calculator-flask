@@ -254,9 +254,9 @@ async function handleFormSubmit(event) {
             //     ...[data.year, data.month, data.day, data.hour, data.minute, data.second]
             //     .map(v => parseInt(v))
             // );
-            const yearStr = formatDateTime(data.year).year;
+            const yearStr = formatDateTime({ year: data.year}).year;
             const resultsHtml = `
-                <h3>Equinoxes and Solstices of <span style="color: blue;">${yearStr}</span>:</h3>
+                <h3>Equinoxes and Solstices of <span style="color: blue;">${year} (${yearStr})</span>:</h3>
                 <table border="1" style="margin-left: auto; margin-right: auto;">
                     <tr>
                         <th></th>

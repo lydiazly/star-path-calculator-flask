@@ -6,7 +6,6 @@ The main script to calculate and print coordinates from the terminal.
 
 import argparse
 from datetime import datetime
-import calendar
 import sys
 import os
 
