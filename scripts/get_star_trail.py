@@ -15,11 +15,11 @@ import base64
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from core.star_trail import get_diagram
-from utils.script_utils import format_datetime, check_datetime_ranges, format_timezone, EPH_DATE_MIN_STR, EPH_DATE_MAX_STR
+from utils.script_utils import format_datetime, format_datetime_iso, validate_datetime, format_timezone, EPH_DATE_MIN_STR, EPH_DATE_MAX_STR
 
 
 prog = f"python {os.path.basename(__file__)}"
-description = "Specify a date to .... The input date is in UT1 by default."
+description = "Specify a date, location, and celestial object to draw a star trail. The input date is in UT1 by default."
 epilog = f"""date range:
   {EPH_DATE_MIN_STR} \u2013 {EPH_DATE_MAX_STR} (UT1)
 examples:
@@ -85,7 +85,7 @@ def main():
     # Set location ------------------------------------------------------------|
     lat = args.lat
     lng = args.lng
-    print(f"[Location]         (lat, lng) = ({lat}, {lng})")
+    print(f"[Location]         lat/lng = {lat:.3f}/{lng:.3f}")
 
     # Set the celestial object ------------------------------------------------|
     name, hip, radec = [None, -1, None]
@@ -94,9 +94,9 @@ def main():
         # (ra, dec)
         try:
             radec = tuple(map(float, args.obj.split(',')))
-            print(f"(ra, dec): ({radec[0]}, {radec[1]})")
+            print(f"RA/Dec: {radec[0]:.3f}/{radec[1]:.3f}")
         except ValueError:
-            print(f"Invalid (ra, dec) format: '{args.obj}'", file=sys.stderr)
+            print(f"Invalid 'ra,dec' format: '{args.obj}'", file=sys.stderr)
             sys.exit(1)
     elif args.obj.isdigit():
         # Hipparchus catalogue number
@@ -109,7 +109,7 @@ def main():
 
     # Plot star trail ---------------------------------------------------------|
     try:
-        check_datetime_ranges(year, month, day)
+        validate_datetime(year, month, day)
         results = get_diagram(year, month, day, lat=lat, lng=lng, name=name, hip=hip, radec=radec)
     except Exception as e:
         print(str(e), file=sys.stderr)
@@ -127,27 +127,13 @@ def main():
     print("\n[Annotations]")
     for item in results["annotations"]:
         if item['is_displayed']:
-            _formatted_time_ut1          = ', '.join([f'{item["time_ut1"][0]:5d}']
-                                                     + [f'{value:02d}' for value in item["time_ut1"][1:-1]]
-                                                     + [f'{item["time_ut1"][-1]:06.3f}'])
-            _formatted_time_ut1_julian   = ', '.join([f'{item["time_ut1_julian"][0]:5d}']
-                                                     + [f'{value:02d}' for value in item["time_ut1_julian"][1:-1]]
-                                                     + [f'{item["time_ut1_julian"][-1]:06.3f}'])
-            _formatted_time_local        = ', '.join([f'{item["time_local"][0]:5d}']
-                                                     + [f'{value:02d}' for value in item["time_local"][1:-1]]
-                                                     + [f'{item["time_local"][-1]:06.3f}']
-                                                     + [f'{format_timezone(item["time_zone"])}'])
-            _formatted_time_local_julian = ', '.join([f'{item["time_local_julian"][0]:5d}']
-                                                     + [f'{value:02d}' for value in item["time_local_julian"][1:-1]]
-                                                     + [f'{item["time_local_julian"][-1]:06.3f}']
-                                                     + [f'{format_timezone(item["time_zone"])}'])
             print(f'{item["name"]}:')
-            print(f'  alt = {item["alt"]}')
-            print(f'  az  = {item["az"]}')
-            print(f'  time_ut1            = ({_formatted_time_ut1})')
-            print(f'  time_ut1 (Julian)   = ({_formatted_time_ut1_julian})')
-            print(f'  time_local          = ({_formatted_time_local})')
-            print(f'  time_local (Julian) = ({_formatted_time_local_julian})')
+            print(f'  alt = {item["alt"]:.3f}')
+            print(f'  az  = {item["az"]:.3f}')
+            print(f'  time_ut1            = {" ".join(format_datetime_iso(*item["time_ut1"]))}')
+            print(f'  time_ut1 (Julian)   = {" ".join(format_datetime_iso(*item["time_ut1_julian"]))}')
+            print(f'  time_local          = {" ".join(format_datetime_iso(*item["time_local"]))}')
+            print(f'  time_local (Julian) = {" ".join(format_datetime_iso(*item["time_local_julian"]))}')
             # print(f'  time_zone = {item["time_zone"]}')
 
     print(f"\nSVG has been saved to '{filename}'")
