@@ -70,6 +70,7 @@ def diagram():
     day   = request.args.get("day", default=1, type=int)
     lat   = request.args.get("lat", default=50, type=float)
     lng   = request.args.get("lng", default=-140, type=float)
+    flag  = request.args.get("flag")
     name  = request.args.get("name")
     hip   = request.args.get("hip", default=-1, type=int)
     ra    = request.args.get("ra")
@@ -98,6 +99,8 @@ def diagram():
         except ValueError:
             return jsonify({"error": "(ra, dec) must be floats."}), 400
     
+    # TODO: equinoxes & solstices: if flag, reset month & date, return flag=ve/ss/ae/ws
+    
     try:
         results = get_diagram(year, month, day, lat=lat, lng=lng, **obj)
     except Exception as e:
@@ -107,6 +110,7 @@ def diagram():
         "year":        str(year),
         "month":       str(month),
         "day":         str(day),
+        "flag":        flag,
         "lat":         str(lat),
         "lng":         str(lng),
         "name":        name,
