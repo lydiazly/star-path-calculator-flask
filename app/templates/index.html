@@ -2,31 +2,31 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Equinox and Solstice ICRS Coordinates Calculator</title>
+    <title>Equinoxes and Solstices</title>
     <!-- Use url_for to generate the correct URL for the static JavaScript file -->
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </head>
 <body>
     <main style="text-align: center">
-        <h1>Equinox & Solstice Coordinates Calculator</h1>
-        <h2>International Celestial Reference System (ICRS)</h2>
+        <h1>Equinoxes & Solstices</h1>
+        <h2>Get the dates, times, and ICRS coordinates in RA and Dec for the equinoxes and solstices of a given year.</h2>
         <hr><br>
         <form id="queryForm" onsubmit="handleFormSubmit(event)">
-            <span>(UT1)&nbsp;&nbsp;</span>
+            <!-- <span>(UT1)&nbsp;&nbsp;</span> -->
 
             <label for="year">Year:</label>
             <input type="number" id="year" name="year" min="-5000" max="5000">
 
-            <label for="month">Month:</label>
+            <!-- <label for="month">Month:</label>
             <select id="month" name="month">
                 <option value="" hidden disabled selected></option>
-            </select>
+            </select> -->
 
-            <label for="day">Day:</label>
-            <input type="number" id="day" name="day" min="1" max="31">
+            <!-- <label for="day">Day:</label>
+            <input type="number" id="day" name="day" min="1" max="31"> -->
 
-            <label for="hour">Hour:</label>
-            <input type="number" id="hour" name="hour" min="0" max="23">
+            <!-- <label for="hour">Hour:</label>
+            <input type="number" id="hour" name="hour" min="0" max="23"> -->
 
             <!-- <label for="minute">Minute:</label>
             <input type="number" id="minute" name="minute" min="0" max="59"> -->

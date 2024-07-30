@@ -23,41 +23,42 @@ def ratelimit_error(e):
     return jsonify({"error": f"For security, we rate-limit requests as: {str(e.description)}. Please try again later."}), 429
 
 
-@app.route("/coords", methods=["GET"])
+@app.route("/equinox", methods=["GET"])
 @limiter.limit("4/second", override_defaults=False)
 def coords():
     year   = request.args.get("year")
-    month  = request.args.get("month", default=1, type=int)
-    day    = request.args.get("day", default=1, type=int)
-    hour   = request.args.get("hour", default=12, type=int)
-    minute = request.args.get("minute", default=0, type=int)
-    second = request.args.get("second", default=0, type=float)
+    # month  = request.args.get("month", default=1, type=int)
+    # day    = request.args.get("day", default=1, type=int)
+    # hour   = request.args.get("hour", default=12, type=int)
+    # minute = request.args.get("minute", default=0, type=int)
+    # second = request.args.get("second", default=0, type=float)
 
     if year is None:
         return jsonify({"error": "Year is required."}), 400
 
     try:
         year   = int(year)
-        month  = int(month)
-        day    = int(day)
-        hour   = int(hour)
-        minute = int(minute)
-        second = float(second)
+        # month  = int(month)
+        # day    = int(day)
+        # hour   = int(hour)
+        # minute = int(minute)
+        # second = float(second)
     except ValueError:
-        return jsonify({"error": "Date and time must be integers."}), 400
+        return jsonify({"error": "The year must be an integers."}), 400
 
     try:
-        results = get_coords(year, month, day, hour, minute, second)
+        # results = get_coords(year, month, day, hour, minute, second)
+        results = get_coords(year)
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
     return jsonify({
         "year":    str(year),
-        "month":   str(month),
-        "day":     str(day),
-        "hour":    str(hour),
-        "minute":  str(minute),
-        "second":  str(second),
+        # "month":   str(month),
+        # "day":     str(day),
+        # "hour":    str(hour),
+        # "minute":  str(minute),
+        # "second":  str(second),
         "results": results,
     }), 200
 

@@ -30,16 +30,16 @@ Output:
 ```text
 Dates, times, and ICRS coordinates (J2000) for the equinoxes and solstices of 2001 BCE:
 
-[Vernal Equinox] -2000-03-21 04:40:19.602
+[Vernal Equinox] -2000-03-21 04:40:19.602 (UT1)
   ra = 52.962, dec = 19.517
 
-[Summer Solstice] -2000-06-23 11:32:34.141
+[Summer Solstice] -2000-06-23 11:32:34.141 (UT1)
   ra = 147.791, dec = 13.371
 
-[Autumnal Equinox] -2000-09-22 05:50:58.094
+[Autumnal Equinox] -2000-09-22 05:50:58.094 (UT1)
   ra = 232.955, dec = -19.515
 
-[Winter Solstice] -2000-12-19 15:18:26.852
+[Winter Solstice] -2000-12-19 15:18:26.852 (UT1)
   ra = 327.784, dec = -13.373
 ```
 
