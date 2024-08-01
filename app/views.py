@@ -25,8 +25,8 @@ def ratelimit_error(e):
 
 @app.route("/equinox", methods=["GET"])
 @limiter.limit("4/second", override_defaults=False)
-def coords():
-    year   = request.args.get("year")
+def equinox():
+    year   = request.args.get("year", default=None, type=int)
     # month  = request.args.get("month", default=1, type=int)
     # day    = request.args.get("day", default=1, type=int)
     # hour   = request.args.get("hour", default=12, type=int)
@@ -34,17 +34,7 @@ def coords():
     # second = request.args.get("second", default=0, type=float)
 
     if year is None:
-        return jsonify({"error": "Year is required."}), 400
-
-    try:
-        year   = int(year)
-        # month  = int(month)
-        # day    = int(day)
-        # hour   = int(hour)
-        # minute = int(minute)
-        # second = float(second)
-    except ValueError:
-        return jsonify({"error": "The year must be an integers."}), 400
+        return jsonify({"error": "The year must be provided."}), 400
 
     try:
         # results = get_coords(year, month, day, hour, minute, second)
@@ -66,42 +56,45 @@ def coords():
 @app.route("/diagram", methods=["GET"])
 @limiter.limit("4/second", override_defaults=False)
 def diagram():
-    year  = request.args.get("year")
+    year  = request.args.get("year", default=None, type=int)
     month = request.args.get("month", default=1, type=int)
     day   = request.args.get("day", default=1, type=int)
-    lat   = request.args.get("lat", default=50, type=float)
-    lng   = request.args.get("lng", default=-140, type=float)
-    flag  = request.args.get("flag")
-    name  = request.args.get("name")
+    lat   = request.args.get("lat", default=None, type=float)
+    lng   = request.args.get("lng", default=None, type=float)
+    flag  = request.args.get("flag", default=None)
+    name  = request.args.get("name", default=None)
     hip   = request.args.get("hip", default=-1, type=int)
-    ra    = request.args.get("ra")
-    dec   = request.args.get("dec")
+    ra    = request.args.get("ra", default=None, type=float)
+    dec   = request.args.get("dec", default=None, type=float)
 
-    try:
-        year  = int(year)
-        month = int(month)
-        day   = int(day)
-    except ValueError:
-        return jsonify({"error": "Date must be integers."}), 400
-    
-    try:
-        lat   = float(lat)
-        lng   = float(lng)
-    except ValueError:
-        return jsonify({"error": "Longitude and latitude must be floats."}), 400
+    if year is None:
+        return jsonify({"error": "The year must be provided."}), 400
 
-    if (name):
-        obj = {"name": str(name).lower()}
-    elif (hip > 0):
+    if lat is None or lng is None:
+        return jsonify({"error": "The longitude and latitude must be provided."}), 400
+
+    if name:
+        obj = {"name": name.lower()}
+    elif hip > 0:
         obj = {"hip": hip}
-    elif (ra and dec):
-        try:
-            obj = {"radec": (float(ra), float(dec))}
-        except ValueError:
-            return jsonify({"error": "(ra, dec) must be floats."}), 400
-    
-    # TODO: equinoxes & solstices: if flag, reset month & date, return flag=ve/ss/ae/ws
-    
+    elif ra is not None and dec is not None:
+        obj = {"radec": (ra, dec)}
+    else:
+        return jsonify({"error": "Either planet name, Hipparchus catalogue number, or (ra, dec) must be provided."}), 400
+
+    # TODO: test equinox/solstice times
+    eqx_sol_keys = {
+        "ve": "vernal_time",
+        "ss": "summer_time",
+        "ae": "autumnal_time",
+        "ws": "winter_time"
+    }
+    eqx_sol_time = []
+    if flag in eqx_sol_keys:
+        eqx_sol_time = get_coords(year)[eqx_sol_keys[flag]]  # [int, int, int, int, int, float]
+        month = eqx_sol_time[1]
+        day = eqx_sol_time[2]
+
     try:
         results = get_diagram(year, month, day, lat=lat, lng=lng, **obj)
     except Exception as e:
@@ -118,9 +111,10 @@ def diagram():
         "hip":         hip,
         "ra":          ra,
         "dec":         dec,
-        'diagramId':   str(results["diagram_id"]),
-        'svgData':     results["svg_data"],
-        'annotations': results["annotations"]
+        "diagramId":   str(results["diagram_id"]),
+        "svgData":     results["svg_data"],
+        "annotations": results["annotations"],
+        "eqxSolTime":  eqx_sol_time
     }), 200
 
 
