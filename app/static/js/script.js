@@ -3,7 +3,8 @@
 
 const EPH_DATE_MIN = [-3000, 1, 29];  // 29 January 3001 BCE
 const EPH_DATE_MAX = [3000, 5, 6];  // 6 May 3000 CE
-const DATE_IDS = ['year', 'month', 'day', 'hour'];
+// const DATE_IDS = ['year', 'month', 'day', 'hour'];
+const DATE_IDS = ['year'];
 const MONTHS = [
     { abbr: '', name: '' },
     { abbr: 'Jan', name: 'January' },
@@ -300,7 +301,7 @@ async function handleFormSubmit(event) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    populateMonthOptions();
+    // populateMonthOptions();
     clearForm();
 
     /* Adjust the date */
