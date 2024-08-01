@@ -4,6 +4,7 @@
 Functions used only for scripts that are executed from the command line.
 """
 
+from typing import List
 import calendar
 from config import EPH_DATE_MIN, EPH_DATE_MAX
 
@@ -13,18 +14,18 @@ __all__ = ["format_datetime", "format_datetime_iso", "validate_datetime", "valid
 # Formats the date and time into strings as '1 Jan 2000 CE' and '12:00:00[.000]'
 def format_datetime(year: int, month: int = 1, day: int = 1,
                     hour: int = 12, minute: int = 0, second: float = 0,
-                    month_first = False, abbr = True, year_only = False):
+                    month_first = False, abbr = True, year_only = False) -> List[str]:
     year_str = f"{year} CE" if year > 0 else f"{-year + 1} BCE"
     month_str = calendar.month_abbr[month] if abbr else calendar.month_name[month]
     date_str = f"{month_str} {day}, {year_str}" if month_first else f"{day} {month_str} {year_str}"
     sec_str = f"{int(second):02d}" if float(second).is_integer() else f"{second:06.3f}"
     time_str = f"{hour:02d}:{minute:02d}:{sec_str}"
-    return year_str if year_only else [date_str, time_str]
+    return [year_str] if year_only else [date_str, time_str]
 
 
 # Formats the date and time into ISO format strings '2000-01-01 12:00:00[.000]'
 def format_datetime_iso(year: int, month: int = 1, day: int = 1,
-                    hour: int = 12, minute: int = 0, second: float = 0):
+                        hour: int = 12, minute: int = 0, second: float = 0) -> List[str]:
     date_str = f"{year}-{month:02d}-{day:02d}"
     sec_str = f"{int(second):02d}" if float(second).is_integer() else f"{second:06.3f}"
     time_str = f"{hour:02d}:{minute:02d}:{sec_str}"
@@ -36,7 +37,7 @@ EPH_DATE_MAX_STR, _ = format_datetime_iso(*EPH_DATE_MAX)
 
 
 def validate_datetime(year: int, month: int, day: int,
-                          hour: int = 12, minute: int = 0, second: float = 0):
+                      hour: int = 12, minute: int = 0, second: float = 0):
     day_max = 31
     if month == 2:
         day_max = 29 if year % 4 == 0 and (year % 100 != 0 or year % 400 == 0) else 28
@@ -61,13 +62,15 @@ def validate_datetime(year: int, month: int, day: int,
                 or (month == EPH_DATE_MAX[1] and day > EPH_DATE_MAX[2])))
     ):
         raise ValueError(f"Out of the ephemeris date range: {EPH_DATE_MIN_STR} \u2013 {EPH_DATE_MAX_STR}")
+
 
 def validate_year(year: int):
     if (year <= EPH_DATE_MIN[0] or year >= EPH_DATE_MAX[0]):
         raise ValueError(f"Out of the ephemeris date range: {EPH_DATE_MIN_STR} \u2013 {EPH_DATE_MAX_STR}")
 
+
 def check_year(year: int, month: int, day: int,
-                          hour: int = 12, minute: int = 0, second: float = 0):
+               hour: int = 12, minute: int = 0, second: float = 0):
     day_max = 31
     if month == 2:
         day_max = 29 if year % 4 == 0 and (year % 100 != 0 or year % 400 == 0) else 28
@@ -93,15 +96,18 @@ def check_year(year: int, month: int, day: int,
     ):
         raise ValueError(f"Out of the ephemeris date range: {EPH_DATE_MIN_STR} \u2013 {EPH_DATE_MAX_STR}")
 
-# Converts decimal time to HMS (Hours, Minutes, Seconds).
-def decimal_to_hms(t):
-    hours = int(t)
-    minutes = int((t - hours) * 60)
-    seconds = round(((t - hours) * 60 - minutes) * 60)
-    return {'hours': hours, 'minutes': minutes, 'seconds': seconds}
+
+# Converts decimal hours to HMS (Hours, Minutes, Seconds).
+def decimal_to_hms(decimal_hours: float) -> dict:
+    sign = -1 if decimal_hours < 0 else 1
+    abs_decimal_hours = abs(decimal_hours)
+    abs_hours = int(abs_decimal_hours)
+    minutes = int((abs_decimal_hours - abs_hours) * 60)
+    seconds = ((abs_decimal_hours - abs_hours) * 60 - minutes) * 60
+    return {'hours': sign * abs_hours, 'minutes': minutes, 'seconds': seconds}
 
 
 # Formats a decimal UTC offset into a string.
-def format_timezone(tz):
-    hms = decimal_to_hms(abs(tz))
-    return f"{'-' if tz < 0 else '+'}{hms['hours']:02d}{hms['minutes']:02d}"
+def format_timezone(tz: float) -> str:
+    hms = decimal_to_hms(tz)
+    return f"{'-' if tz < 0 else '+'}{abs(hms['hours']):02d}{hms['minutes']:02d}"

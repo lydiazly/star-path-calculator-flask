@@ -6,7 +6,6 @@ The main script to calculate and print coordinates from the terminal.
 
 import argparse
 from datetime import datetime
-import calendar
 import sys
 import os
 
@@ -92,7 +91,7 @@ def main():
         sys.exit(1)
 
     # date_str, time_str = format_datetime(*datetime_list)
-    year_str = format_datetime(*datetime_list, year_only=True)
+    year_str, *_ = format_datetime(*datetime_list, year_only=True)
 
     # print(f"ICRS coordinates (J2000) of equinoxes and solstices on {date_str}, at {time_str}:")
     print(f"Dates, times, and ICRS coordinates (J2000) for the equinoxes and solstices of {year_str}:")

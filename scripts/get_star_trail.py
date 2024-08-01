@@ -132,8 +132,8 @@ def main():
             print(f'  az  = {item["az"]:.3f}')
             print(f'  time_ut1            = {" ".join(format_datetime_iso(*item["time_ut1"]))}')
             print(f'  time_ut1 (Julian)   = {" ".join(format_datetime_iso(*item["time_ut1_julian"]))}')
-            print(f'  time_local          = {" ".join(format_datetime_iso(*item["time_local"]))}')
-            print(f'  time_local (Julian) = {" ".join(format_datetime_iso(*item["time_local_julian"]))}')
+            print(f'  time_local          = {" ".join(format_datetime_iso(*item["time_local"]))} ({format_timezone(item["time_zone"])})')
+            print(f'  time_local (Julian) = {" ".join(format_datetime_iso(*item["time_local_julian"]))} ({format_timezone(item["time_zone"])})')
             # print(f'  time_zone = {item["time_zone"]}')
 
     print(f"\nSVG has been saved to '{filename}'")
