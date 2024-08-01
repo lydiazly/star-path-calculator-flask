@@ -15,7 +15,6 @@ import base64
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from core.star_trail import get_diagram
-from core.data_loader import load_hip_ident, hip_to_name
 from utils.script_utils import format_datetime, format_datetime_iso, validate_datetime, format_timezone, EPH_DATE_MIN_STR, EPH_DATE_MAX_STR
 
 
@@ -52,9 +51,12 @@ def main():
                         help='use local time (default: False)')
     parser.add_argument('-d', '--dir', metavar="path", type=str, default=".",
                         help='path to save output figures (default: %(default)s)')
+    parser.add_argument('--name', action='store_true',
+                        help='also print the name if Hipparchus catalogue number is provided (default: False)')
     args = parser.parse_args()
 
     fig_dir = args.dir
+    print_hip_name = args.name
 
     # Set date ----------------------------------------------------------------|
     now = datetime.now()
@@ -102,9 +104,13 @@ def main():
     elif args.obj.isdigit():
         # Hipparchus catalogue number
         hip = int(args.obj)
-        df = load_hip_ident()
-        hip_name = hip_to_name(hip, df)
-        print(f"Hipparchus: {hip} ({hip_name})")
+        if print_hip_name:
+            from utils.script_utils import load_hip_ident, hip_to_name
+            df = load_hip_ident()
+            hip_name = hip_to_name(hip, df)
+            print(f"Hipparchus: {hip} ({hip_name})")
+        else:
+            print(f"Hipparchus: {hip}")
     else:
         # Planet name
         name = args.obj.lower()
