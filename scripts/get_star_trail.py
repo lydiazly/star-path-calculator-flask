@@ -15,6 +15,7 @@ import base64
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from core.star_trail import get_diagram
+from core.data_loader import load_hip_ident, hip_to_name
 from utils.script_utils import format_datetime, format_datetime_iso, validate_datetime, format_timezone, EPH_DATE_MIN_STR, EPH_DATE_MAX_STR
 
 
@@ -101,7 +102,9 @@ def main():
     elif args.obj.isdigit():
         # Hipparchus catalogue number
         hip = int(args.obj)
-        print(f"Hipparchus: {hip}")
+        df = load_hip_ident()
+        hip_name = hip_to_name(hip, df)
+        print(f"Hipparchus: {hip} ({hip_name})")
     else:
         # Planet name
         name = args.obj.lower()

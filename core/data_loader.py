@@ -85,16 +85,14 @@ def load_hip_ident() -> pd.DataFrame:
     df_merged = df_merged[['HIP', 'name']]
     df_merged.columns = ['hip', 'name']
 
-    # Set 'hip' as the index for faster lookup
-    df_merged.set_index('hip', inplace=True)
-
     return df_merged
 
-def hip_to_name(hip: int, df_merged: pd.DataFrame) -> dict:
-    result = {'hip': hip, 'name': ''}
-    if hip in df_merged.index:
-        result['name'] = df_merged.loc[hip, 'name']
-    return result
+def hip_to_name(hip: int, df: pd.DataFrame) -> dict:
+    # Set 'hip' as the index for faster lookup
+    df.set_index('hip', inplace=True)
+    if hip in df.index:
+        name = df.loc[hip, 'name']
+    return name
 
 def df_to_json(df: pd.DataFrame, filename = 'hip_ident.json'):
     import json

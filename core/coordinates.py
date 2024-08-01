@@ -10,7 +10,6 @@ some_value = dl.eph.some_method()
 ```
 """
 
-from typing import Tuple
 import numpy as np
 from skyfield.api import load
 from skyfield.almanac import find_discrete, seasons
