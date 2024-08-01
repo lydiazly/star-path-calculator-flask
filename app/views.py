@@ -24,7 +24,7 @@ def ratelimit_error(e):
 
 
 @app.route("/equinox", methods=["GET"])
-@limiter.limit("4/second", override_defaults=False)
+@limiter.limit("6/second", override_defaults=False)
 def equinox():
     year   = request.args.get("year", default=None, type=int)
     # month  = request.args.get("month", default=1, type=int)
@@ -82,7 +82,7 @@ def diagram():
     else:
         return jsonify({"error": "Either planet name, Hipparchus catalogue number, or (ra, dec) must be provided."}), 400
 
-    # TODO: test equinox/solstice times
+    # Get the equinox/solstice times
     eqx_sol_keys = {
         "ve": "vernal_time",
         "ss": "summer_time",
@@ -114,7 +114,7 @@ def diagram():
         "diagramId":   str(results["diagram_id"]),
         "svgData":     results["svg_data"],
         "annotations": results["annotations"],
-        "eqxSolTime":  eqx_sol_time
+        "eqxSolTime":  eqx_sol_time  # keep the elements as numbers
     }), 200
 
 

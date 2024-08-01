@@ -271,16 +271,16 @@ async function handleFormSubmit(event) {
                         <td>${results.vernal_dec.toFixed(3)}</td>
                     </tr>
                     <tr>
-                        <td>Autumnal Equinox</td>
-                        <td>${dateTimeToStr({ dateTime: results.autumnal_time })}</td>
-                        <td>${results.autumnal_ra.toFixed(3)}</td>
-                        <td>${results.autumnal_dec.toFixed(3)}</td>
-                    </tr>
-                    <tr>
                         <td>Summer Solstice</td>
                         <td>${dateTimeToStr({ dateTime: results.summer_time })}</td>
                         <td>${results.summer_ra.toFixed(3)}</td>
                         <td>${results.summer_dec.toFixed(3)}</td>
+                    </tr>
+                    <tr>
+                        <td>Autumnal Equinox</td>
+                        <td>${dateTimeToStr({ dateTime: results.autumnal_time })}</td>
+                        <td>${results.autumnal_ra.toFixed(3)}</td>
+                        <td>${results.autumnal_dec.toFixed(3)}</td>
                     </tr>
                     <tr>
                         <td>Winter Solstice</td>
