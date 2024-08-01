@@ -12,6 +12,7 @@ some_value = dl.eph.some_method()
 from skyfield.api import load, load_file
 from skyfield.data import hipparcos
 import pandas as pd
+import pickle
 import os
 from config import constants
 
@@ -63,8 +64,12 @@ def load_data():
 def load_hip_ident() -> pd.DataFrame:
     data_full_path_bayer = os.path.join(data_dir, constants.HIP_BAYER_FILE)
     data_full_path_proper = os.path.join(data_dir, constants.HIP_PROPER_FILE)
-    df_bayer = pd.read_pickle(data_full_path_bayer)
-    df_proper = pd.read_pickle(data_full_path_proper)
+    # df_bayer = pd.read_pickle(data_full_path_bayer)
+    # df_proper = pd.read_pickle(data_full_path_proper)
+    with open(data_full_path_bayer, 'rb') as file:
+        df_bayer = pickle.load(file)
+    with open(data_full_path_proper, 'rb') as file:
+        df_proper = pickle.load(file)
 
     # Group by HIP and aggregate Bayer Designation and Proper Name with '/'
     df_bayer_agg = df_bayer.groupby('HIP')['Bayer Designation'].apply(lambda x: '/'.join(x)).reset_index()
