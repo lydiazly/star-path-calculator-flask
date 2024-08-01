@@ -6,7 +6,10 @@ Functions used only for scripts that are executed from the command line.
 
 from typing import List
 import calendar
-from config import EPH_DATE_MIN, EPH_DATE_MAX
+import pandas as pd
+# import pickle
+import os
+from config import EPH_DATE_MIN, EPH_DATE_MAX, HIP_BAYER_FILE, HIP_PROPER_FILE
 
 __all__ = ["format_datetime", "format_datetime_iso", "validate_datetime", "validate_year"]
 
@@ -111,3 +114,52 @@ def decimal_to_hms(decimal_hours: float) -> dict:
 def format_timezone(tz: float) -> str:
     hms = decimal_to_hms(tz)
     return f"{'-' if tz < 0 else '+'}{abs(hms['hours']):02d}{hms['minutes']:02d}"
+
+
+def load_hip_ident() -> pd.DataFrame:
+    data_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'data')
+    data_full_path_bayer = os.path.join(data_dir, HIP_BAYER_FILE)
+    data_full_path_proper = os.path.join(data_dir, HIP_PROPER_FILE)
+    df_bayer = pd.read_pickle(data_full_path_bayer)
+    df_proper = pd.read_pickle(data_full_path_proper)
+    # with open(data_full_path_bayer, 'rb') as file:
+    #     df_bayer = pickle.load(file)
+    # with open(data_full_path_proper, 'rb') as file:
+    #     df_proper = pickle.load(file)
+
+    # Group by HIP and aggregate Bayer Designation and Proper Name with '/'
+    df_bayer_agg = df_bayer.groupby('HIP')['Bayer Designation'].apply(lambda x: '/'.join(x)).reset_index()
+    df_proper_agg = df_proper.groupby('HIP')['Proper Name'].apply(lambda x: '/'.join(x)).reset_index()
+
+    # Merge the aggregated DataFrames on the HIP column
+    df_merged = pd.merge(df_bayer_agg, df_proper_agg, on='HIP', how='outer')
+
+    # Fill NaN values with empty strings
+    df_merged['Bayer Designation'] = df_merged['Bayer Designation'].fillna('')
+    df_merged['Proper Name'] = df_merged['Proper Name'].fillna('')
+
+    # Combine bayer and proper into a single 'name' column
+    df_merged['name'] = df_merged['Bayer Designation'] + '/' + df_merged['Proper Name']
+    df_merged['name'] = df_merged['name'].str.strip('/').str.replace('//', '/')
+
+    # Select only the required columns and rename them
+    df_merged = df_merged[['HIP', 'name']]
+    df_merged.columns = ['hip', 'name']
+
+    return df_merged
+
+
+def hip_to_name(hip: int, df: pd.DataFrame) -> dict:
+    # Set 'hip' as the index for faster lookup
+    df.set_index('hip', inplace=True)
+    if hip in df.index:
+        name = df.loc[hip, 'name']
+    return name
+
+
+def df_to_json(df: pd.DataFrame, filename = 'hip_ident.json'):
+    import json
+    data_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'data')
+    data_dict = df.to_dict(orient='records')
+    with open(os.path.join(data_dir, filename), 'w') as json_file:
+        json.dump(data_dict, json_file, indent=4)
