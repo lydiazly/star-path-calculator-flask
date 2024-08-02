@@ -35,7 +35,7 @@ const pad = number => number.toString().padStart(2, '0');
  * @param {number} [params.second=0] - Seconds (can be an integer or float)
  * @param {boolean} [params.monthFirst=true] - month-day-year or day-month-year
  * @param {boolean} [params.abbr=false] - use abbreviation or full name for month
- * @returns {string[]} An array containing two strings: the formatted date and the formatted time.
+ * @returns {Object} An object containing two strings: the formatted date and the formatted time.
  */
 const formatDateTime = ({ year, month = 1, day = 1, hour = 12, minute = 0, second = 0,
     monthFirst = true, abbr = false }) => {
@@ -59,7 +59,7 @@ return { date: dateStr, time: timeStr, year: yearStr };
 * @param {number} [params.hour=12] - 24-hour format
 * @param {number} [params.minute=0] - Minutes
 * @param {number} [params.second=0] - Seconds (can be an integer or float)
-* @returns {string[]} An array containing two strings: the formatted date and the formatted time.
+* @returns {Object} An object containing two strings: the formatted date and the formatted time.
 */
 const formatDateTimeISO = ({ year, month = 1, day = 1, hour = 12, minute = 0, second = 0 }) => {
 const dateStr = [year, pad(month), pad(day)].join('-');
@@ -97,25 +97,23 @@ const dateTimeToStr = ({ dateTime, iso = true, delim = ' ', monthFirst = true, a
 };
 
 /**
- * Formats a date and time array into a string.
+ * Formats a date array into a string.
  * 
  * @param {Object} params - An object containing a date array and other parameters
  * @param {number[]} params.date - An array containing [year, month, day]
  * @param {boolean} [params.iso=true] - use ISO format or not
  * @param {boolean} [params.monthFirst=true] - month-day-year or day-month-year
  * @param {boolean} [params.abbr=false] - use abbreviation or full name for month
- * @returns {string} The formatted date and time string.
+ * @returns {string} The formatted date string.
  */
 const dateToStr = ({ date, iso = true, monthFirst = true, abbr = false }) => {
   if (!Array.isArray(date) || date.length < 3) return '';
 
-  const [year, month, day] = date.map((value) => {
-    return parseInt(value);
-  });
+  const [year, month, day] = date.map((value) => parseInt(value));
   
   const dateStr = iso
     ? formatDateTimeISO({ year, month, day }).date
-    : formatDateTime({ year, month, day, monthFirst: monthFirst, abbr: abbr }).date;
+    : formatDateTime({ year, month, day, monthFirst, abbr }).date;
   return dateStr;
 };
 
