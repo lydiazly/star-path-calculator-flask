@@ -63,7 +63,7 @@ def diagram():
     month = request.args.get("month", default=1, type=int)
     day   = request.args.get("day", default=1, type=int)
     flag  = request.args.get("flag", default=None)
-    cal   = request.args.get("cal", default="g")
+    cal   = request.args.get("cal", default=None)  # None: Gregorian, 'j': Julian
     name  = request.args.get("name", default=None)
     hip   = request.args.get("hip", default=-1, type=int)
     ra    = request.args.get("ra", default=None, type=float)
