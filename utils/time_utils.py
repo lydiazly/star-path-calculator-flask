@@ -13,6 +13,12 @@ from timezonefinder import TimezoneFinder
 __all__ = ["get_standard_offset", "ut1_to_local_standard_time"]
 
 
+# TODO
+# def julian_to_gregorian(t_julian):
+#     t_gregorian = 
+#     return t_gregorian
+
+
 def get_standard_offset(lng: float, lat: float) -> float:
     """
     Returns a location's standard offset from UTC in minutes.
