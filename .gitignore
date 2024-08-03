@@ -4,6 +4,7 @@
 tmp
 *.bk
 st_*.svg
+*.pem
 
 # Ignore system-specific files
 .DS_Store
