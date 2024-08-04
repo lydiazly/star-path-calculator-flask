@@ -4,6 +4,7 @@ from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from core.coordinates import get_coords
 from core.star_trail import get_diagram
+from utils.time_utils import ut1_to_local_standard_time_list, julian_to_gregorian
 
 # Initialize the limiter
 limiter = Limiter(
@@ -27,6 +28,8 @@ def ratelimit_error(e):
 @limiter.limit("6/second", override_defaults=False)
 def equinox():
     # [Gregorian]
+    lat   = request.args.get("lat", default=None, type=float)
+    lng   = request.args.get("lng", default=None, type=float)
     year   = request.args.get("year", default=None, type=int)
     # month  = request.args.get("month", default=1, type=int)
     # day    = request.args.get("day", default=1, type=int)
@@ -34,17 +37,28 @@ def equinox():
     # minute = request.args.get("minute", default=0, type=int)
     # second = request.args.get("second", default=0, type=float)
 
+    if lat is None or lng is None:
+        return jsonify({"error": "Either longitude or latitude is not provided."}), 400
+    
     if year is None:
-        return jsonify({"error": "The year must be provided."}), 400
+        return jsonify({"error": "Year is not provided."}), 400
 
     try:
         # results = get_coords(year, month, day, hour, minute, second)
         results = get_coords(year)
+        # Convert from UT1 to Standard Time
+        results["vernal_time"], results["summer_time"], results["winter_time"], results["winter_time"] = ut1_to_local_standard_time_list(
+            [results["vernal_time"], results["summer_time"], results["winter_time"], results["winter_time"]],
+            lng=lng, lat=lat
+        )
+
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
     return jsonify({
-        "year":    str(year),
+        "lat":  str(lat),
+        "lng":  str(lng),
+        "year": str(year),
         # "month":   str(month),
         # "day":     str(day),
         # "hour":    str(hour),
