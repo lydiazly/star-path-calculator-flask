@@ -86,17 +86,17 @@ def diagram():
 
     # Get the equinox/solstice times
     eqx_sol_time = []
-    if flag is not None:
-        eqx_sol_keys = {
-            "ve": "vernal_time",
-            "ss": "summer_time",
-            "ae": "autumnal_time",
-            "ws": "winter_time"
-        }
-        if flag in eqx_sol_keys:
-            eqx_sol_time = get_coords(year)[eqx_sol_keys[flag]]  # [int, int, int, int, int, float]
-            month = eqx_sol_time[1]
-            day = eqx_sol_time[2]
+    # if flag is not None:
+    #     eqx_sol_keys = {
+    #         "ve": "vernal_time",
+    #         "ss": "summer_time",
+    #         "ae": "autumnal_time",
+    #         "ws": "winter_time"
+    #     }
+    #     if flag in eqx_sol_keys:
+    #         eqx_sol_time = get_coords(year)[eqx_sol_keys[flag]]  # [int, int, int, int, int, float]
+    #         month = eqx_sol_time[1]
+    #         day = eqx_sol_time[2]
 
     try:
         results = get_diagram(year, month, day, lat=lat, lng=lng, **obj)
