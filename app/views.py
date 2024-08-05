@@ -4,7 +4,7 @@ from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from core.coordinates import get_coords
 from core.star_trail import get_diagram
-from utils.time_utils import ut1_to_local_standard_time_list, julian_to_gregorian
+from utils.time_utils import ut1_to_local_standard_time_list, julian_to_gregorian, gregorian_to_julian
 
 # Initialize the limiter
 limiter = Limiter(
@@ -31,11 +31,6 @@ def equinox():
     lat   = request.args.get("lat", default=None, type=float)
     lng   = request.args.get("lng", default=None, type=float)
     year   = request.args.get("year", default=None, type=int)
-    # month  = request.args.get("month", default=1, type=int)
-    # day    = request.args.get("day", default=1, type=int)
-    # hour   = request.args.get("hour", default=12, type=int)
-    # minute = request.args.get("minute", default=0, type=int)
-    # second = request.args.get("second", default=0, type=float)
 
     if lat is None or lng is None:
         return jsonify({"error": "Either longitude or latitude is not provided."}), 400
@@ -44,7 +39,6 @@ def equinox():
         return jsonify({"error": "Year is not provided."}), 400
 
     try:
-        # results = get_coords(year, month, day, hour, minute, second)
         results = get_coords(year)
         # Convert from UT1 to Standard Time
         results["vernal_time"], results["summer_time"], results["winter_time"], results["winter_time"] = ut1_to_local_standard_time_list(
@@ -59,11 +53,6 @@ def equinox():
         "lat":  str(lat),
         "lng":  str(lng),
         "year": str(year),
-        # "month":   str(month),
-        # "day":     str(day),
-        # "hour":    str(hour),
-        # "minute":  str(minute),
-        # "second":  str(second),
         "results": results,
     }), 200
 
@@ -76,7 +65,7 @@ def diagram():
     year  = request.args.get("year", default=None, type=int)
     month = request.args.get("month", default=1, type=int)
     day   = request.args.get("day", default=1, type=int)
-    flag  = request.args.get("flag", default=None)
+    flag  = request.args.get("flag", default=None)  # unused
     cal   = request.args.get("cal", default=None)  # None: Gregorian, 'j': Julian
     name  = request.args.get("name", default=None)
     hip   = request.args.get("hip", default=-1, type=int)
@@ -98,6 +87,10 @@ def diagram():
     else:
         return jsonify({"error": "Either planet name, Hipparchus catalogue number, or (ra, dec) is not provided."}), 400
 
+    # Convert to Gregorian
+    if cal == "j":
+        year, month, day, *_ = julian_to_gregorian((year, month, day, 12))  # 12:00:00
+
     # Get the equinox/solstice times
     eqx_sol_time = []
     # if flag is not None:
@@ -108,31 +101,37 @@ def diagram():
     #         "ws": "winter_time"
     #     }
     #     if flag in eqx_sol_keys:
-    #         eqx_sol_time = get_coords(year)[eqx_sol_keys[flag]]  # [int, int, int, int, int, float]
+    #         eqx_sol_time = get_coords(year)[eqx_sol_keys[flag]]  # keep the elements as numbers: [int, int, int, int, int, float]
     #         month = eqx_sol_time[1]
     #         day = eqx_sol_time[2]
 
     try:
         results = get_diagram(year, month, day, lat=lat, lng=lng, **obj)
+        if cal == "j":
+            cal = ""
+        else:
+            cal = "j"
+            # Convert to Julian
+            year, month, day, *_ = gregorian_to_julian((year, month, day, 12))  # 12:00:00
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
     return jsonify({
         "lat":         str(lat),
         "lng":         str(lng),
-        "year":        str(year),
-        "month":       str(month),
-        "day":         str(day),
+        "year":        str(year),  # the other calendar
+        "month":       str(month),  # the other calendar
+        "day":         str(day),  # the other calendar
         "flag":        flag,
-        "cal":         cal,
+        "cal":         cal,  # the other calendar
         "name":        name,
-        "hip":         hip,
+        "hip":         hip if hip > 0 else None,
         "ra":          ra,
         "dec":         dec,
         "diagramId":   str(results["diagram_id"]),
         "svgData":     results["svg_data"],
         "annotations": results["annotations"],
-        "eqxSolTime":  eqx_sol_time  # keep the elements as numbers
+        "eqxSolTime":  eqx_sol_time  # unused
     }), 200
 
 
