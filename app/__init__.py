@@ -8,7 +8,7 @@ def create_app():
     CORS(app)
 
     with app.app_context():
-        from . import views
-        views.init_limiter(app)  # Initialize the limiter with the app context
+        from . import views  # noqa
+        # views.init_limiter(app)  # Initialize the limiter with the app context
     
     return app

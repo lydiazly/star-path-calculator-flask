@@ -238,7 +238,7 @@ async function handleFormSubmit(event) {
     // document.getElementById('second').value = `${second}`;
 
     // const apiUrl = `/coords?year=${year}&month=${month}&day=${day}&hour=${hour}&minute=${minute}&second=${second}`;
-    const apiUrl = `/equinox?year=${year}`;
+    const apiUrl = `/equinox?lat=45&lng=0&year=${year}`;
 
     try {
         const response = await fetch(apiUrl);

@@ -1,31 +1,31 @@
 # app/views.py
 from flask import request, jsonify, render_template, current_app as app
-from flask_limiter import Limiter
-from flask_limiter.util import get_remote_address
+# from flask_limiter import Limiter
+# from flask_limiter.util import get_remote_address
 from core.coordinates import get_coords
 from core.star_trail import get_diagram
 from utils.time_utils import ut1_to_local_standard_time_list, julian_to_gregorian, gregorian_to_julian
 
 # Initialize the limiter
-limiter = Limiter(
-    get_remote_address,
-    default_limits=["720 per hour", "60 per minute"],
-    storage_uri="memory://",
-    strategy="fixed-window"
-)
+# limiter = Limiter(
+#     get_remote_address,
+#     default_limits=["720 per hour", "60 per minute"],
+#     storage_uri="memory://",
+#     strategy="fixed-window"
+# )
 
 
-def init_limiter(app):
-    limiter.init_app(app)
+# def init_limiter(app):
+#     limiter.init_app(app)
 
 
-@app.errorhandler(429)
-def ratelimit_error(e):
-    return jsonify({"error": f"For security, we rate-limit requests as: {str(e.description)}. Please try again later."}), 429
+# @app.errorhandler(429)
+# def ratelimit_error(e):
+#     return jsonify({"error": f"For security, we rate-limit requests as: {str(e.description)}. Please try again later."}), 429
 
 
 @app.route("/equinox", methods=["GET"])
-@limiter.limit("6/second", override_defaults=False)
+# @limiter.limit("6/second", override_defaults=False)
 def equinox():
     # [Gregorian]
     lat   = request.args.get("lat", default=None, type=float)
@@ -58,7 +58,7 @@ def equinox():
 
 
 @app.route("/diagram", methods=["GET"])
-@limiter.limit("4/second", override_defaults=False)
+# @limiter.limit("4/second", override_defaults=False)
 def diagram():
     lat   = request.args.get("lat", default=None, type=float)
     lng   = request.args.get("lng", default=None, type=float)
@@ -136,6 +136,6 @@ def diagram():
 
 
 @app.route("/")
-@limiter.limit("5/second", override_defaults=False)
+# @limiter.limit("5/second", override_defaults=False)
 def home():
     return render_template("index.html")
