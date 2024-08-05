@@ -11,7 +11,7 @@ from datetime import datetime
 from timezonefinder import TimezoneFinder
 import juliandate
 
-__all__ = ["get_standard_offset", "ut1_to_local_standard_time", "ut1_to_local_standard_time_list", "julian_to_gregorian"]
+__all__ = ["get_standard_offset", "ut1_to_local_standard_time", "ut1_to_local_standard_time_list", "julian_to_gregorian", "gregorian_to_julian"]
 
 
 tisca = load.timescale()
@@ -57,3 +57,9 @@ def julian_to_gregorian(t_julian: Tuple) -> Tuple:
     t_gregorian = juliandate.to_gregorian(juliandate.from_julian(*t_julian))
     t_gregorian = (*map(int, t_gregorian[0:5]), float(t_gregorian[-2]+t_gregorian[-1]/1e6))
     return t_gregorian
+
+
+def gregorian_to_julian(t_gregorian: Tuple) -> Tuple:
+    t_julian = juliandate.to_julian(juliandate.from_gregorian(*t_gregorian))
+    t_julian = (*map(int, t_julian[0:5]), float(t_julian[-2]+t_julian[-1]/1e6))
+    return t_julian
