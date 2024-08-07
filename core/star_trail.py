@@ -330,7 +330,7 @@ def get_star_trail_diagram(t: Time, lng: float, lat: float, offset_in_minutes: f
         s = Star(ra_hours=float(radec[0]), dec_degrees=float(radec[1]))
 
     if not s:
-        raise ValueError("Invalid planet name, Hipparchus catalogue number, or (ra, dec).")
+        raise ValueError("Invalid celestial object.")
 
     t_risings, y_risings = get_star_rising_time(s, t, lng, lat, offset_in_minutes)
     t_starting = t_risings[0]
