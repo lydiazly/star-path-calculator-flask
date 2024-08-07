@@ -324,8 +324,13 @@ def get_star_trail_diagram(t: Time, lng: float, lat: float, offset_in_minutes: f
             s = dl.eph[name + ' barycenter']
         else:
             raise ValueError(f"Invalid planet name: {name}")
-    elif hip > 0:
-        s = Star.from_dataframe(dl.hip_df.loc[hip])
+    elif hip >= 0:
+        if hip < 1 or hip > 118322:
+            raise ValueError("The Hipparchus Catalogue Number must be in the range [1, 118322].")
+        try:
+            s = Star.from_dataframe(dl.hip_df.loc[hip])
+        except KeyError:
+            raise ValueError("Invalid Hipparchus Catalogue Number.")
     elif radec and len(radec) == 2:
         s = Star(ra_hours=float(radec[0]), dec_degrees=float(radec[1]))
 
