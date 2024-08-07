@@ -504,4 +504,5 @@ def get_diagram(year: int, month: int, day: int, lat: float, lng: float, tz_id: 
       "diagram_id": diagram_id,
       "svg_data": svg_data,
       "annotations": annotations,
+      "offset": offset_in_minutes,
     }
