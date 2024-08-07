@@ -1,6 +1,7 @@
 *.docx
 *.dat
 *.bsp
+*.pkl
 tmp
 *.bk
 st_*.svg
