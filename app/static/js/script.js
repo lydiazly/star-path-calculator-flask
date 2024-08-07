@@ -38,34 +38,34 @@ const pad = number => number.toString().padStart(2, '0');
  * @returns {Object} An object containing two strings: the formatted date and the formatted time.
  */
 const formatDateTime = ({ year, month = 1, day = 1, hour = 12, minute = 0, second = 0,
-    monthFirst = true, abbr = false }) => {
-const yearStr = year > 0 ? `${year} CE` : `${-year + 1} BCE`;
-const monthStr = MONTHS[month][abbr ? 'abbr' : 'name'];
-const dateStr = monthFirst
-? `${monthStr} ${day}, ${yearStr}`
-: `${day} ${monthStr} ${yearStr}`;
-const secondStr = Number.isInteger(second) ? pad(second) : second.toFixed(3).padStart(6, '0');
-const timeStr = `${pad(hour)}:${pad(minute)}:${secondStr}`;
-return { date: dateStr, time: timeStr, year: yearStr };
+                          monthFirst = true, abbr = false }) => {
+  const yearStr = year > 0 ? `${year} CE` : `${-year + 1} BCE`;
+  const monthStr = MONTHS[month][abbr ? 'abbr' : 'name'];
+  const dateStr = monthFirst
+    ? `${monthStr} ${day}, ${yearStr}`
+    : `${day} ${monthStr} ${yearStr}`;
+  const secondStr = Number.isInteger(second) ? pad(second) : second.toFixed(3).padStart(6, '0');
+  const timeStr = `${pad(hour)}:${pad(minute)}:${secondStr}`;
+  return { date: dateStr, time: timeStr, year: yearStr };
 };
 
 /**
-* Formats the date and time into ISO format strings '2000-01-01 12:00:00[.000]'
-*
-* @param {Object} params - An object containing year, month, day, hour, minute, second
-* @param {number} params.year - 0 is 1 BCE
-* @param {number} [params.month=1] - Starts from 1
-* @param {number} [params.day=1] - Day of the month
-* @param {number} [params.hour=12] - 24-hour format
-* @param {number} [params.minute=0] - Minutes
-* @param {number} [params.second=0] - Seconds (can be an integer or float)
-* @returns {Object} An object containing two strings: the formatted date and the formatted time.
-*/
+ * Formats the date and time into ISO format strings '2000-01-01 12:00:00[.000]'
+ *
+ * @param {Object} params - An object containing year, month, day, hour, minute, second
+ * @param {number} params.year - 0 is 1 BCE
+ * @param {number} [params.month=1] - Starts from 1
+ * @param {number} [params.day=1] - Day of the month
+ * @param {number} [params.hour=12] - 24-hour format
+ * @param {number} [params.minute=0] - Minutes
+ * @param {number} [params.second=0] - Seconds (can be an integer or float)
+ * @returns {Object} An object containing two strings: the formatted date and the formatted time.
+ */
 const formatDateTimeISO = ({ year, month = 1, day = 1, hour = 12, minute = 0, second = 0 }) => {
-const dateStr = [year, pad(month), pad(day)].join('-');
-const secondStr = Number.isInteger(second) ? pad(second) : second.toFixed(3).padStart(6, '0');
-const timeStr = `${pad(hour)}:${pad(minute)}:${secondStr}`;
-return { date: dateStr, time: timeStr };
+  const dateStr = [year, pad(month), pad(day)].join('-');
+  const secondStr = Number.isInteger(second) ? pad(second) : second.toFixed(3).padStart(6, '0');
+  const timeStr = `${pad(hour)}:${pad(minute)}:${secondStr}`;
+  return { date: dateStr, time: timeStr };
 };
 
 /**
@@ -238,7 +238,7 @@ async function handleFormSubmit(event) {
     // document.getElementById('second').value = `${second}`;
 
     // const apiUrl = `/coords?year=${year}&month=${month}&day=${day}&hour=${hour}&minute=${minute}&second=${second}`;
-    const apiUrl = `/equinox?lat=45&lng=0&year=${year}`;
+    const apiUrl = `/seasons?tz=Etc%2FGMT&year=${year}`;
 
     try {
         const response = await fetch(apiUrl);
