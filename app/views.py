@@ -138,6 +138,8 @@ def diagram():
         obj = {"name": name.lower()}
     elif hip is not None:
         obj = {"hip": hip}
+        from utils.star_utils import hip_to_name
+        name = hip_to_name(hip)
     elif ra is not None and dec is not None:
         obj = {"radec": (ra, dec)}
     else:
