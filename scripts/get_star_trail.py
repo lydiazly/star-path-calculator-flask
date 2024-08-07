@@ -118,8 +118,12 @@ def main():
 
     # Plot star trail ---------------------------------------------------------|
     try:
+        from utils.time_utils import find_timezone
+        tz_id = find_timezone(lat=lat, lng=lng)
+        # tz_id = "America/Vancouver"
+        
         validate_datetime(year, month, day)
-        results = get_diagram(year, month, day, lat=lat, lng=lng, name=name, hip=hip, radec=radec)
+        results = get_diagram(year, month, day, lat=lat, lng=lng, tz_id=tz_id, name=name, hip=hip, radec=radec)
     except Exception as e:
         print(str(e), file=sys.stderr)
         sys.exit(1)
