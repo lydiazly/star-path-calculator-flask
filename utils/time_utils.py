@@ -4,7 +4,7 @@
 Functions to handle time conversions.
 """
 
-from typing import Tuple, List
+from typing import Tuple
 from skyfield.api import load
 from pytz import timezone
 from datetime import datetime

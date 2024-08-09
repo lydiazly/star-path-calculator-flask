@@ -19,16 +19,16 @@ from utils.script_utils import format_datetime, format_datetime_iso, validate_da
 
 
 prog = f"python {os.path.basename(__file__)}"
-description = "Specify a date, location, and celestial object to draw a star trail. The input date is in UT1 by default."
+description = "Specify a local date, location, and celestial object to draw the star trail. Daylight Saving Time is not included."
 epilog = f"""date range:
-  {EPH_DATE_MIN_STR} \u2013 {EPH_DATE_MAX_STR} (UT1)
+  {EPH_DATE_MIN_STR} \u2013 {EPH_DATE_MAX_STR} (Gregorian)
 examples:
   # Plot the star trail of Mars:
   {prog} -o mars\n
-  # Plot the star trail by giving the star's Hipparcos Catalog number:
-  {prog} -o 87937\n
-  # Plot the star trail by giving the star's ICRS coordinates:
-  {prog} -o 10,10
+  # Plot the star trail of Vega by giving its Hipparcos Catalog number:
+  {prog} -o 91262\n
+  # Plot the star trail by giving the star's ICRS coordinates (RA, Dec):
+  {prog} -o 310.7,-5.1
 """
 
 
@@ -42,20 +42,17 @@ def main():
     parser.add_argument("day", type=int, nargs="?",
                         help="int (default: today, or 1 if the year is provided)")
     parser.add_argument("--lat", metavar="float", type=float, default=39.9042,
-                        help="latitude (default: %(default)s)")
+                        help="latitude in decimal degrees (default: %(default)s)")
     parser.add_argument("--lng", "--lon", dest="lng", metavar="float", type=float, default=116.4074,
-                        help="longitude (default: %(default)s)")
+                        help="longitude in decimal degrees (default: %(default)s)")
     parser.add_argument("-o", "--obj", metavar="str", type=str, default="Mars",
-                        help="planet name, Hipparchus catalogue number, or 'ra,dec' (default: %(default)s)")
-    parser.add_argument('-l', '--local', action='store_true',
-                        help='use local time (default: False)')
-    parser.add_argument('-d', '--dir', metavar="path", type=str, default=".",
-                        help='path to save output figures (default: %(default)s)')
+                        help="planet name, Hipparchus catalogue number, or the ICRS coordinates in the format 'ra,dec' (default: %(default)s)")
+    parser.add_argument('-j', '--julian', action='store_true',
+                        help='use Julian calendar (default: Gregorian calendar)')
     parser.add_argument('--name', action='store_true',
-                        help='also print the name if Hipparchus catalogue number is provided (default: False)')
+                        help='print the proper name or the Bayer designation, if available (default: False)')
     args = parser.parse_args()
 
-    fig_dir = args.dir
     print_hip_name = args.name
 
     # Set date ----------------------------------------------------------------|
@@ -79,11 +76,11 @@ def main():
             sys.exit(1)
 
     # Convert from local time to UT1 ------------------------------------------|
-    if args.local:
-        # TODO: call the function to convert (remove `pass` after complete)
-        pass
+    if args.julian:
+        from utils.time_utils import julian_to_gregorian
+        year, month, day, *_ = julian_to_gregorian((year, month, day, 12))  # 12:00:00
 
-    print(f"[Date]             {format_datetime(year, month, day)[0]}")
+    print(f"[Date (Gregorian)] {format_datetime(year, month, day)[0]}")
 
     # Set location ------------------------------------------------------------|
     lat = args.lat
@@ -105,12 +102,11 @@ def main():
         # Hipparchus catalogue number
         hip = int(args.obj)
         if print_hip_name:
-            from utils.script_utils import load_hip_ident, hip_to_name
-            df = load_hip_ident()
-            hip_name = hip_to_name(hip, df)
-            print(f"Hipparchus: {hip} ({hip_name})")
-        else:
-            print(f"Hipparchus: {hip}")
+            from utils.star_utils import hip_to_name
+            hip_name = hip_to_name(hip)
+            if hip_name:
+                print(f"Star Name: {hip_name},", end=" ")
+        print(f"Hipparchus Catalogue Number: {hip}")
     else:
         # Planet name
         name = args.obj.lower()
@@ -121,7 +117,7 @@ def main():
         from utils.time_utils import find_timezone
         tz_id = find_timezone(lat=lat, lng=lng)
         # tz_id = "America/Vancouver"
-        
+
         validate_datetime(year, month, day)
         results = get_diagram(year, month, day, lat=lat, lng=lng, tz_id=tz_id, name=name, hip=hip, radec=radec)
     except Exception as e:
@@ -129,24 +125,23 @@ def main():
         sys.exit(1)
 
     # Write the SVG data to a file
-    os.makedirs(fig_dir, exist_ok=True)
-    filename = os.path.join(fig_dir, f'st_{results["diagram_id"]}.svg')
+    filename = f'stv_{results["diagram_id"]}.svg'
 
     # Decode the base64 data to get the SVG content
     svg_data = base64.b64decode(results["svg_data"]).decode('utf-8')
     with open(filename, 'w', encoding='utf-8') as file:
         file.write(svg_data)
 
-    print("\n[Annotations]")
+    print("\n[Point Details]")
     for item in results["annotations"]:
         if item['is_displayed']:
             print(f'{item["name"]}:')
             print(f'  alt = {item["alt"]:.3f}')
             print(f'  az  = {item["az"]:.3f}')
-            print(f'  time_local          = {"T".join(format_datetime_iso(*item["time_local"]))}{format_timezone(item["time_zone"])}')
-            print(f'  time_ut1            = {"T".join(format_datetime_iso(*item["time_ut1"]))}')
-            print(f'  time_local (Julian) = {"T".join(format_datetime_iso(*item["time_local_julian"]))}{format_timezone(item["time_zone"])}')
-            print(f'  time_ut1 (Julian)   = {"T".join(format_datetime_iso(*item["time_ut1_julian"]))}')
+            print(f'  time_local (Gregorian) = {"T".join(format_datetime_iso(*item["time_local"]))}{format_timezone(item["time_zone"])}')
+            print(f'  time_ut1   (Gregorian) = {"T".join(format_datetime_iso(*item["time_ut1"]))}')
+            print(f'  time_local (Julian)    = {"T".join(format_datetime_iso(*item["time_local_julian"]))}{format_timezone(item["time_zone"])}')
+            print(f'  time_ut1   (Julian)    = {"T".join(format_datetime_iso(*item["time_ut1_julian"]))}')
             # print(f'  time_zone = {item["time_zone"]}')
 
     print(f"\nSVG has been saved to '{filename}'")

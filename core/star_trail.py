@@ -20,7 +20,6 @@ from datetime import datetime
 from skyfield.api import Star, wgs84, load
 from skyfield.timelib import Time
 from skyfield import almanac
-from adjustText import adjust_text
 import io
 import base64
 import re
@@ -244,7 +243,7 @@ def plot_twilight_transition_points(fig, ax, altitudes, azimuths, annotations, l
 
     r = 90 - np.array(altitudes)
     theta = np.radians(azimuths)
-    
+
     for i, j, k in zip(theta, r, annotations):
         ax.plot(i, j, 'ro', ms=4)
 
@@ -256,7 +255,7 @@ def plot_twilight_transition_points(fig, ax, altitudes, azimuths, annotations, l
     #     texts.append(plt.text(i, j, k, ha='center', va='center', color='r'))
     # adjust_text(texts, x=theta_interp, y=r_interp, expand=(2,2), force_static=(1,1), min_arrow_len=10,
     #             arrowprops=dict(arrowstyle="->", color='r', lw=1, shrinkA=0, shrinkB=2, mutation_scale=10))
-    
+
     # Draw the labels of twilight transition points
     ttp_coord_bg = []
     for i in range(len(r)):
@@ -272,7 +271,7 @@ def plot_twilight_transition_points(fig, ax, altitudes, azimuths, annotations, l
     ax2 = fig.add_axes([0,0,1,1], facecolor=(1,1,1,0))
     ax2.set_xlim(0, 1)
     ax2.set_ylim(0, 1)
-    
+
     _vector = np.array(ttp_coord_bg[0]) - np.array(cp_coord_bg)
     _vector_length = np.sqrt(np.sum(_vector**2))
     if _vector_length < 0.1:
@@ -281,13 +280,13 @@ def plot_twilight_transition_points(fig, ax, altitudes, azimuths, annotations, l
     else:
         _offset_scale = 0.02
         _flag = 0
-    
+
     for i in range(len(ttp_coord_bg)):
         _vector = np.array(ttp_coord_bg[i]) - np.array(cp_coord_bg)
         _vector_length = np.sqrt(np.sum(_vector**2))
         _unit_vector = _vector / _vector_length
         _offset = _unit_vector * _offset_scale
-        
+
         if _flag == 1:
             ax2.annotate(annotations[i],
                 xy = (ttp_coord_bg[i][0], ttp_coord_bg[i][1]),
@@ -299,7 +298,7 @@ def plot_twilight_transition_points(fig, ax, altitudes, azimuths, annotations, l
                 xy = (ttp_coord_bg[i][0], ttp_coord_bg[i][1]),
                 xytext = (ttp_coord_bg[i][0] + _offset[0], ttp_coord_bg[i][1] + _offset[1]),
                 va='center', ha='center', fontsize=10, color='r')
-    
+
     ax2.axis('off')
 
 
