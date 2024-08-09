@@ -1,10 +1,8 @@
-adjusttext==1.2.0
 flask==3.0.3
 flask-cors==4.0.1
 juliandate==1.0.4
-numpy==2.0.0
+matplotlib==3.9.1.post1
+numpy==2.0.1
 pandas==2.2.2
-pytz==2024.1
-scipy==1.14.0
 skyfield==1.49
-timezonefinder==6.5.2
+tzfpy==0.15.5

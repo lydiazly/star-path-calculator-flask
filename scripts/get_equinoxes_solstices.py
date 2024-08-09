@@ -30,7 +30,7 @@ prog = f"python {os.path.basename(__file__)}"
 # """
 description = "Specify a year to obtain the dates, times, and coordinates in RA and Dec for the equinoxes and solstices of that year."
 epilog = f"""year range:
-  {EPH_DATE_MIN_STR} \u2013 {EPH_DATE_MAX_STR} (UT1)
+  {EPH_DATE_MIN_STR} \u2013 {EPH_DATE_MAX_STR} (Gregorian)
 examples:
   # The current year:
   {prog}\n
@@ -95,14 +95,14 @@ def main():
 
     # print(f"ICRS coordinates (J2000) of equinoxes and solstices on {date_str}, at {time_str}:")
     print(f"Dates, times, and ICRS coordinates (J2000) for the equinoxes and solstices of {year_str}:")
-    print(f'\n[Vernal Equinox] {" ".join(format_datetime_iso(*results["vernal_time"]))} (UT1)')
-    print(f'  ra = {results["vernal_ra"]:.3f}, dec = {results["vernal_dec"]:.3f}')
-    print(f'\n[Summer Solstice] {" ".join(format_datetime_iso(*results["summer_time"]))} (UT1)')
-    print(f'  ra = {results["summer_ra"]:.3f}, dec = {results["summer_dec"]:.3f}')
+    print(f'\n[Vernal Equinox]   {" ".join(format_datetime_iso(*results["vernal_time"]))} (UT1)')
+    print(f'                   ra = {results["vernal_ra"]:.3f}, dec = {results["vernal_dec"]:.3f}')
+    print(f'\n[Summer Solstice]  {" ".join(format_datetime_iso(*results["summer_time"]))} (UT1)')
+    print(f'                   ra = {results["summer_ra"]:.3f}, dec = {results["summer_dec"]:.3f}')
     print(f'\n[Autumnal Equinox] {" ".join(format_datetime_iso(*results["autumnal_time"]))} (UT1)')
-    print(f'  ra = {results["autumnal_ra"]:.3f}, dec = {results["autumnal_dec"]:.3f}')
-    print(f'\n[Winter Solstice] {" ".join(format_datetime_iso(*results["winter_time"]))} (UT1)')
-    print(f'  ra = {results["winter_ra"]:.3f}, dec = {results["winter_dec"]:.3f}')
+    print(f'                   ra = {results["autumnal_ra"]:.3f}, dec = {results["autumnal_dec"]:.3f}')
+    print(f'\n[Winter Solstice]  {" ".join(format_datetime_iso(*results["winter_time"]))} (UT1)')
+    print(f'                   ra = {results["winter_ra"]:.3f}, dec = {results["winter_dec"]:.3f}')
 
 
 if __name__ == "__main__":
