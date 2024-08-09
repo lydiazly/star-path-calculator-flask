@@ -168,8 +168,6 @@ def plot_in_style(ax, event, t_jd0, t_jd1, s, lng: float, lat: float):
         line, = ax.plot(theta, r, 'k--', lw=0.5)
         line.set_dashes([1,4])
 
-    return list(altitudes), list(azimuths)
-
 
 def get_twilight_transition_points(ts, events, s, lng: float, lat: float):
     """
@@ -228,34 +226,81 @@ def plot_meridian_transit_points(ax, t, s, lng: float, lat: float):
     r = 90 - alt.degrees
     theta = np.radians(az.degrees)
 
-    ax.plot(theta, r, 'ro', ms=4)
-    ax.annotate('T', (theta, r), textcoords="offset points", xytext=(0, 13), ha='center',va='top',
-                fontsize=10, color='r')
+    ax.plot(theta, r, 'ro', ms=6)
+    if lat >= 0:
+        ax.annotate('T', (theta, r), textcoords="offset points", xytext=(0, 15), ha='center',va='top',
+                    fontsize=10, color='r')
+    else:
+        ax.annotate('T', (theta, r), textcoords="offset points", xytext=(0, -15), ha='center',va='top',
+                    fontsize=10, color='r')
 
     return alt.degrees, az.degrees
 
 
-def plot_twilight_transition_points(ax, altitudes, azimuths, annotations, alt_interp, az_interp):
+def plot_twilight_transition_points(fig, ax, altitudes, azimuths, annotations, lng, lat):
     """
     Plot the twilight transition points as well as their labels.
     """
 
     r = 90 - np.array(altitudes)
     theta = np.radians(azimuths)
-    r_interp = 90 - np.array(alt_interp)
-    theta_interp =  np.radians(az_interp)
-
-    texts = []
+    
     for i, j, k in zip(theta, r, annotations):
         ax.plot(i, j, 'ro', ms=4)
-        texts.append(plt.text(i, j, k, ha='center', va='center', color='r'))
-    adjust_text(texts, x=theta_interp, y=r_interp, expand=(2,2), force_static=(1,1), min_arrow_len=10,
-                arrowprops=dict(arrowstyle="->", color='r', lw=1, shrinkA=0, shrinkB=2, mutation_scale=10))
-    # try:
-    #     ax.annotate(annotations, (theta, r), textcoords="offset points", xytext=(0, -10), ha='center',va='top',
-    #                 fontsize=10, color='r')
-    # except:
-    #     pass
+
+    # The code below is in order to draw the labels of twilight transition points with adjust_text
+    # temparorily keep it
+    # texts = []
+    # for i, j, k in zip(theta, r, annotations):
+    #     ax.plot(i, j, 'ro', ms=4)
+    #     texts.append(plt.text(i, j, k, ha='center', va='center', color='r'))
+    # adjust_text(texts, x=theta_interp, y=r_interp, expand=(2,2), force_static=(1,1), min_arrow_len=10,
+    #             arrowprops=dict(arrowstyle="->", color='r', lw=1, shrinkA=0, shrinkB=2, mutation_scale=10))
+    
+    # Draw the labels of twilight transition points
+    ttp_coord_bg = []
+    for i in range(len(r)):
+        _coord = ax.transData.transform((theta[i], r[i]))
+        ttp_coord_bg.append([_coord[0]/fig.bbox.width, _coord[1]/fig.bbox.height])
+    if lat >= 0:
+        _coord = ax.transData.transform((0, 90-lat))
+        cp_coord_bg = [_coord[0]/fig.bbox.width, _coord[1]/fig.bbox.height]
+    else:
+        _coord = ax.transData.transform((np.radians(180), 90+lat))
+        cp_coord_bg = [_coord[0]/fig.bbox.width, _coord[1]/fig.bbox.height]
+
+    ax2 = fig.add_axes([0,0,1,1], facecolor=(1,1,1,0))
+    ax2.set_xlim(0, 1)
+    ax2.set_ylim(0, 1)
+    
+    _vector = np.array(ttp_coord_bg[0]) - np.array(cp_coord_bg)
+    _vector_length = np.sqrt(np.sum(_vector**2))
+    if _vector_length < 0.1:
+        _offset_scale = 0.05
+        _flag = 1
+    else:
+        _offset_scale = 0.02
+        _flag = 0
+    
+    for i in range(len(ttp_coord_bg)):
+        _vector = np.array(ttp_coord_bg[i]) - np.array(cp_coord_bg)
+        _vector_length = np.sqrt(np.sum(_vector**2))
+        _unit_vector = _vector / _vector_length
+        _offset = _unit_vector * _offset_scale
+        
+        if _flag == 1:
+            ax2.annotate(annotations[i],
+                xy = (ttp_coord_bg[i][0], ttp_coord_bg[i][1]),
+                xytext = (ttp_coord_bg[i][0] + _offset[0], ttp_coord_bg[i][1] + _offset[1]),
+                arrowprops=dict(color='r', arrowstyle='-', shrinkA=0.2, shrinkB=0.2, lw=0.5),
+                va='center', ha='center', fontsize=10, color='r')
+        else:
+            ax2.annotate(annotations[i],
+                xy = (ttp_coord_bg[i][0], ttp_coord_bg[i][1]),
+                xytext = (ttp_coord_bg[i][0] + _offset[0], ttp_coord_bg[i][1] + _offset[1]),
+                va='center', ha='center', fontsize=10, color='r')
+    
+    ax2.axis('off')
 
 
 def plot_rising_and_setting_points(fig, ax, t0, t1, s, lng:float, lat:float):
@@ -347,28 +392,24 @@ def get_star_trail_diagram(t: Time, lng: float, lat: float, offset_in_minutes: f
 
     # Insert the setting point to the array representing twilight transition points
     t_jd_setting = t_settings[0].ut1
-    # ind_tst = len(t_jds[(t_jds - t_jd_setting) < 0])
     ind_tst = np.sum(t_jds < t_jd_setting)
     ts_combined = np.insert(t_jds, ind_tst, t_jd_setting)
     events_combined = np.insert(events, ind_tst, events[ind_tst-1])
-
-    alt_interp, az_interp = [], []
 
     # Adjusting Matplotlib rcParams to ensure text is not converted to paths
     plt.rcParams['svg.fonttype'] = 'none'
     # plt.rcParams['font.family'] = 'Arial'
 
     fig, ax = plt.subplots(figsize=(10, 10), subplot_kw={'projection': 'polar'})
+    ax.set_position([0.1, 0.1, 0.8, 0.8])
     ax.set_ylim(0, 90)
     ax.set_theta_offset(np.pi/2)
 
     for i in range(len(ts_combined)-1):
-        alt_temp, az_temp = plot_in_style(ax, events_combined[i], ts_combined[i], ts_combined[i+1], s, lng, lat)
-        alt_interp.extend(alt_temp[:-1])
-        az_interp.extend(az_temp[:-1])
+        plot_in_style(ax, events_combined[i], ts_combined[i], ts_combined[i+1], s, lng, lat)
 
     ttp_alt, ttp_az, ttp_anno, ttp_ts = get_twilight_transition_points(ts, events, s, lng, lat)
-    plot_twilight_transition_points(ax, ttp_alt, ttp_az, ttp_anno, alt_interp, az_interp)
+    plot_twilight_transition_points(fig, ax, ttp_alt, ttp_az, ttp_anno, lng, lat)
     plot_celestial_poles(ax, lat)
 
     if y_risings[0] and y_settings[0]:
