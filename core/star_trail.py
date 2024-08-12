@@ -154,17 +154,20 @@ def plot_in_style(ax, event, t_jd0, t_jd1, s, lng: float, lat: float):
 
     r = 90 - altitudes
     theta = np.radians(azimuths)
-
+    
+    # Get rid of the points that are close to the antipode of the zenith.
+    mask = r < 150
+    
     if event == 0 or event == 1:
-        line, = ax.plot(theta, r, 'k-', lw=2)
+        line, = ax.plot(theta[mask], r[mask], 'k-', lw=2)
     if event == 2:
-        line, = ax.plot(theta, r, 'k--', lw=2)
-        line.set_dashes([3,3])
+        line, = ax.plot(theta[mask], r[mask], 'k--', lw=2)
+        line.set_dashes([2,2])
     if event == 3:
-        line, = ax.plot(theta, r, 'k--', lw=1.5, alpha=0.4)
-        line.set_dashes([3,3])
+        line, = ax.plot(theta[mask], r[mask], 'k--', lw=2, alpha=0.4)
+        line.set_dashes([2,2])
     if event == 4:
-        line, = ax.plot(theta, r, 'k--', lw=0.5)
+        line, = ax.plot(theta[mask], r[mask], 'k--', lw=0.5)
         line.set_dashes([1,4])
 
 
