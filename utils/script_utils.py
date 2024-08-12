@@ -79,13 +79,13 @@ def decimal_to_hms(decimal_hours: float) -> dict:
     abs_hours = int(abs_decimal_hours)
     minutes = int((abs_decimal_hours - abs_hours) * 60)
     seconds = ((abs_decimal_hours - abs_hours) * 60 - minutes) * 60
-    return {'hours': sign * abs_hours, 'minutes': minutes, 'seconds': seconds}
+    return {'sign': sign, 'hours': abs_hours, 'minutes': minutes, 'seconds': seconds}
 
 
 # Formats a decimal UTC offset into a string.
 def format_timezone(tz: float) -> str:
     hms = decimal_to_hms(tz)
-    return f"{'-' if tz < 0 else '+'}{abs(hms['hours']):02d}:{hms['minutes']:02d}"
+    return f"{'-' if tz < 0 else '+'}{hms['hours']:02d}:{hms['minutes']:02d}"
 
 
 def load_hip_ident() -> pd.DataFrame:

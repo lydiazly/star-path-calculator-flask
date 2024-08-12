@@ -154,10 +154,10 @@ def plot_in_style(ax, event, t_jd0, t_jd1, s, lng: float, lat: float):
 
     r = 90 - altitudes
     theta = np.radians(azimuths)
-    
+
     # Get rid of the points that are close to the antipode of the zenith.
     mask = r < 150
-    
+
     if event == 0 or event == 1:
         line, = ax.plot(theta[mask], r[mask], 'k-', lw=2)
     if event == 2:
@@ -542,6 +542,7 @@ def get_diagram(year: int, month: int, day: int, lat: float, lng: float, tz_id: 
     t1 = tisca.ut1(year, month, day)
 
     offset_in_minutes = get_standard_offset_by_id(tz_id)
+    # print(year, month, day, lat, lng, offset_in_minutes, name, hip, radec)
 
     diagram_id, svg_data, ttp, rts = get_star_trail_diagram(t=t1, lng=lng, lat=lat, offset_in_minutes=offset_in_minutes,
                                                             name=name, hip=hip, radec=radec)
