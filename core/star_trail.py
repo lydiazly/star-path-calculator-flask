@@ -244,6 +244,9 @@ def plot_twilight_transition_points(fig, ax, altitudes, azimuths, annotations, l
     Plot the twilight transition points as well as their labels.
     """
 
+    if len(altitudes) == 0:
+        return
+
     r = 90 - np.array(altitudes)
     theta = np.radians(azimuths)
 
@@ -349,12 +352,12 @@ def plot_celestial_poles(ax, lat):
     Plot the north celestial pole or the south celestial pole.
     """
 
-    if lat>0:
+    if lat > 0:
         r = 90 - lat
         theta = 0
         ax.plot(theta, r, 'b+', ms=8)
         ax.annotate('NCP', (theta, r), textcoords="offset points", xytext=(-6, 0), ha='right', va='center', fontsize=10, color='b')
-    elif lat<0:
+    elif lat < 0:
         r = 90 + lat
         theta = np.radians(180)
         ax.plot(theta, r, 'b+', ms=8)
@@ -398,8 +401,10 @@ def get_star_trail_diagram(t: Time, lng: float, lat: float, offset_in_minutes: f
     ts_combined = np.insert(t_jds, ind_tst, t_jd_setting)
     events_combined = np.insert(events, ind_tst, events[ind_tst-1])
 
-    # Adjusting Matplotlib rcParams to ensure text is not converted to paths
-    plt.rcParams['svg.fonttype'] = 'none'
+    # Set to 'none' to ensure the text is not converted to paths
+    # plt.rcParams['svg.fonttype'] = 'none'
+
+    # Set font
     # plt.rcParams['font.family'] = 'Arial'
 
     fig, ax = plt.subplots(figsize=(10, 10), subplot_kw={'projection': 'polar'})
