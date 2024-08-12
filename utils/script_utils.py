@@ -77,8 +77,15 @@ def decimal_to_hms(decimal_hours: float) -> dict:
     sign = -1 if decimal_hours < 0 else 1
     abs_decimal_hours = abs(decimal_hours)
     abs_hours = int(abs_decimal_hours)
-    minutes = int((abs_decimal_hours - abs_hours) * 60)
-    seconds = ((abs_decimal_hours - abs_hours) * 60 - minutes) * 60
+    decimal_minutes = (abs_decimal_hours - abs_hours) * 60
+    minutes = int(decimal_minutes)
+    seconds = round((decimal_minutes - minutes) * 60)  # int
+    # Handle carryover
+    if seconds == 60:
+        seconds = 0
+        minutes += 1
+    abs_hours += minutes // 60
+    minutes = minutes % 60
     return {'sign': sign, 'hours': abs_hours, 'minutes': minutes, 'seconds': seconds}
 
 
