@@ -26,6 +26,7 @@ import re
 import core.data_loader as dl
 from utils.time_utils import get_standard_offset_by_id, ut1_to_local_standard_time
 import juliandate
+from great_circle_calculator.great_circle_calculator import distance_between_points, intermediate_point
 
 __all__ = ["get_star_trail_diagram", "get_annotations"]
 
@@ -60,9 +61,9 @@ def get_twilight_time(t0: Time, t1: Time, lng: float, lat: float):
         events = list(events)
         events.append(f(t0).item())
         events.append(f(t1).item())
-        
+
         return ts1, events
-    
+
     else:
         ts1 = []
         t_cals = ts.ut1_calendar()
@@ -70,7 +71,7 @@ def get_twilight_time(t0: Time, t1: Time, lng: float, lat: float):
             t_cal = (t_cals[0][i], t_cals[1][i], t_cals[2][i],
                      t_cals[3][i], t_cals[4][i], t_cals[5][i])
             ts1.append(tisca.ut1(*t_cal))
-        
+
         # add t0 before the beginning of the list and
         # add t1 behind the ending of the list
         ts1.insert(0, t0)
@@ -78,7 +79,7 @@ def get_twilight_time(t0: Time, t1: Time, lng: float, lat: float):
         events = list(events)
         events.insert(0, f(t0).item())
         events.append(f(t1).item())
-        
+
         return ts1, events
 
 
@@ -153,7 +154,7 @@ def plot_in_style(ax, event, t_jd0, t_jd1, s, lng: float, lat: float):
     """
 
     pts_num = int((t_jd1 - t_jd0) * 100)
-    t_jds = np.linspace(t_jd0, t_jd1, pts_num if pts_num>10 else 10)
+    t_jds = np.linspace(t_jd0, t_jd1, pts_num if pts_num > 10 else 10)
 
     altitudes = np.zeros(shape=(0), dtype=float)
     azimuths = np.zeros(shape=(0), dtype=float)
@@ -190,7 +191,7 @@ def get_twilight_transition_points(ts, events, s, lng: float, lat: float):
 
     for i in range(1, len(ts)-1):
         alt, az = get_star_altaz(s, ts[i], lng, lat)
-        
+
         if events[i-1] == 4 and events[i] == 3:
             altitudes.append(alt.degrees)
             azimuths.append(az.degrees)
@@ -269,47 +270,50 @@ def plot_twilight_transition_points(fig, ax, altitudes, azimuths, annotations, l
     # adjust_text(texts, x=theta_interp, y=r_interp, expand=(2,2), force_static=(1,1), min_arrow_len=10,
     #             arrowprops=dict(arrowstyle="->", color='r', lw=1, shrinkA=0, shrinkB=2, mutation_scale=10))
 
-    # Draw the labels of twilight transition points
-    ttp_coord_bg = []
-    for i in range(len(r)):
-        _coord = ax.transData.transform((theta[i], r[i]))
-        ttp_coord_bg.append([_coord[0]/fig.bbox.width, _coord[1]/fig.bbox.height])
+    # Draw the labels of twilight transition points.
+    # Label positions are set at the points on the extended segments of the great circles
+    # connecting from the pole to the twilight transition points.
+    # The reat_circle_calculator package is used to take calculation for great circles.
     if lat >= 0:
-        _coord = ax.transData.transform((0, 90-lat))
-        cp_coord_bg = [_coord[0]/fig.bbox.width, _coord[1]/fig.bbox.height]
+        cp_coord = (0, lat)
     else:
-        _coord = ax.transData.transform((np.radians(180), 90+lat))
-        cp_coord_bg = [_coord[0]/fig.bbox.width, _coord[1]/fig.bbox.height]
+        cp_coord = (180, lat)
+
+    label_coord = []
+    _offset_scale = 0.6 * 1e6
+    for i in range(len(altitudes)):
+        if azimuths[i] > 180:
+            _ttp_coord = (azimuths[i] - 360, altitudes[i])
+        else:
+            _ttp_coord = (azimuths[i], altitudes[i])
+
+        _vector_length = distance_between_points(cp_coord, _ttp_coord, unit='meters', haversine=True)
+        if _vector_length < 2.2e6 and i == 0:
+            _offset_scale = 1.5 * 1e6
+        _label_coord = intermediate_point(cp_coord, _ttp_coord, 1 + _offset_scale / _vector_length)
+
+        if _label_coord[0] < 0:
+            _label_coord = (_label_coord[0] + 360, _label_coord[1])
+
+        label_coord.append(_label_coord)
 
     ax2 = fig.add_axes([0,0,1,1], facecolor=(1,1,1,0))
     ax2.set_xlim(0, 1)
     ax2.set_ylim(0, 1)
 
-    _vector = np.array(ttp_coord_bg[0]) - np.array(cp_coord_bg)
-    _vector_length = np.sqrt(np.sum(_vector**2))
-    if _vector_length < 0.1:
-        _offset_scale = 0.05
-        _flag = 1
-    else:
-        _offset_scale = 0.02
-        _flag = 0
+    for i in range(len(label_coord)):
+        _r = 90 - label_coord[i][1]
+        _theta = np.radians(label_coord[i][0])
+        label_coord_bg = ax.transData.transform((_theta, _r))
+        label_coord_bg = [label_coord_bg[0]/fig.bbox.width, label_coord_bg[1]/fig.bbox.height]
 
-    for i in range(len(ttp_coord_bg)):
-        _vector = np.array(ttp_coord_bg[i]) - np.array(cp_coord_bg)
-        _vector_length = np.sqrt(np.sum(_vector**2))
-        _unit_vector = _vector / _vector_length
-        _offset = _unit_vector * _offset_scale
+        ttp_coord_bg = ax.transData.transform((theta[i], r[i]))
+        ttp_coord_bg = ([ttp_coord_bg[0]/fig.bbox.width, ttp_coord_bg[1]/fig.bbox.height])
 
-        if _flag == 1:
-            ax2.annotate(annotations[i],
-                xy = (ttp_coord_bg[i][0], ttp_coord_bg[i][1]),
-                xytext = (ttp_coord_bg[i][0] + _offset[0], ttp_coord_bg[i][1] + _offset[1]),
+        ax2.annotate(annotations[i],
+                xy = (ttp_coord_bg[0], ttp_coord_bg[1]),
+                xytext = (label_coord_bg[0], label_coord_bg[1]),
                 arrowprops=dict(color='r', arrowstyle='-', shrinkA=0.2, shrinkB=0.2, lw=0.5),
-                va='center', ha='center', fontsize=10, color='r')
-        else:
-            ax2.annotate(annotations[i],
-                xy = (ttp_coord_bg[i][0], ttp_coord_bg[i][1]),
-                xytext = (ttp_coord_bg[i][0] + _offset[0], ttp_coord_bg[i][1] + _offset[1]),
                 va='center', ha='center', fontsize=10, color='r')
 
     ax2.axis('off')
@@ -424,12 +428,12 @@ def get_star_trail_diagram(t: Time, lng: float, lat: float, offset_in_minutes: f
         rts_alt.insert(1, mtp_alt)
         rts_az.insert(1, mtp_az)
         rts_ts.insert(1, t_transit)
-    
+
     elif not y_rising and get_star_altaz(s, t_rising, lng, lat)[0].degrees < refraction_limit:
         ttp_alt, ttp_az, ttp_anno, ttp_ts = [], [], [], []
         rts_alt, rts_az, rts_ts = [], [], []
         raise ValueError('This star never rises on this day.')
-    
+
     else:
         for i in range(len(ts)-1):
             plot_in_style(ax, events[i], ts[i].ut1, ts[i+1].ut1, s, lng, lat)
