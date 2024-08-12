@@ -26,6 +26,7 @@ import re
 import core.data_loader as dl
 from utils.time_utils import get_standard_offset_by_id, ut1_to_local_standard_time
 import juliandate
+from great_circle_calculator.great_circle_calculator import distance_between_points, intermediate_point
 
 __all__ = ["get_star_trail_diagram", "get_annotations"]
 
@@ -269,49 +270,52 @@ def plot_twilight_transition_points(fig, ax, altitudes, azimuths, annotations, l
     # adjust_text(texts, x=theta_interp, y=r_interp, expand=(2,2), force_static=(1,1), min_arrow_len=10,
     #             arrowprops=dict(arrowstyle="->", color='r', lw=1, shrinkA=0, shrinkB=2, mutation_scale=10))
 
-    # Draw the labels of twilight transition points
-    ttp_coord_bg = []
-    for i in range(len(r)):
-        _coord = ax.transData.transform((theta[i], r[i]))
-        ttp_coord_bg.append([_coord[0]/fig.bbox.width, _coord[1]/fig.bbox.height])
+    # Draw the labels of twilight transition points.
+    # Label positions are set at the points on the extended segments of the great circles
+    # connecting from the pole to the twilight transition points.
+    # The reat_circle_calculator package is used to take calculation for great circles.
     if lat >= 0:
-        _coord = ax.transData.transform((0, 90-lat))
-        cp_coord_bg = [_coord[0]/fig.bbox.width, _coord[1]/fig.bbox.height]
+        cp_coord = (0, lat)
     else:
-        _coord = ax.transData.transform((np.radians(180), 90+lat))
-        cp_coord_bg = [_coord[0]/fig.bbox.width, _coord[1]/fig.bbox.height]
-
+        cp_coord = (180, lat)
+    
+    label_coord = []
+    _offset_scale = 0.6 * 1e6
+    for i in range(len(altitudes)):
+        if azimuths[i] > 180:
+            _ttp_coord = (azimuths[i] - 360, altitudes[i])
+        else:
+            _ttp_coord = (azimuths[i], altitudes[i])
+        
+        _vector_length = distance_between_points(cp_coord, _ttp_coord, unit='meters', haversine=True)
+        if _vector_length < 2.2e6 and i == 0:
+            _offset_scale = 1.5 * 1e6
+        _label_coord = intermediate_point(cp_coord, _ttp_coord, 1 + _offset_scale / _vector_length)
+        
+        if _label_coord[0] < 0:
+            _label_coord = (_label_coord[0] + 360, _label_coord[1])
+        
+        label_coord.append(_label_coord)
+    
     ax2 = fig.add_axes([0,0,1,1], facecolor=(1,1,1,0))
     ax2.set_xlim(0, 1)
     ax2.set_ylim(0, 1)
-
-    _vector = np.array(ttp_coord_bg[0]) - np.array(cp_coord_bg)
-    _vector_length = np.sqrt(np.sum(_vector**2))
-    if _vector_length < 0.1:
-        _offset_scale = 0.05
-        _flag = 1
-    else:
-        _offset_scale = 0.02
-        _flag = 0
-
-    for i in range(len(ttp_coord_bg)):
-        _vector = np.array(ttp_coord_bg[i]) - np.array(cp_coord_bg)
-        _vector_length = np.sqrt(np.sum(_vector**2))
-        _unit_vector = _vector / _vector_length
-        _offset = _unit_vector * _offset_scale
-
-        if _flag == 1:
-            ax2.annotate(annotations[i],
-                xy = (ttp_coord_bg[i][0], ttp_coord_bg[i][1]),
-                xytext = (ttp_coord_bg[i][0] + _offset[0], ttp_coord_bg[i][1] + _offset[1]),
+    
+    for i in range(len(label_coord)):
+        _r = 90 - label_coord[i][1]
+        _theta = np.radians(label_coord[i][0])
+        label_coord_bg = ax.transData.transform((_theta, _r))
+        label_coord_bg = [label_coord_bg[0]/fig.bbox.width, label_coord_bg[1]/fig.bbox.height]
+        
+        ttp_coord_bg = ax.transData.transform((theta[i], r[i]))
+        ttp_coord_bg = ([ttp_coord_bg[0]/fig.bbox.width, ttp_coord_bg[1]/fig.bbox.height])
+        
+        ax2.annotate(annotations[i],
+                xy = (ttp_coord_bg[0], ttp_coord_bg[1]),
+                xytext = (label_coord_bg[0], label_coord_bg[1]),
                 arrowprops=dict(color='r', arrowstyle='-', shrinkA=0.2, shrinkB=0.2, lw=0.5),
                 va='center', ha='center', fontsize=10, color='r')
-        else:
-            ax2.annotate(annotations[i],
-                xy = (ttp_coord_bg[i][0], ttp_coord_bg[i][1]),
-                xytext = (ttp_coord_bg[i][0] + _offset[0], ttp_coord_bg[i][1] + _offset[1]),
-                va='center', ha='center', fontsize=10, color='r')
-
+    
     ax2.axis('off')
 
 
