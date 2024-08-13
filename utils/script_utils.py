@@ -84,8 +84,9 @@ def decimal_to_hms(decimal_hours: float) -> dict:
     if seconds == 60:
         seconds = 0
         minutes += 1
-    abs_hours += minutes // 60
-    minutes = minutes % 60
+    if seconds == 60:
+        minutes = 0
+        abs_hours += 1
     return {'sign': sign, 'hours': abs_hours, 'minutes': minutes, 'seconds': seconds}
 
 
