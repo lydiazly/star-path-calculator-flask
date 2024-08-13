@@ -432,7 +432,7 @@ def get_star_trail_diagram(t: Time, lng: float, lat: float, offset_in_minutes: f
     elif not y_rising and get_star_altaz(s, t_rising, lng, lat)[0].degrees < refraction_limit:
         ttp_alt, ttp_az, ttp_anno, ttp_ts = [], [], [], []
         rts_alt, rts_az, rts_ts = [], [], []
-        raise ValueError('This star never rises on this day.')
+        raise ValueError('This star never rises at this location on this date.')
 
     else:
         for i in range(len(ts)-1):
