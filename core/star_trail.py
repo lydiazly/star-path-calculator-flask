@@ -513,15 +513,17 @@ def get_annotations(ttp, rts, offset_in_minutes: float):
         ind = name_list.index(ttp_anno[i])
         _time_ut1 = ttp_times[i].ut1_calendar()
         _time_local = ut1_to_local_standard_time(_time_ut1, offset_in_minutes)
+        _time_ut1 = tisca.ut1(*_time_ut1[:5], round(_time_ut1[5]) + 0.1).ut1_calendar()
+        _time_local = tisca.ut1(*_time_local[:5], round(_time_local[5]) + 0.1).ut1_calendar()
         _time_ut1_julian   = juliandate.to_julian(juliandate.from_gregorian(*_time_ut1))
         _time_local_julian = juliandate.to_julian(juliandate.from_gregorian(*_time_local))
         annotations[ind]['is_displayed'] = True
         annotations[ind]['alt'] = float(ttp_alt[i])
         annotations[ind]['az']  = float(ttp_az[i])
-        annotations[ind]['time_ut1']          = (*map(int, _time_ut1[:5]), float(_time_ut1[-1]))
-        annotations[ind]['time_ut1_julian']   = (*map(int, _time_ut1_julian[:5]), float(_time_ut1_julian[-2]+_time_ut1_julian[-1]/1e6))
-        annotations[ind]['time_local']        = (*map(int, _time_local[:5]), float(_time_local[-1]))
-        annotations[ind]['time_local_julian'] = (*map(int, _time_local_julian[:5]), float(_time_local_julian[-2]+_time_local_julian[-1]/1e6))
+        annotations[ind]['time_ut1']          = tuple(map(int, _time_ut1))
+        annotations[ind]['time_ut1_julian']   = tuple(map(int, _time_ut1_julian[:6]))
+        annotations[ind]['time_local']        = tuple(map(int, _time_local))
+        annotations[ind]['time_local_julian'] = tuple(map(int, _time_local_julian[:6]))
         annotations[ind]['time_zone'] = offset_in_minutes / 60
 
     if len(rts_alt) > 1:
@@ -529,29 +531,34 @@ def get_annotations(ttp, rts, offset_in_minutes: float):
             ind = name_list.index(name)
             _time_ut1 = rts_times[i].ut1_calendar()
             _time_local = ut1_to_local_standard_time(_time_ut1, offset_in_minutes)
+            _time_ut1 = tisca.ut1(*_time_ut1[:5], round(_time_ut1[5]) + 0.1).ut1_calendar()
+            _time_local = tisca.ut1(*_time_local[:5], round(_time_local[5]) + 0.1).ut1_calendar()
             _time_ut1_julian   = juliandate.to_julian(juliandate.from_gregorian(*_time_ut1))
             _time_local_julian = juliandate.to_julian(juliandate.from_gregorian(*_time_local))
             annotations[ind]['is_displayed'] = True
             annotations[ind]['alt'] = float(rts_alt[i])
             annotations[ind]['az']  = float(rts_az[i])
-            annotations[ind]['time_ut1']          = (*map(int, _time_ut1[:5]), float(_time_ut1[-1]))
-            annotations[ind]['time_ut1_julian']   = (*map(int, _time_ut1_julian[:5]), float(_time_ut1_julian[-2]+_time_ut1_julian[-1]/1e6))
-            annotations[ind]['time_local']        = (*map(int, _time_local[:5]), float(_time_local[-1]))
-            annotations[ind]['time_local_julian'] = (*map(int, _time_local_julian[:5]), float(_time_local_julian[-2]+_time_local_julian[-1]/1e6))
+            annotations[ind]['time_ut1']          = tuple(map(int, _time_ut1))
+            annotations[ind]['time_ut1_julian']   = tuple(map(int, _time_ut1_julian[:6]))
+            annotations[ind]['time_local']        = tuple(map(int, _time_local))
+            annotations[ind]['time_local_julian'] = tuple(map(int, _time_local_julian[:6]))
             annotations[ind]['time_zone'] = offset_in_minutes / 60
+    
     elif len(rts_alt) == 1:
         ind = name_list.index('T')
         _time_ut1 = rts_times[0].ut1_calendar()
         _time_local = ut1_to_local_standard_time(_time_ut1, offset_in_minutes)
+        _time_ut1 = tisca.ut1(*_time_ut1[:5], round(_time_ut1[5]) + 0.1).ut1_calendar()
+        _time_local = tisca.ut1(*_time_local[:5], round(_time_local[5]) + 0.1).ut1_calendar()
         _time_ut1_julian   = juliandate.to_julian(juliandate.from_gregorian(*_time_ut1))
         _time_local_julian = juliandate.to_julian(juliandate.from_gregorian(*_time_local))
         annotations[ind]['is_displayed'] = True
         annotations[ind]['alt'] = float(rts_alt[0])
         annotations[ind]['az'] = float(rts_az[0])
-        annotations[ind]['time_ut1']          = (*map(int, _time_ut1[:5]), float(_time_ut1[-1]))
-        annotations[ind]['time_ut1_julian']   = (*map(int, _time_ut1_julian[:5]), float(_time_ut1_julian[-2]+_time_ut1_julian[-1]/1e6))
-        annotations[ind]['time_local']        = (*map(int, _time_local[:5]), float(_time_local[-1]))
-        annotations[ind]['time_local_julian'] = (*map(int, _time_local_julian[:5]), float(_time_local_julian[-2]+_time_local_julian[-1]/1e6))
+        annotations[ind]['time_ut1']          = tuple(map(int, _time_ut1))
+        annotations[ind]['time_ut1_julian']   = tuple(map(int, _time_ut1_julian[:6]))
+        annotations[ind]['time_local']        = tuple(map(int, _time_local))
+        annotations[ind]['time_local_julian'] = tuple(map(int, _time_local_julian[:6]))
         annotations[ind]['time_zone'] = offset_in_minutes / 60
 
     return annotations
