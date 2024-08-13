@@ -543,7 +543,7 @@ def get_annotations(ttp, rts, offset_in_minutes: float):
             annotations[ind]['time_local']        = tuple(map(int, _time_local))
             annotations[ind]['time_local_julian'] = tuple(map(int, _time_local_julian[:6]))
             annotations[ind]['time_zone'] = offset_in_minutes / 60
-    
+
     elif len(rts_alt) == 1:
         ind = name_list.index('T')
         _time_ut1 = rts_times[0].ut1_calendar()
