@@ -105,7 +105,7 @@ def get_star_rising_time(s, t: Time, lng: float, lat: float, offset_in_minutes: 
     year, month, day, _, _, _ = t.ut1_calendar()
 
     t0 = tisca.ut1(year, month, day, 0, 0 - offset_in_minutes, 0)
-    t1 = tisca.ut1(year, month, day + 2, 0, 0 - offset_in_minutes, 0)
+    t1 = tisca.ut1(year, month, day + 3, 0, 0 - offset_in_minutes, 0)
 
     loc = wgs84.latlon(longitude_degrees=lng, latitude_degrees=lat)
     observer = dl.earth + loc
@@ -121,7 +121,7 @@ def get_star_setting_time(s, t: Time, t_rising: Time, lng: float, lat: float):
     """
 
     t0 = t
-    t1 = tisca.ut1_jd(t0.ut1 + 2)
+    t1 = tisca.ut1_jd(t0.ut1 + 3)
 
     loc = wgs84.latlon(longitude_degrees=lng, latitude_degrees=lat)
     observer = dl.earth + loc
