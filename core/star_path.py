@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-# core/star_trail.py
+# core/star_path.py
 """
-Functions to plot star trails.
+Functions to plot star paths.
 
 Use global variables eph and earth by referencing, e.g.:
 ```
@@ -28,7 +28,7 @@ from utils.time_utils import get_standard_offset_by_id, ut1_to_local_standard_ti
 import juliandate
 from great_circle_calculator.great_circle_calculator import distance_between_points, intermediate_point
 
-__all__ = ["get_star_trail_diagram", "get_annotations"]
+__all__ = ["get_star_path_diagram", "get_annotations"]
 
 
 tisca = load.timescale()
@@ -149,7 +149,7 @@ def get_star_meridian_transit_time(s, t: Time, lng: float, lat: float):
 
 def plot_in_style(ax, event, t_jd0, t_jd1, s, lng: float, lat: float):
     """
-    Plot star trails in different styles for different twilight conditions.
+    Plot star paths in different styles for different twilight conditions.
     t0 and t1 are both in units of Julian days.
     """
 
@@ -323,7 +323,7 @@ def plot_rising_and_setting_points(fig, ax, t0, t1, s, lng:float, lat:float):
     """
     Plot the star rising and setting points, whose latitudes are both at the refraction limit.
     They are outside the plotting range, so they are both plotted on the ax2 layer
-    which is above the ax layer where the star trails are drawn on.
+    which is above the ax layer where the star paths are drawn on.
     """
 
     alt0, az0 = get_star_altaz(s, t0, lng, lat)
@@ -375,7 +375,7 @@ def plot_celestial_poles(ax, lat):
         ax.annotate('SCP', (theta, r), textcoords="offset points", xytext=(-6, 0), ha='right', va='center', fontsize=10, color='b')
 
 
-def get_star_trail_diagram(t: Time, lng: float, lat: float, offset_in_minutes: float,
+def get_star_path_diagram(t: Time, lng: float, lat: float, offset_in_minutes: float,
                            name=None, hip: int = -1, radec: Tuple[float, float] = None):
     s = None
     if name is not None:
@@ -570,7 +570,7 @@ def get_diagram(year: int, month: int, day: int, lat: float, lng: float, tz_id: 
     offset_in_minutes = get_standard_offset_by_id(tz_id)
     # print(year, month, day, lat, lng, offset_in_minutes, name, hip, radec)
 
-    diagram_id, svg_data, ttp, rts = get_star_trail_diagram(t=t1, lng=lng, lat=lat, offset_in_minutes=offset_in_minutes,
+    diagram_id, svg_data, ttp, rts = get_star_path_diagram(t=t1, lng=lng, lat=lat, offset_in_minutes=offset_in_minutes,
                                                             name=name, hip=hip, radec=radec)
 
     annotations = get_annotations(ttp=ttp, rts=rts, offset_in_minutes=offset_in_minutes)

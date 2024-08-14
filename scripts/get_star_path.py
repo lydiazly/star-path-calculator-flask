@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-The main script to plot the star trail from the terminal.
+The main script to plot the star path from the terminal.
 """
 
 import argparse
@@ -14,20 +14,20 @@ import base64
 # Add the parent directory to the Python path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from core.star_trail import get_diagram
+from core.star_path import get_diagram
 from utils.script_utils import format_datetime, format_datetime_iso, validate_datetime, format_timezone, EPH_DATE_MIN_STR, EPH_DATE_MAX_STR
 
 
 prog = f"python {os.path.basename(__file__)}"
-description = "Specify a local date, location, and celestial object to draw the star trail. Daylight Saving Time is not included."
+description = "Specify a local date, location, and celestial object to draw the star path. Daylight Saving Time is not included."
 epilog = f"""date range:
   {EPH_DATE_MIN_STR} \u2013 {EPH_DATE_MAX_STR} (Gregorian)
 examples:
-  # Plot the star trail of Mars:
+  # Plot the star path of Mars:
   {prog} -o mars\n
-  # Plot the star trail of Vega by giving its Hipparcos Catalog number:
+  # Plot the star path of Vega by giving its Hipparcos Catalog number:
   {prog} -o 91262\n
-  # Plot the star trail by giving the star's ICRS coordinates (RA, Dec):
+  # Plot the star path by giving the star's ICRS coordinates (RA, Dec):
   {prog} -o 310.7,-5.1
 """
 
@@ -112,7 +112,7 @@ def main():
         name = args.obj.lower()
         print(f"{name.capitalize()}")
 
-    # Plot star trail ---------------------------------------------------------|
+    # Plot star path ---------------------------------------------------------|
     try:
         from utils.time_utils import find_timezone
         tz_id = find_timezone(lat=lat, lng=lng)
@@ -125,7 +125,7 @@ def main():
         sys.exit(1)
 
     # Write the SVG data to a file
-    filename = f'stv_{results["diagram_id"]}.svg'
+    filename = f'sp_{results["diagram_id"]}.svg'
 
     # Decode the base64 data to get the SVG content
     svg_data = base64.b64decode(results["svg_data"]).decode('utf-8')

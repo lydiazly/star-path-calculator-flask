@@ -3,7 +3,7 @@ from flask import request, jsonify, render_template, current_app as app
 # from flask_limiter import Limiter
 # from flask_limiter.util import get_remote_address
 from core.coordinates import get_seasons
-from core.star_trail import get_diagram
+from core.star_path import get_diagram
 from utils.time_utils import get_standard_offset_by_id, ut1_to_local_standard_time, julian_to_gregorian, gregorian_to_julian
 
 
