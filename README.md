@@ -1,4 +1,4 @@
-# PlotStarTrail
+# Stardial
 
 [![python](https://img.shields.io/badge/Python-3.10,_3.11-3776AB?logo=python&logoColor=white)](https://www.python.org) [![numpy](https://img.shields.io/badge/Numpy-2.0.1-013243?logo=numpy&logoColor=white)](https://numpy.org) [![pandas](https://img.shields.io/badge/Pandas-2.2.2-150458?logo=Pandas&logoColor=white)](https://pandas.pydata.org) [![matplotlib](https://img.shields.io/badge/Matplotlib-3.9.1.post1-12557C)](https://matplotlib.org) [![skyfield](https://img.shields.io/badge/Skyfield-1.49-BD9354)](https://rhodesmill.org/skyfield) [![juliandate](https://img.shields.io/badge/Juliandate-1.0.4-BD9354)](https://pypi.org/project/juliandate) [![tzfpy](https://img.shields.io/badge/tzfpy-0.15.5-blue)](https://github.com/ringsaturn/tzfpy) [![great-circle-calculator](https://img.shields.io/badge/Great_Circle_Calculator-1.3.1-brightgreen)](https://github.com/seangrogan/great_circle_calculator)
 
@@ -15,7 +15,7 @@
 - [Install](#install)
 - [Usage](#usage)
   - [get\_equinoxes\_solstices.py](#get_equinoxes_solsticespy)
-  - [get\_star\_trail.py](#get_star_trailpy)
+  - [get\_star\_path.py](#get_star_pathpy)
 
 ## Overview
 
@@ -86,7 +86,7 @@ examples:
   python get_equinoxes_solstices.py -2000
 ```
 
-### [get_star_trail.py](./scripts/get_star_trail.py)
+### [get_star_path.py](./scripts/get_star_path.py)
 
 Example:
 
