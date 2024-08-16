@@ -32,7 +32,7 @@ __all__ = ["get_star_path_diagram", "get_annotations"]
 
 
 tisca = load.timescale()
-refraction_limit = -0.5666
+refraction_limit = -34 / 60
 
 
 # Ensure ephemeris data is loaded
