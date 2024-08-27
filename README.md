@@ -2,7 +2,23 @@
 
 [![python](https://img.shields.io/badge/Python-3.10,_3.11-3776AB?logo=python&logoColor=white)](https://www.python.org) [![numpy](https://img.shields.io/badge/Numpy-2.0.1-013243?logo=numpy&logoColor=white)](https://numpy.org) [![pandas](https://img.shields.io/badge/Pandas-2.2.2-150458?logo=Pandas&logoColor=white)](https://pandas.pydata.org) [![matplotlib](https://img.shields.io/badge/Matplotlib-3.9.1.post1-12557C)](https://matplotlib.org) [![skyfield](https://img.shields.io/badge/Skyfield-1.49-BD9354)](https://rhodesmill.org/skyfield) [![juliandate](https://img.shields.io/badge/Juliandate-1.0.4-BD9354)](https://pypi.org/project/juliandate) [![tzfpy](https://img.shields.io/badge/tzfpy-0.15.5-blue)](https://github.com/ringsaturn/tzfpy) [![great-circle-calculator](https://img.shields.io/badge/Great_Circle_Calculator-1.3.1-brightgreen)](https://github.com/seangrogan/great_circle_calculator) [![Flask](https://img.shields.io/badge/Flask-3.0.3-39A6BD?logo=flask&logoColor=white)](https://flask.palletsprojects.com)
 
-A RESTFul Flask server based on [this project](https://github.com/claude-hao/star-path-calculator).
+The Flask server of our website [Star Path Viewer](https://stardial-astro.github.io/star-path-viewer).
+
+
+[→ Team](https://github.com/stardial-astro)
+
+[→ Source code](https://github.com/claude-hao/star-path-calculator)
+
+[→ React client](https://github.com/lydiazly/star-path-viewer)
+
+## Table of Contents<!-- omit in toc -->
+
+- [Endpoints](#endpoints)
+  - [1. Get dates, times, and coordinates in RA and Dec for the equinoxes and solstices of a given year](#1-get-dates-times-and-coordinates-in-ra-and-dec-for-the-equinoxes-and-solstices-of-a-given-year)
+  - [2. Get only the date of one of the equinoxes and solstices](#2-get-only-the-date-of-one-of-the-equinoxes-and-solstices)
+  - [3. Plot the path of a celestial object on a local date at a specified location](#3-plot-the-path-of-a-celestial-object-on-a-local-date-at-a-specified-location)
+- [Install](#install)
+- [Run the Flask app locally in development mode](#run-the-flask-app-locally-in-development-mode)
 
 ## Endpoints
 
