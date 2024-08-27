@@ -389,7 +389,10 @@ def get_star_path_diagram(t: Time, lng: float, lat: float, offset_in_minutes: fl
         if hip < 1 or hip > 118322:
             raise ValueError("The Hipparchus Catalogue Number must be in the range [1, 118322].")
         try:
-            s = Star.from_dataframe(dl.hip_df.loc[hip])
+            _s = dl.hip_df.loc[hip]
+            if np.isnan(_s['ra_degrees']):
+                raise ValueError("WARNING: No RA/Dec data available for this star in the Hipparcos Catalogue.")
+            s = Star.from_dataframe(_s)
         except KeyError:
             raise ValueError("Invalid Hipparchus Catalogue Number.")
     elif radec and len(radec) == 2:
@@ -432,7 +435,7 @@ def get_star_path_diagram(t: Time, lng: float, lat: float, offset_in_minutes: fl
     elif not y_rising and get_star_altaz(s, t_rising, lng, lat)[0].degrees < refraction_limit:
         ttp_alt, ttp_az, ttp_anno, ttp_ts = [], [], [], []
         rts_alt, rts_az, rts_ts = [], [], []
-        raise ValueError('This star never rises at this location on this date.')
+        raise ValueError('WARNING: This star never rises at this location on this date.')
 
     else:
         for i in range(len(ts)-1):
