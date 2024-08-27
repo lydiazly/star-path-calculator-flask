@@ -4,7 +4,6 @@
 
 The Flask server of our website [Star Path Viewer](https://stardial-astro.github.io/star-path-viewer).
 
-
 [→ Team](https://github.com/stardial-astro)
 
 [→ Source code](https://github.com/claude-hao/star-path-calculator)
@@ -17,19 +16,18 @@ The Flask server of our website [Star Path Viewer](https://stardial-astro.github
   - [1. Get dates, times, and coordinates in RA and Dec for the equinoxes and solstices of a given year](#1-get-dates-times-and-coordinates-in-ra-and-dec-for-the-equinoxes-and-solstices-of-a-given-year)
   - [2. Get only the date of one of the equinoxes and solstices](#2-get-only-the-date-of-one-of-the-equinoxes-and-solstices)
   - [3. Plot the path of a celestial object on a local date at a specified location](#3-plot-the-path-of-a-celestial-object-on-a-local-date-at-a-specified-location)
-- [Install](#install)
 - [Run the Flask app locally in development mode](#run-the-flask-app-locally-in-development-mode)
 
 ## Endpoints
 
 ### 1. Get dates, times, and coordinates in RA and Dec for the equinoxes and solstices of a given year
 
-`https://equinoxcoord.pythonanywhere.com/seasons`
+`https://starpathcalculator.pythonanywhere.com/seasons`
 
 Parameters:
 
 - `year`: (*required*) a year in the range of (-3000, 3000). Note that *0* is *1 BCE*
-- `tz`: a timezone identifier, e.g., `tz=Asia%2FShanghai`
+- `tz`: (*required*) a timezone identifier, e.g., `tz=Asia%2FShanghai`
 - `lat`: the latitude in decimal degrees
 - `lng`: the longitude in decimal degrees
 
@@ -39,14 +37,39 @@ Returns:
 
 - `results`: a list of all the obtained coordinates and times of the equinoxes and solstices
 
+Example:
+
+`https://starpathcalculator.pythonanywhere.com/seasons?tz=Etc%2FGMT&year=-1000`
+
+```json
+{
+  "results": {
+    "autumnal_dec": -15.5640130948836,
+    "autumnal_ra": 219.114596206919,
+    "autumnal_time": [-1000, 9, 23, 7, 15, 44.1148616373539],
+    "summer_dec": 17.5909755740231,
+    "summer_ra": 134.184027102195,
+    "summer_time": [-1000, 6, 23, 16, 9, 1.93309620022774],
+    "vernal_dec": 15.5661277766416,
+    "vernal_ra": 39.1204852333523,
+    "vernal_time": [-1000, 3, 21, 10, 8, 34.8072123527527],
+    "winter_dec": -17.592567254477,
+    "winter_ra": 314.177991317744,
+    "winter_time": [-1000, 12, 20, 17, 23, 41.1424760520458]
+  },
+  "tz": "Etc/GMT",
+  "year": -1000
+}
+```
+
 ### 2. Get only the date of one of the equinoxes and solstices
 
-`https://equinoxcoord.pythonanywhere.com/equinox`
+`https://starpathcalculator.pythonanywhere.com/equinox`
 
 Parameters:
 
 - `year`: (*required*) same as above
-- `tz`: same as above
+- `tz`: (*required*) same as above
 - `lat`: same as above
 - `lng`: same as above
 - `flag`: (*required*)
@@ -59,37 +82,51 @@ Returns:
 
 - `results`: a list of the obtained coordinates and times of the specified equinox or solstice
 
+Example:
+
+`https://starpathcalculator.pythonanywhere.com/equinox?tz=Etc%2FGMT&year=-1000&flag=ve`
+
+```json
+{
+  "results": [-1000, 3, 21, 10, 8, 34.8072123527527],
+  "tz": "Etc/GMT",
+  "year": -1000
+}
+```
+
 ### 3. Plot the path of a celestial object on a local date at a specified location
 
-`https://equinoxcoord.pythonanywhere.com/diagram`
+`https://starpathcalculator.pythonanywhere.com/diagram`
 
 Parameters:
 
 - `year`: (*required*) same as above
 - `month`: (*required*) a month as a number (from 1 to 12).
 - `day`: (*required*) a day of the month.
-- `tz`: same as above
-- `lat`: same as above
-- `lng`: same as above
-- `flag`: (*required*) same as above
-- `cal`: (*required*) calendar
+- `lat`: (*required*) same as above
+- `lng`: (*required*) same as above
+- `name` | `hip` | `ra`, `dec`: (*required*) planet name (case insensitive), Hipparchus catalogue number, or a RA/Dec pair
+- `tz`: the timezone identifier of this location
+- `cal`: calendar
   - `cal=` or not provided: Gregorian calendar
   - `cal=j`: Julian calendar
+
+If `tz` is not provided, it will be derived from the `lat` and `lng`.
+Specifying `tz` can enhance speed. However, if `tz` doesn't match the `lat` and `lng`, the result will be incorrect. To optimize performance, we do not verify this match.
 
 Returns:
 
 - `name`: if `hip` is specified, finds and returns the corresponding proper name or the Bayer designation
 - `diagramId`: a string of a unix timestamp
-- `svgData`: the plotted SVG data
-- `annotations`: a list of details of the points on the figure
+- `offset`: timezone offset in decimal hours
+- `svgData`: the Base64-encoded SVG data of the output figure
+- `annotations`: a list of details about the points on the figure, including dates in both the Gregorian and Julian calendars.
 
-## Install
+## Run the Flask app locally in development mode
 
 ```sh
 python3 -m pip install pandas matplotlib skyfield juliandate tzfpy Flask
 ```
-
-## Run the Flask app locally in development mode
 
 ```sh
 python3 run.py
