@@ -8,7 +8,7 @@ This repository contains the source code of our website [Star Path Viewer](https
 
 [→ Flask server](https://github.com/lydiazly/star-path-calculator-flask)
 
-[→ React client](https://github.com/lydiazly/star-path-viewer)
+[→ React client](https://github.com/stardial-astro/star-path-viewer)
 
 ## Table of Contents<!-- omit in toc -->
 
