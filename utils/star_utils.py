@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # utils/star_utils.py
 """
-Functions handle Hipparchus catalogue number, names, etc.
+Functions handle Hipparchus Catalogue number, names, etc.
 """
 
 import pandas as pd

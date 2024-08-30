@@ -387,14 +387,14 @@ def get_star_path_diagram(t: Time, lng: float, lat: float, offset_in_minutes: fl
             raise ValueError(f"Invalid planet name: {name}")
     elif hip >= 0:
         if hip < 1 or hip > 118322:
-            raise ValueError("The Hipparchus Catalogue Number must be in the range [1, 118322].")
+            raise ValueError("The Hipparchus Catalogue number must be in the range [1, 118322].")
         try:
             _s = dl.hip_df.loc[hip]
             if np.isnan(_s['ra_degrees']):
                 raise ValueError("WARNING: No RA/Dec data available for this star in the Hipparcos Catalogue.")
             s = Star.from_dataframe(_s)
         except KeyError:
-            raise ValueError("Invalid Hipparchus Catalogue Number.")
+            raise ValueError("Invalid Hipparchus Catalogue number.")
     elif radec and len(radec) == 2:
         s = Star(ra_hours=float(radec[0]), dec_degrees=float(radec[1]))
 
