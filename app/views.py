@@ -14,6 +14,8 @@ EQX_SOL_KEYS = {
     "ws": "winter_time"
 }
 
+GREGORIAN = ""
+JULIAN = "j"
 
 # Initialize the limiter
 # limiter = Limiter(
@@ -122,7 +124,7 @@ def diagram():
     month = request.args.get("month", default=1, type=int)
     day   = request.args.get("day", default=1, type=int)
     flag  = request.args.get("flag", default=None)  # unused
-    cal   = request.args.get("cal", default=None)  # None: Gregorian, 'j': Julian
+    cal   = request.args.get("cal", default=None)  # None: Gregorian, "j": Julian
     name  = request.args.get("name", default=None)
     hip   = request.args.get("hip", default=None, type=int)
     ra    = request.args.get("ra", default=None, type=float)
@@ -143,10 +145,10 @@ def diagram():
     elif ra is not None and dec is not None:
         obj = {"radec": (ra, dec)}
     else:
-        return jsonify({"error": "Either planet name, Hipparchus catalogue number, or (ra, dec) is not provided."}), 400
+        return jsonify({"error": "Either planet name, Hipparchus Catalogue number, or (ra, dec) is not provided."}), 400
 
     # Convert to Gregorian if the request is in Julian
-    if cal == "j":
+    if cal == JULIAN:
         year, month, day, *_ = julian_to_gregorian((year, month, day, 12))  # 12:00:00
 
     # Get the equinox/solstice times
@@ -164,13 +166,13 @@ def diagram():
 
         results = get_diagram(year, month, day, lat=lat, lng=lng, tz_id=tz_id, **obj)
 
-        if cal == "j":
+        if cal == JULIAN:
             # The results are already in Gregorian
-            cal = ""
+            cal = GREGORIAN
         else:
             # Convert to Julian if the original request was in Gregorian
             year, month, day, *_ = gregorian_to_julian((year, month, day, 12))  # 12:00:00
-            cal = "j"
+            cal = JULIAN
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
