@@ -1,0 +1,916 @@
+Name_en,Id,Const,Name_zh_hk
+Alpherat,a,And,壁宿二
+Alpheratz,a,And,壁宿二
+Sirah,a,And,壁宿二
+Sirrah,a,And,壁宿二
+Al Mizar,b,And,奎宿九
+Merach,b,And,奎宿九
+Mirac,b,And,奎宿九
+Mirach,b,And,奎宿九
+Mizar,b,And,奎宿九
+Alamak,g,And,天大將軍一
+Almaac,g,And,天大將軍一
+Almaach,g,And,天大將軍一
+Almaack,g,And,天大將軍一
+Almaak,g,And,天大將軍一
+Almach,g,And,天大將軍一
+Almak,g,And,天大將軍一
+Adhil,n,And,奎宿七
+Altair,a,Aql,河鼓二
+Atair,a,Aql,河鼓二
+Alschain,b,Aql,河鼓一
+Alschairn,b,Aql,河鼓一
+Alshain,b,Aql,河鼓一
+Deneb Okab,d,Aql,右旗三
+Deneb,e,Aql,吳越增一
+Deneb el Okab,e,Aql,吳越增一
+Reda,g,Aql,河鼓三
+Tarazad,g,Aql,河鼓三
+Tarazed,g,Aql,河鼓三
+Althalimain,l,Aql,天弁七
+Deneb,x,Aql,"吳越 , 天市左垣六"
+Deneb el Okab,x,Aql,"吳越 , 天市左垣六"
+Dheneb,x,Aql,"吳越 , 天市左垣六"
+El Melik,a,Aqr,危宿一
+Saad el Melik,a,Aqr,危宿一
+Sadal Melik,a,Aqr,危宿一
+Sadalmelek,a,Aqr,危宿一
+Sadalmelik,a,Aqr,危宿一
+Sadlamulk,a,Aqr,危宿一
+Saad el Suud,b,Aqr,虛宿一
+Sad es Saud,b,Aqr,虛宿一
+Sadalsud,b,Aqr,虛宿一
+Sadalsund,b,Aqr,虛宿一
+Sadalsuud,b,Aqr,虛宿一
+Scheat,d,Aqr,羽林軍二十六
+Skat,d,Aqr,羽林軍二十六
+Al Bali,e,Aqr,女宿一
+Albali,e,Aqr,女宿一
+Sadachbia,g,Aqr,墳墓二
+Sadalachbia,g,Aqr,墳墓二
+Situla,k,Aqr,虛梁三
+Ancha,q,Aqr,泣二
+Bunda,x,Aqr,天壘城一
+Choo,a,Ara,杵二(箕宿)
+Alnath,a,Ari,婁宿三
+Arietis,a,Ari,婁宿三
+El Nath,a,Ari,婁宿三
+Hamal,a,Ari,婁宿三
+Hamul,a,Ari,婁宿三
+Hemal,a,Ari,婁宿三
+Ras Hammel,a,Ari,婁宿三
+Al Sheratain,b,Ari,婁宿一
+Sharatan,b,Ari,婁宿一
+Sheratan,b,Ari,婁宿一
+Botein,d,Ari,天陰四
+Mesarthim,g,Ari,婁宿二
+Mesartim,g,Ari,婁宿二
+Alhajoth,a,Aur,五車二
+Capella,a,Aur,五車二
+Singer,a,Aur,五車二
+Menkalina,b,Aur,五車三
+Menkalinan,b,Aur,五車三
+Al Anz,e,Aur,柱一(畢宿)
+Alanz,e,Aur,柱一(畢宿)
+Almaaz,e,Aur,柱一(畢宿)
+Maaz,e,Aur,柱一(畢宿)
+Hoedus II,h,Aur,柱三(畢宿)
+Hasseleh,i,Aur,五車一
+Haedus,z,Aur,柱二(畢宿)
+Hoedus I,z,Aur,柱二(畢宿)
+Saclateni,z,Aur,柱二(畢宿)
+Sadatoni,z,Aur,柱二(畢宿)
+Falx Italica,38,Boo,玄戈增二
+Marrha,38,Boo,玄戈增二
+Merga,38,Boo,玄戈增二
+Arcturus,a,Boo,大角
+Job's Star,a,Boo,大角
+Meres,b,Boo,七公增五
+Merez,b,Boo,七公增五
+Nekkar,b,Boo,七公增五
+Izar,e,Boo,梗河一
+Mirac,e,Boo,梗河一
+Mirach,e,Boo,梗河一
+Mirak,e,Boo,梗河一
+Mirrak,e,Boo,梗河一
+Mizar,e,Boo,梗河一
+Pulcherrima,e,Boo,梗河一
+Ceginus,g,Boo,招搖
+Haris,g,Boo,招搖
+Seginus,g,Boo,招搖
+Mufrid,h,Boo,右攝提一
+Mufride,h,Boo,右攝提一
+Muphrid,h,Boo,右攝提一
+Muphride,h,Boo,右攝提一
+Saak,h,Boo,右攝提一
+Asellus Secundus,i,Boo,天槍二
+Asellus Tertius,k,Boo,天槍一
+Alkalurops,m,Boo,七公六
+Alkaurops,m,Boo,七公六
+Clava,m,Boo,七公六
+Icalurus,m,Boo,七公六
+Inkalunis,m,Boo,七公六
+Venabulum,m,Boo,七公六
+Asellus Primus,q,Boo,天槍三
+Aschere,a,CMa,天狼
+Canicula,a,CMa,天狼
+Isis,a,CMa,天狼
+Osiris,a,CMa,天狼
+Sirius,a,CMa,天狼
+Mirza,b,CMa,軍市一
+Mirzam,b,CMa,軍市一
+Mirzim,b,CMa,軍市一
+Murzim,b,CMa,軍市一
+Alwazn,d,CMa,弧矢一
+Wesen,d,CMa,弧矢一
+Wezea,d,CMa,弧矢一
+Wezen,d,CMa,弧矢一
+Adara,e,CMa,弧矢七
+Adhara,e,CMa,弧矢七
+Isis,g,CMa,天狼增四
+Mirza,g,CMa,天狼增四
+Muliphain,g,CMa,天狼增四
+Muliphein,g,CMa,天狼增四
+Muliphen,g,CMa,天狼增四
+Aludra,h,CMa,弧矢二
+Furud,z,CMa,孫增一
+Phurad,z,CMa,孫增一
+Phurud,z,CMa,孫增一
+Algomeysa,a,CMi,南河三
+Antecanis,a,CMi,南河三
+Elgomaisa,a,CMi,南河三
+Procyon,a,CMi,南河三
+Algomeyla,b,CMi,南河二
+Gomeisa,b,CMi,南河二
+Gomelza,b,CMi,南河二
+Superba,Y,CVn,
+Chara,a,CVn,常陳一
+Cor Caroli,a,CVn,常陳一
+Asterion,b,CVn,常陳四
+Chara,b,CVn,常陳四
+La Superba,y,CVn,
+Algedi Prima,a1,Cap,牛宿增六
+Giede Prime,a1,Cap,牛宿增六
+Al Giedi,a2,Cap,牛宿二
+Algedi,a2,Cap,牛宿二
+Algedi Secunda,a2,Cap,牛宿二
+Algiedi,a2,Cap,牛宿二
+Giede Secunda,a2,Cap,牛宿二
+Giedi,a2,Cap,牛宿二
+Gredi,a2,Cap,牛宿二
+Prima Giedi,a2,Cap,牛宿二
+Secunda Giedi,a2,Cap,牛宿二
+Dabih,b,Cap,牛宿一
+Dhabih,b,Cap,牛宿一
+Deneb Al Giedi,d,Cap,壘壁陣四
+Deneb Algedi,d,Cap,壘壁陣四
+Deneb Algedi,d,Cap,壘壁陣四
+Deneb Algiedi,d,Cap,壘壁陣四
+Scheddi,d,Cap,壘壁陣四
+Sheddi,d,Cap,壘壁陣四
+Nashira,g,Cap,壘壁陣三
+Alshat,n,Cap,牛宿增七
+Canopus,a,Car,老人
+Suhail,a,Car,老人
+Suhel,a,Car,老人
+Maiaplacidus,b,Car,南船五
+Miaplacidus,b,Car,南船五
+Avior,e,Car,海石一
+Asmidiske,i,Car,海石二
+Aspidiske,i,Car,海石二
+Azmidiske,i,Car,海石二
+Scutulum,i,Car,海石二
+Turais,i,Car,海石二
+Tureis,i,Car,海石二
+Schedar,a,Cas,王良四
+Schedir,a,Cas,王良四
+Shedar,a,Cas,王良四
+Shedir,a,Cas,王良四
+Shedir,a,Cas,王良四
+Al Sanam al Nakah,b,Cas,王良一
+Caph,b,Cas,王良一
+Chaph,b,Cas,王良一
+Kaff,b,Cas,王良一
+Ksora,d,Cas,閣道三
+Rucha,d,Cas,閣道三
+Ruchbah,d,Cas,閣道三
+Navi,e,Cas,閣道二
+Ruchbah,e,Cas,閣道二
+Segin,e,Cas,閣道二
+Cih,g,Cas,策
+Tsih,g,Cas,策
+Achird,h,Cas,王良三
+Marfak,m,Cas,
+Castula,n,Cas,閣道五
+Marfak,q,Cas,閣道四
+Al Rijil,a,Cen,南門二
+Rigel Kent,a,Cen,南門二
+Rigel Kentaurus,a,Cen,南門二
+Rigil Kent,a,Cen,南門二
+Rigil Kentaurus,a,Cen,南門二
+Toliman,a,Cen,南門二
+Tolimann,a,Cen,南門二
+Agena,b,Cen,馬腹一
+Hadar,b,Cen,馬腹一
+Muhlifain,g,Cen,庫樓七
+Menkent,q,Cen,庫樓三
+Proxima Centauri,a,Cen_C,比鄰星
+Alderaimin,a,Cep,天鉤五
+Alderamin,a,Cep,天鉤五
+Alfirk,b,Cep,上衛增一(紫微左垣)
+Alphirk,b,Cep,上衛增一(紫微左垣)
+Alrai,g,Cep,少衛增八(紫微左垣)
+Arrai,g,Cep,少衛增八(紫微左垣)
+Er Rai,g,Cep,少衛增八(紫微左垣)
+Errai,g,Cep,少衛增八(紫微左垣)
+Erakis,m,Cep,造父四
+Garnet Star,m,Cep,造父四
+Herschel's Garnet Star,m,Cep,造父四
+Al Kalb al Rai,r,Cep,芻藁一
+Al Kirduh,x,Cep,天鉤六
+Alkirdah,x,Cep,天鉤六
+Alkurhah,x,Cep,天鉤六
+Kurhah,x,Cep,天鉤六
+Mekab,a,Cet,天囷一
+Menkab,a,Cet,天囷一
+Menkar,a,Cet,天囷一
+Monkar,a,Cet,天囷一
+Deneb Kait,b,Cet,土司空
+Deneb Kaitos,b,Cet,土司空
+Deneb Kaitos Senubi,b,Cet,土司空
+Difda,b,Cet,土司空
+Difda al Thani,b,Cet,土司空
+Diphda,b,Cet,土司空
+El Difda,b,Cet,土司空
+Rana Secunda,b,Cet,土司空
+Al Kaff al Jidmah,g,Cet,天囷八
+Alkaffaljidhina,g,Cet,天囷八
+Kaffaljidhmah,g,Cet,天囷八
+Kaffaljidma,g,Cet,天囷八
+Deneb,h,Cet,天倉二
+Deneb Algenudi,h,Cet,天倉二
+Dheneb,h,Cet,天倉二
+Deneb Kaitos Shamaliyy,i,Cet,天倉一
+Deneb Kaitos Shemali,i,Cet,天倉一
+Deneb al Schemali,i,Cet,天倉一
+Schemali,i,Cet,天倉一
+Shemali,i,Cet,天倉一
+Menkar,l,Cet,天囷三
+Mira,o,Cet,芻藁增二
+Baiten Kaitos,z,Cet,天倉四
+Baten Kaitos,z,Cet,天倉四
+Batenkaitos,z,Cet,天倉四
+Acubens,a,Cnc,柳宿增三
+Sartan,a,Cnc,柳宿增三
+Sertan,a,Cnc,柳宿增三
+Al Tarf,b,Cnc,柳宿增十
+Altarf,b,Cnc,柳宿增十
+Tarf,b,Cnc,柳宿增十
+Asellus Australis,d,Cnc,鬼宿四
+Asellus Borealis,g,Cnc,鬼宿三
+Tegmen,z,Cnc,水位四
+Tegmine,z,Cnc,水位四
+Phack,a,Col,丈人一
+Phact,a,Col,丈人一
+Phad,a,Col,丈人一
+Phaet,a,Col,丈人一
+Phakt,a,Col,丈人一
+Wasn,b,Col,子二
+Wazn,b,Col,子二
+Wezn,b,Col,子二
+Diadem,a,Com,"東上將 , 太微左垣五"
+Alfecca,a,CrA,鱉六
+Alfecca Meridiana,a,CrA,鱉六
+Meridiana,a,CrA,鱉六
+Variabilis Coronae,R,CrB,
+Alphaca,a,CrB,貫索四
+Alphacca,a,CrB,貫索四
+Alphecca,a,CrB,貫索四
+Alphekka,a,CrB,貫索四
+Ashtaroth,a,CrB,貫索四
+Gemma,a,CrB,貫索四
+Gnosia,a,CrB,貫索四
+Gnosia Stella Cornonae,a,CrB,貫索四
+Jewel,a,CrB,貫索四
+Nusakan,b,CrB,貫索三
+Alkes,a,Crt,翼宿一
+Acrux,a,Cru,十字架二
+Becrux,b,Cru,十字架三
+Mimosa,b,Cru,十字架三
+Gacrux,g,Cru,十字架一
+Al Chiba,a,Crv,右轄
+Al Minliar al Ghurab,a,Crv,右轄
+Alchiba,a,Crv,右轄
+Alchita,a,Crv,右轄
+Alkhiba,a,Crv,右轄
+Kraz,b,Crv,軫宿四
+Algoers,d,Crv,軫宿三
+Algorab,d,Crv,軫宿三
+Algoral,d,Crv,軫宿三
+Algorel,d,Crv,軫宿三
+Minkar,e,Crv,軫宿二
+Gienah,g,Crv,軫宿一
+Gienah Ghurab,g,Crv,軫宿一
+Arided,a,Cyg,天津四
+Aridif,a,Cyg,天津四
+Arrioph,a,Cyg,天津四
+Deneb,a,Cyg,天津四
+Deneb Cygni,a,Cyg,天津四
+Deneb el Adige,a,Cyg,天津四
+Gallina,a,Cyg,天津四
+Albereo,b,Cyg,輦道增七
+Albireo,b,Cyg,輦道增七
+Albireor,b,Cyg,輦道增七
+Gienah,e,Cyg,天津九
+Gienah Cygni,e,Cyg,天津九
+Gienar,e,Cyg,天津九
+Sadir,g,Cyg,天津一
+Sador,g,Cyg,天津一
+Sadr,g,Cyg,天津一
+Sadr el dedschadsche,g,Cyg,天津一
+Ruchba,o2,Cyg,天津增三十七
+Rukbat al-dejajah,o2,Cyg,天津增三十七
+Azelfafage,p1,Cyg,螣蛇四
+Al Rukbah al Dajajah,w2,Cyg,天津增三十四
+Nicolaus,a,Del,瓠瓜一
+Scalovin,a,Del,瓠瓜一
+Sualocin,a,Del,瓠瓜一
+Svalocin,a,Del,瓠瓜一
+Rotanen,b,Del,瓠瓜四
+Rotanev,b,Del,瓠瓜四
+Venator,b,Del,瓠瓜四
+Deneb,e,Del,敗瓜一
+Deneb Dulfim,e,Del,敗瓜一
+Deneb el Delphinus,e,Del,敗瓜一
+Al Tinnin,a,Dra,"右樞 , 紫微右垣一"
+Thuban,a,Dra,"右樞 , 紫微右垣一"
+Alwaid,b,Dra,天棓三
+Asuia,b,Dra,天棓三
+Rasaben,b,Dra,天棓三
+Rastaban,b,Dra,天棓三
+Rastaben,b,Dra,天棓三
+Aldib,d,Dra,天廚一
+Altais,d,Dra,天廚一
+Nodus II,d,Dra,天廚一
+Nodus Secundus,d,Dra,天廚一
+Tais,d,Dra,天廚一
+Tyl,e,Dra,天廚三
+Al Nath,g,Dra,天棓四
+Alnath,g,Dra,天棓四
+Eltanin,g,Dra,天棓四
+Etamin,g,Dra,天棓四
+Etanin,g,Dra,天棓四
+Ettanin,g,Dra,天棓四
+Rastaban,g,Dra,天棓四
+Zenith Star,g,Dra,天棓四
+Aldhibain,h,Dra,"少宰 , 紫微左垣三"
+Al Dhiba,i,Dra,"左樞 , 紫微左垣一"
+Al Dhihi,i,Dra,"左樞 , 紫微左垣一"
+Ed Asich,i,Dra,"左樞 , 紫微左垣一"
+Edasich,i,Dra,"左樞 , 紫微左垣一"
+Eldsich,i,Dra,"左樞 , 紫微左垣一"
+Gianfar,l,Dra,"上輔 , 紫微右垣三"
+Giansar,l,Dra,"上輔 , 紫微右垣三"
+Giausar,l,Dra,"上輔 , 紫微右垣三"
+Giauzar,l,Dra,"上輔 , 紫微右垣三"
+Juza,l,Dra,"上輔 , 紫微右垣三"
+Alrakis,m,Dra,天棓增九
+Arrakis,m,Dra,天棓增九
+El Rakis,m,Dra,天棓增九
+Er Rakis,m,Dra,天棓增九
+Errakis,m,Dra,天棓增九
+Al Rakis,n,Dra,天棓二
+Kuma,n,Dra,天棓二
+Alsafi,s,Dra,天廚二
+Althafi,s,Dra,天廚二
+Athafi,s,Dra,天廚二
+Athafiyy,s,Dra,天廚二
+Genam,x,Dra,天棓一
+Juza,x,Dra,天棓一
+Dsiban,y,Dra,女史增一
+Dziban,y,Dra,女史增一
+Al Dibah,z,Dra,"上弼 , 紫微左垣四"
+Aldhibah,z,Dra,"上弼 , 紫微左垣四"
+Nodus I,z,Dra,"上弼 , 紫微左垣四"
+Kitabpha,a,Equ,虛宿二
+Kitalpha,a,Equ,虛宿二
+Kitalphar,a,Equ,虛宿二
+Kitel Phard,a,Equ,虛宿二
+Sceptrum,53,Eri,九斿增四
+Achernar,a,Eri,水委一
+Cursa,b,Eri,玉井三
+Dhalim,b,Eri,玉井三
+El Dhalim,b,Eri,玉井三
+Kursa,b,Eri,玉井三
+Rana,d,Eri,天苑三
+Theemini,d,Eri,天苑三
+Zaurac,g,Eri,天苑一
+Zaurack,g,Eri,天苑一
+Zaurak,g,Eri,天苑一
+Azha,h,Eri,天苑六
+Theemin,n,Eri,九州殊口四
+Theemim,n2,Eri,天園九
+Theemin,n2,Eri,天園九
+Beid,o1,Eri,九州殊口二
+Keid,o2,Eri,九州殊口增十一
+Kied,o2,Eri,九州殊口增十一
+Acamar,q,Eri,天園六
+Al Anchat al Nahr,t2,Eri,天苑九
+Anchat,t2,Eri,天苑九
+Angetenar,t2,Eri,天苑九
+Zibal,z,Eri,天苑五
+Zibel,z,Eri,天苑五
+Fornacis,a,For,"天苑增三 , 天苑增四"
+Apollo,a,Gem,北河二
+Castor,a,Gem,北河二
+Hercules,b,Gem,北河三
+Pollux,b,Gem,北河三
+Wasat,d,Gem,天樽二
+Mebsuta,e,Gem,井宿五
+Mebusta,e,Gem,井宿五
+Melboula,e,Gem,井宿五
+Melucta,e,Gem,井宿五
+Alhena,g,Gem,井宿三
+Almeisan,g,Gem,井宿三
+Propus,h,Gem,鉞
+Tejat Prior,h,Gem,鉞
+Propus,i,Gem,五諸侯三(井宿)
+Calx,m,Gem,井宿一
+Pishpai,m,Gem,井宿一
+Tejat,m,Gem,井宿一
+Tejat Posterior,m,Gem,井宿一
+Alzirr,x,Gem,井宿四
+Mekbuda,z,Gem,井宿七
+Al Na'ir,a,Gru,鶴一
+Al Nair,a,Gru,鶴一
+Alnair,a,Gru,鶴一
+Al Dhanab,b,Gru,鶴二
+Al Dhanab,g,Gru,敗臼一
+Ras Algethi,a,Her,帝座
+Rasalegti,a,Her,帝座
+Rasalgethi,a,Her,帝座
+Korneforos,b,Her,"河中 , 天市右垣一"
+Kornephoros,b,Her,"河中 , 天市右垣一"
+Rutilicus,b,Her,"河中 , 天市右垣一"
+Sarin,d,Her,"魏 , 天市左垣一"
+Marfak,k,Her,"晉 , 天市右垣三"
+Marfik,k,Her,"晉 , 天市右垣三"
+Marsik,k,Her,"晉 , 天市右垣三"
+Mirfak,k,Her,"晉 , 天市右垣三"
+Maasym,l,Her,"趙 , 天市左垣二"
+Masym,l,Her,"趙 , 天市左垣二"
+Misam,l,Her,"趙 , 天市左垣二"
+Caiam,w,Her,斗一
+Cajam,w,Her,斗一
+Cujam,w,Her,斗一
+Kajam,w,Her,斗一
+Rutilicus,z,Her,天紀二
+Alfard,a,Hya,星宿一
+Alphard,a,Hya,星宿一
+Alphart,a,Hya,星宿一
+Cor Hydrae,a,Hya,星宿一
+Kalbelaphard,a,Hya,星宿一
+Al Minliar al Shuja,s,Hya,柳宿二
+Praecipua,46,LMi,勢四
+Al Kalb al Asad,a,Leo,軒轅十四
+Cor Leonis,a,Leo,軒轅十四
+Kabeleced,a,Leo,軒轅十四
+Kalb,a,Leo,軒轅十四
+Kelb,a,Leo,軒轅十四
+Regulus,a,Leo,軒轅十四
+Rex,a,Leo,軒轅十四
+Deneb,b,Leo,五帝座一
+Deneb Aleet,b,Leo,五帝座一
+Denebola,b,Leo,五帝座一
+Denebolan,b,Leo,五帝座一
+Dhur,d,Leo,"西上相 , 太微右垣五"
+Duhr,d,Leo,"西上相 , 太微右垣五"
+Zosca,d,Leo,"西上相 , 太微右垣五"
+Zosma,d,Leo,"西上相 , 太微右垣五"
+Zozca,d,Leo,"西上相 , 太微右垣五"
+Zozma,d,Leo,"西上相 , 太微右垣五"
+Zubra,d,Leo,"西上相 , 太微右垣五"
+Algenubi,e,Leo,軒轅九
+Asad Australis,e,Leo,軒轅九
+Ras Elased Australis,e,Leo,軒轅九
+Al Gieba,g,Leo,軒轅十二
+Algeiba,g,Leo,軒轅十二
+Algieba,g,Leo,軒轅十二
+Al Minliar al Asad,k,Leo,軒轅七
+Alterf,l,Leo,軒轅八
+Alshemali,m,Leo,軒轅十
+Ras Elased Boraelis,m,Leo,軒轅十
+Ras al Asad,m,Leo,軒轅十
+Rasalas,m,Leo,軒轅十
+Rassalas,m,Leo,軒轅十
+Subra,o,Leo,軒轅十五
+Chertan,q,Leo,"西次相 , 太微右垣四"
+Chort,q,Leo,"西次相 , 太微右垣四"
+Coxa,q,Leo,"西次相 , 太微右垣四"
+Adhafera,z,Leo,軒轅十一
+Aldhafara,z,Leo,軒轅十一
+Aldhafera,z,Leo,軒轅十一
+Arneb,a,Lep,廁一
+Nibal,b,Lep,廁二
+Nihal,b,Lep,廁二
+Elkhiffa Australis,a,Lib,氐宿一
+Kiffa Australis,a,Lib,氐宿一
+Zuben Elgenubi,a,Lib,氐宿一
+Zuben el Genubi,a,Lib,氐宿一
+Zubenelgenubi,a,Lib,氐宿一
+Elkhiffa Boraelis,b,Lib,氐宿四
+Kiffa Boraelis,b,Lib,氐宿四
+Zebeneschamali,b,Lib,氐宿四
+Zuben Elschemali,b,Lib,氐宿四
+Zuben el Chamali,b,Lib,氐宿四
+Zubenelchemali,b,Lib,氐宿四
+Zubenelg,b,Lib,氐宿四
+Zubenesch,b,Lib,氐宿四
+Zubeneschamali,b,Lib,氐宿四
+Zuben Elakribi,d,Lib,氐宿增一
+Zubenelakribi,d,Lib,氐宿增一
+Zeubenelhakrabi,g,Lib,氐宿三
+Zuben Elakrab,g,Lib,氐宿三
+Zuben Hakrabi,g,Lib,氐宿三
+Zuben Hakraki,g,Lib,氐宿三
+Zuben el Hakrabi,g,Lib,氐宿三
+Zubenelakrab,g,Lib,氐宿三
+Zubenhakrabi,g,Lib,氐宿三
+Zuben Hakrabi,h,Lib,西咸四
+Zuben Hakrabi,n,Lib,氐宿增十
+Brachium,s,Lib,折威七
+Cornu,s,Lib,折威七
+Zubenalgubi,s,Lib,折威七
+Men,a,Lup,騎官十
+Ke Kouan,b,Lup,騎官四
+Alsciaukat,31,Lyn,上台增四
+Mabsuthat,31,Lyn,上台增四
+Fidis,a,Lyr,織女一
+Vega,a,Lyr,織女一
+Sheliak,b,Lyr,漸台二
+Shelyak,b,Lyr,漸台二
+Shiliak,b,Lyr,漸台二
+Jugum,g,Lyr,漸台三
+Sulafat,g,Lyr,漸台三
+Sulaphat,g,Lyr,漸台三
+Aladfar,h,Lyr,輦道二
+Al Athfar,m,Lyr,織女增三
+Aladfar,m,Lyr,織女增三
+Alathfar,m,Lyr,織女增三
+Plaskett's Star,V640,Mon,
+Poaris Australis,s,Oct,南極
+Ras Alhagua,a,Oph,候
+Ras-Alhague,a,Oph,候
+Ras-al-hague,a,Oph,候
+Rasalhague,a,Oph,候
+Cebalrai,b,Oph,宗正一
+Cebelrai,b,Oph,宗正一
+Celb-al-Rai,b,Oph,宗正一
+Cheleb,b,Oph,宗正一
+Kalb al Rai,b,Oph,宗正一
+Kalbalrai,b,Oph,宗正一
+Kelb Alrai,b,Oph,宗正一
+Kelb-al-Rai,b,Oph,宗正一
+Jed,d,Oph,"梁 , 天市右垣九"
+Yad,d,Oph,"梁 , 天市右垣九"
+Yed,d,Oph,"梁 , 天市右垣九"
+Yed Prior,d,Oph,"梁 , 天市右垣九"
+Yed Post,e,Oph,"楚 , 天市右垣十"
+Yed Posterior,e,Oph,"楚 , 天市右垣十"
+Sabik,h,Oph,"宋 , 天市左垣十一"
+Marfic,l,Oph,列肆二
+Marfik,l,Oph,列肆二
+Marsic,l,Oph,列肆二
+Han,z,Oph,"韓 , 天市右垣十一"
+Al Mankib,a,Ori,參宿四
+Betelgeuse,a,Ori,參宿四
+Betelgeux,a,Ori,參宿四
+Betelgeuze,a,Ori,參宿四
+Algebar,b,Ori,參宿七
+Elgebar,b,Ori,參宿七
+Rigel,b,Ori,參宿七
+Mintaka,d,Ori,參宿三
+Mintika,d,Ori,參宿三
+Alnihan,e,Ori,參宿二
+Alnilam,e,Ori,參宿二
+Alnitam,e,Ori,參宿二
+Amazon Star,g,Ori,參宿五
+Bellatrix,g,Ori,參宿五
+Algjebbath,h,Ori,參宿增三
+Saiph,h,Ori,參宿增三
+Hatsya,i,Ori,伐三
+Hatysa,i,Ori,伐三
+Nair al Saif,i,Ori,伐三
+Saiph,i,Ori,伐三
+Saiph,k,Ori,參宿六
+Heka,l,Ori,觜宿一
+Meissa,l,Ori,觜宿一
+Tabit,p3,Ori,參旗六
+Tabit,u,Ori,參宿增三十六
+Thabit,u,Ori,參宿增三十六
+Alnitah,x,Ori,參宿一
+Alnitak,x,Ori,參宿一
+Peacock,a,Pav,孔雀十一
+Marchab,a,Peg,室宿一
+Markab,a,Peg,室宿一
+Mirfak,a,Peg,室宿一
+Mirphak,a,Peg,室宿一
+Menkib,b,Peg,室宿二
+Scheat,b,Peg,室宿二
+Seat Alpheras,b,Peg,室宿二
+Sheat,b,Peg,室宿二
+Al Anf,e,Peg,危宿三
+Alanf,e,Peg,危宿三
+Enf,e,Peg,危宿三
+Enif,e,Peg,危宿三
+Eniph,e,Peg,危宿三
+Enir,e,Peg,危宿三
+Fom,e,Peg,危宿三
+Os Pegasi,e,Peg,危宿三
+Algenib,g,Peg,壁宿一
+Matar,h,Peg,離宮四
+Sadalbari,m,Peg,離宮二
+Baham,q,Peg,危宿二
+Biham,q,Peg,危宿二
+El Khereb,t,Peg,離宮五
+Kerb,t,Peg,離宮五
+Markab,t,Peg,離宮五
+Markeb,t,Peg,離宮五
+Salm,t,Peg,離宮五
+Al Hammam,z,Peg,雷電一
+Homam,z,Peg,雷電一
+Homan,z,Peg,雷電一
+Humam,z,Peg,雷電一
+Algenib,a,Per,天船三
+Marfac,a,Per,天船三
+Marfak,a,Per,天船三
+Mirfak,a,Per,天船三
+Mirphak,a,Per,天船三
+Mirzak,a,Per,天船三
+Algol,b,Per,大陵五
+El Ghoul,b,Per,大陵五
+Gorgona,b,Per,大陵五
+Gorgonea Prima,b,Per,大陵五
+Miram,h,Per,天船一
+Misam,k,Per,大陵四
+Al Atik,o,Per,卷舌增七
+Ati,o,Per,卷舌增七
+Atik,o,Per,卷舌增七
+Atiks,o,Per,卷舌增七
+Gorgonea Secunda,p,Per,積尸
+Gorgonea Tertia,r,Per,大陵六
+Gorgonea Quarta,w,Per,大陵增十八
+Menchib,x,Per,卷舌三
+Menkhib,z,Per,卷舌四
+Menkib,z,Per,卷舌四
+Ankaa,a,Phe,火鳥六
+Cymbae,a,Phe,火鳥六
+Lucida Cymbae,a,Phe,火鳥六
+Nair al Zaurak,a,Phe,火鳥六
+Difda al Auwel,a,PsA,北落師門
+Fomalhaut,a,PsA,北落師門
+Hastorang,a,PsA,北落師門
+Os Piscis Meridiani,a,PsA,北落師門
+Os Piscis Notii,a,PsA,北落師門
+Al Rescha,a,Psc,外屏七
+Al Richa,a,Psc,外屏七
+Al Rischa,a,Psc,外屏七
+Alrescha,a,Psc,外屏七
+Alrischa,a,Psc,外屏七
+Alrisha,a,Psc,外屏七
+El Rischa,a,Psc,外屏七
+Kaitain,a,Psc,外屏七
+Okda,a,Psc,外屏七
+Rescha,a,Psc,外屏七
+Fum Al Samakah,b,Psc,霹靂一
+Torcularis Septentrionalis,o,Psc,右更四
+Markab,k1,Pup,弧矢六
+Markeb,k1,Pup,弧矢六
+Asmidiske,x,Pup,弧矢增十七
+Aspidiske,x,Pup,弧矢增十七
+Azmidiske,x,Pup,弧矢增十七
+Naos,z,Pup,弧矢增二十二
+Suhail Hadar,z,Pup,弧矢增二十二
+Antares,a,Sco,心宿二
+Calbalakrab,a,Sco,心宿二
+Cor Scorpii,a,Sco,心宿二
+Kalb al Akrab,a,Sco,心宿二
+Vespertilio,a,Sco,心宿二
+Vespertilo,a,Sco,心宿二
+Acrab,b,Sco,房宿四
+Elacrab,b,Sco,房宿四
+Graffias,b,Sco,房宿四
+Dschubba,d,Sco,房宿三
+Dzuba,d,Sco,房宿三
+Iclarkrau,d,Sco,房宿三
+Iclarkrav,d,Sco,房宿三
+Wei,e,Sco,尾宿二
+Zuben Elgenubi,g,Sco,
+Zuben Hakrabi,g,Sco,
+Zuben el Genubi,g,Sco,
+Zubenalgubi,g,Sco,
+Girtab,k,Sco,尾宿七
+Alascha,l,Sco,尾宿八
+Lesath,l,Sco,尾宿八
+Lesuth,l,Sco,尾宿八
+Shaula,l,Sco,尾宿八
+Jabbah,n,Sco,鍵閉
+Lesath,n,Sco,鍵閉
+Sargas,q,Sco,尾宿五
+Al Niyat,s,Sco,心宿一
+Alniyat,s,Sco,心宿一
+Al Niyat,t,Sco,心宿三
+Lesath,u,Sco,尾宿九
+Leschath,u,Sco,尾宿九
+Lesuth,u,Sco,尾宿九
+Graffias,z,Sco,尾宿三
+Grafias,z,Sco,尾宿三
+Cor Sepentis,a,Ser,"蜀 , 天市右垣七"
+Unuk,a,Ser,"蜀 , 天市右垣七"
+Unuk El Haia,a,Ser,"蜀 , 天市右垣七"
+Unuk Elhaia,a,Ser,"蜀 , 天市右垣七"
+Unuk al Hai,a,Ser,"蜀 , 天市右垣七"
+Unukalhai,a,Ser,"蜀 , 天市右垣七"
+Alga,q,Ser,"徐 , 天市左垣七"
+Alya,s,Ser,"徐 , 天市左垣七"
+Alsahm,a,Sge,左旗一
+Sham,a,Sge,左旗一
+Terebellum,59,Sgr,狗國四
+Alrami,a,Sgr,天淵三
+Rukbat,a,Sgr,天淵三
+Rukbat al Rami,a,Sgr,天淵三
+Arkeb Prior,b1,Sgr,天淵二
+Urkab Prior,b1,Sgr,天淵二
+Arkeb Posterior,b2,Sgr,天淵一
+Urkab Posterior,b2,Sgr,天淵一
+El Karidab,d,Sgr,箕宿二
+Kaus Media,d,Sgr,箕宿二
+Kaus Medius,d,Sgr,箕宿二
+Kaus Meridionalis,d,Sgr,箕宿二
+Media,d,Sgr,箕宿二
+Kaus Australis,e,Sgr,箕宿三
+Al Nasl,g,Sgr,箕宿一
+Alnasl,g,Sgr,箕宿一
+Alnasr,g,Sgr,箕宿一
+Alwazl,g,Sgr,箕宿一
+Nash,g,Sgr,箕宿一
+Nasl,g,Sgr,箕宿一
+Nushaba,g,Sgr,箕宿一
+Zuji al Nushshabah,g,Sgr,箕宿一
+Kaus Borealis,l,Sgr,斗宿二
+Ain al Rami,m1,Sgr,斗宿三
+Al Baldah,p,Sgr,建三
+Albaldah,p,Sgr,建三
+Nunki,s,Sgr,斗宿四
+Sadira,s,Sgr,斗宿四
+Ascella,z,Sgr,斗宿六
+Celaeno,16,Tau,昴宿增六
+Celeno,16,Tau,昴宿增六
+Celieno,16,Tau,昴宿增六
+Electra,17,Tau,昴宿一
+Tayeta,19,Tau,昴宿二
+Taygeta,19,Tau,昴宿二
+Taygete,19,Tau,昴宿二
+Maia,20,Tau,昴宿四
+Asterope,21,Tau,昴宿三
+Sterope,21,Tau,昴宿三
+Merope,23,Tau,昴宿五
+Atlas,27,Tau,昴宿七
+Pleione,28,Tau,昴宿增十二
+Aldebaran,a,Tau,畢宿五
+Cor Tauri,a,Tau,畢宿五
+Palilicium,a,Tau,畢宿五
+Parilicium,a,Tau,畢宿五
+Alnath,b,Tau,五車五
+El Nath,b,Tau,五車五
+Elnath,b,Tau,五車五
+Nath,b,Tau,五車五
+Hyadem II,d1,Tau,畢宿三
+Hyadum II,d1,Tau,畢宿三
+Ain,e,Tau,畢宿一
+Oculus Boreus,e,Tau,畢宿一
+Hyadem I,g,Tau,畢宿四
+Hyadem Primus,g,Tau,畢宿四
+Hyadum I,g,Tau,畢宿四
+Hyadum Primus,g,Tau,畢宿四
+Alcyone,h,Tau,昴宿六
+Alcyone,x,Tau,天關
+Atria,a,TrA,三角形三
+Caput Trianguli,a,Tri,婁宿增六
+Elmathalleth,a,Tri,婁宿增六
+Elmuthalleth,a,Tri,婁宿增六
+Metallah,a,Tri,婁宿增六
+Metallah,a,Tri,婁宿增六
+Mothallah,a,Tri,婁宿增六
+Ras al Mothallath,a,Tri,婁宿增六
+Ras al Muthallath,a,Tri,婁宿增六
+Rasalmothallah,a,Tri,婁宿增六
+Alcor,80,UMa,開陽增一
+Saidak,80,UMa,開陽增一
+Suha,80,UMa,開陽增一
+Ak,a,UMa,"天樞 , 北斗一"
+Dubb,a,UMa,"天樞 , 北斗一"
+Dubhe,a,UMa,"天樞 , 北斗一"
+Merak,b,UMa,"天璇 , 北斗二"
+Al Kaphrah,c,UMa,太陽守
+Alkaphrah,c,UMa,太陽守
+El Koprah,c,UMa,太陽守
+Kaffa,d,UMa,"天權 , 北斗四"
+Megres,d,UMa,"天權 , 北斗四"
+Megrez,d,UMa,"天權 , 北斗四"
+Aliath,e,UMa,"玉衡 , 北斗五"
+Alioth,e,UMa,"玉衡 , 北斗五"
+Phacd,g,UMa,"天璣 , 北斗三"
+Phad,g,UMa,"天璣 , 北斗三"
+Phad,g,UMa,"天璣 , 北斗三"
+Phakda,g,UMa,"天璣,北斗三"
+Phecda,g,UMa,"天璣,北斗三"
+Phegda,g,UMa,"天璣,北斗三"
+Phekha,g,UMa,"天璣,北斗三"
+Alcaid,h,UMa,"搖光 , 北斗七"
+Alkaid,h,UMa,"搖光 , 北斗七"
+Benatnasch,h,UMa,"搖光 , 北斗七"
+Benetnasch,h,UMa,"搖光 , 北斗七"
+Benetnash,h,UMa,"搖光 , 北斗七"
+Elkeid,h,UMa,"搖光 , 北斗七"
+Dnoces,i,UMa,"上台一 , 三台一"
+Talita,i,UMa,"上台一 , 三台一"
+Talitha,i,UMa,"上台一 , 三台一"
+El Kaprah,k,UMa,"上台二 , 二台二"
+Tania Borealis,l,UMa,"中台一 , 三台三"
+El Phekrah,m,UMa,"中台二 , 三台四"
+Tania Australis,m,UMa,"中台二 , 三台四"
+Alula Boreale,n,UMa,"下台一 , 三台五"
+Alula Borealis,n,UMa,"下台一 , 三台五"
+Muscida,o,UMa,內階一
+Althiba II,p1,UMa,內階增九
+Muscida,p2,UMa,內階增七
+Museida,p2,UMa,內階增七
+Alula Australe,x,UMa,"下台二 , 三台六"
+Alula Australis,x,UMa,"下台二 , 三台六"
+El Acola,x,UMa,"下台二 , 三台六"
+Ta Tsun,y,UMa,太尊
+Mirza,z,UMa,"開陽 , 北斗六"
+Mizar,z,UMa,"開陽 , 北斗六"
+Mizat,z,UMa,"開陽 , 北斗六"
+Alruccabah,a,UMi,"勾陳一 , 北極星"
+Angel Stern,a,UMi,"勾陳一 , 北極星"
+Cynosaura,a,UMi,"勾陳一 , 北極星"
+Cynosura,a,UMi,"勾陳一 , 北極星"
+Lodestar,a,UMi,"勾陳一 , 北極星"
+Mismar,a,UMi,"勾陳一 , 北極星"
+Navigatoria,a,UMi,"勾陳一 , 北極星"
+Phoenice,a,UMi,"勾陳一 , 北極星"
+Polaris,a,UMi,"勾陳一 , 北極星"
+Tramontana,a,UMi,"勾陳一 , 北極星"
+Yilduz,a,UMi,"勾陳一 , 北極星"
+Kocab,b,UMi,"帝 , 北極二"
+Kochab,b,UMi,"帝 , 北極二"
+Kochah,b,UMi,"帝 , 北極二"
+Gildun,d,UMi,勾陳二
+Pherkard,d,UMi,勾陳二
+Vildiur,d,UMi,勾陳二
+Yildun,d,UMi,勾陳二
+Yilduz,d,UMi,勾陳二
+Pherkad,g,UMi,"太子 , 北極一"
+Pherkad Major,g,UMi,"太子 , 北極一"
+Alasco,h,UMi,勾陳增九
+Pherkad Minor,l,UMi,勾陳增五
+Alifa,z,UMi,勾陳四
+Markeb,C,Vel,
+Al Suhail al Muhlif,g,Vel,天社一
+Regor,g,Vel,天社一
+Suhail al Mulif,g,Vel,天社一
+Al Suhail al Wazn,l,Vel,天記
+Alsuhail,l,Vel,天記
+Suhail,l,Vel,天記
+Suhail al Wazn,l,Vel,天記
+Alaraph,a,Vir,角宿一
+Azimech,a,Vir,角宿一
+Spica,a,Vir,角宿一
+Spica Virginis,a,Vir,角宿一
+Alaraph,b,Vir,"右執法 , 太微右垣一"
+Minelauva,b,Vir,"右執法 , 太微右垣一"
+Zarijan,b,Vir,"右執法 , 太微右垣一"
+Zavijah,b,Vir,"右執法 , 太微右垣一"
+Zavijava,b,Vir,"右執法 , 太微右垣一"
+Zavyava,b,Vir,"右執法 , 太微右垣一"
+Zawijah,b,Vir,"右執法 , 太微右垣一"
+Auva,d,Vir,"東次相 , 太微左垣三"
+Minelauva,d,Vir,"東次相 , 太微左垣三"
+Minelauva,d,Vir,"東次相 , 太微左垣三"
+Alaraph,e,Vir,"東次將 , 太微左垣四"
+Almuredin,e,Vir,"東次將 , 太微左垣四"
+Protrygetor,e,Vir,"東次將 , 太微左垣四"
+Vendemiatrix,e,Vir,"東次將 , 太微左垣四"
+Vindemiator,e,Vir,"東次將 , 太微左垣四"
+Vindemiatrix,e,Vir,"東次將 , 太微左垣四"
+Arich,g,Vir,"東上相 , 太微左垣二"
+Porrima,g,Vir,"東上相,太微左垣二"
+Postvarta,g,Vir,"東上相,太微左垣二"
+Zania,h,Vir,"左執法 , 太微左垣一"
+Zaniah,h,Vir,"左執法 , 太微左垣一"
+Syrma,i,Vir,亢宿二
+Rigl al Awwa,m,Vir,亢宿增七
+Heze,z,Vir,角宿二
+Anser,a,Vul,齊增五
