@@ -115,7 +115,6 @@ Specifying `tz` can enhance speed. However, if `tz` doesn't match the `lat` and 
 
 Returns:
 
-- `name`: if `hip` is specified, finds and returns the corresponding proper name or the Bayer designation
 - `diagramId`: a string of a unix timestamp
 - `offset`: timezone offset in decimal hours
 - `svgData`: the Base64-encoded SVG data of the output figure
