@@ -5,7 +5,7 @@
 
 The Flask server of our website [Star Path Viewer](https://stardial-astro.github.io/star-path-viewer).
 
-[→ Team](https://github.com/stardial-astro)
+[→ Team: Stardial](https://github.com/stardial-astro)
 
 [→ Source code](https://github.com/claude-hao/star-path-calculator)
 
@@ -14,13 +14,13 @@ The Flask server of our website [Star Path Viewer](https://stardial-astro.github
 ## Table of Contents<!-- omit in toc -->
 
 - [Endpoints](#endpoints)
-  - [1. Get dates, times, and and RA/Dec coordinates for equinoxes and solstices by specifying a year and location](#1-get-dates-times-and-and-radec-coordinates-for-equinoxes-and-solstices-by-specifying-a-year-and-location)
+  - [1. Get dates, times, and and RA/Dec coordinates of equinoxes and solstices by specifying a year and location](#1-get-dates-times-and-and-radec-coordinates-of-equinoxes-and-solstices-by-specifying-a-year-and-location)
   - [2. Get only the date of one of the equinoxes and solstices](#2-get-only-the-date-of-one-of-the-equinoxes-and-solstices)
   - [3. Plots the star path and calculates the rising/setting times based on the specified date, location, and star information](#3-plots-the-star-path-and-calculates-the-risingsetting-times-based-on-the-specified-date-location-and-star-information)
 
 ## Endpoints
 
-### 1. Get dates, times, and and RA/Dec coordinates for equinoxes and solstices by specifying a year and location
+### 1. Get dates, times, and and RA/Dec coordinates of equinoxes and solstices by specifying a year and location
 
 `https://starpathcalculator.pythonanywhere.com/seasons`
 
