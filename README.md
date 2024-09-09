@@ -5,20 +5,22 @@
 
 This repository contains the source code of our website [Star Path Viewer](https://stardial-astro.github.io/star-path-viewer).
 
-[→ Team](https://github.com/stardial-astro)
+[→ Team: Stardial](https://github.com/stardial-astro)
 
 [→ Flask server](https://github.com/lydiazly/star-path-calculator-flask)
 
 [→ React client](https://github.com/stardial-astro/star-path-viewer)
 
+[→ Hosted data (star names)](https://github.com/stardial-astro/star-path-data)
+
 ## Table of Contents<!-- omit in toc -->
 
 - [Overview](#overview)
 - [Features](#features)
-- [Install](#install)
+- [Installation](#installation)
 - [Usage](#usage)
-  - [Get Equinoxes and Solstices](#get-equinoxes-and-solstices)
-  - [Plot a Star Path](#plot-a-star-path)
+  - [Get times and coordinates of the equinoxes and solstices in a given year](#get-times-and-coordinates-of-the-equinoxes-and-solstices-in-a-given-year)
+  - [Plot a star's path on a given date at a given location](#plot-a-stars-path-on-a-given-date-at-a-given-location)
 - [Resources](#resources)
 - [References](#references)
 
@@ -28,7 +30,7 @@ We are aiming to develop a user-friendly app to facilitate the research in histo
 
 ## Features
 
-- :globe_with_meridians: Obtain dates, times, and RA/Dec coordinates for equinoxes and solstices by specifying a year and location.
+- :globe_with_meridians: Obtain dates, times, and RA/Dec coordinates of equinoxes and solstices by specifying a year and location.
 - :stars: Plots the star path and calculates the rising/setting times based on the provided date, location, and star information.
 - :calendar: Covers a wide time span, from **3001 BCE to 3000 CE**.
 - :ringed_planet: Uses the JPL DE406 ephemeris and Hipparchus Catelogue to calculate the planet and star positions for any given time.
@@ -38,7 +40,7 @@ We are aiming to develop a user-friendly app to facilitate the research in histo
 - :night_with_stars: Displays star paths with distinct line styles for daytime, twilight, and nighttime.
 - :clock1: Offers both local time and UT1 time in output details (*Daylight Saving Time is not included*).
 
-## Install
+## Installation
 
 ```sh
 python3 -m pip install pandas matplotlib skyfield juliandate tzfpy
@@ -46,7 +48,7 @@ python3 -m pip install pandas matplotlib skyfield juliandate tzfpy
 
 ## Usage
 
-### Get Equinoxes and Solstices
+### Get times and coordinates of the equinoxes and solstices in a given year
 
 [get_equinoxes_solstices.py](./scripts/get_equinoxes_solstices.py)
 
@@ -60,7 +62,7 @@ python3 ./scripts/get_equinoxes_solstices.py -2000
 <summary>Output:</summary>
 
 ```text
-Dates, times, and ICRS coordinates (J2000) for the equinoxes and solstices of 2001 BCE:
+Dates, times, and ICRS coordinates (J2000) of the equinoxes and solstices in 2001 BCE:
 
 [Vernal Equinox]   -2000-03-21 04:40:19.602 (UT1)
                    ra = 52.962, dec = 19.517
@@ -83,7 +85,7 @@ Dates, times, and ICRS coordinates (J2000) for the equinoxes and solstices of 20
 ```text
 usage: python get_equinoxes_solstices.py [-h] [year]
 
-Specify a year to obtain the dates, times, and coordinates in RA and Dec for the equinoxes and solstices of that year.
+Specify a year to obtain the dates, times, and coordinates in RA and Dec of the equinoxes and solstices in that year.
 
 positional arguments:
   year        int, 0 is 1 BCE (default: this year)
@@ -103,7 +105,7 @@ examples:
 
 </details>
 
-### Plot a Star Path
+### Plot a star's path on a given date at a given location
 
 [get_star_path.py](./scripts/get_star_path.py)
 
