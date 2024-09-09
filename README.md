@@ -3,7 +3,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
 [![python](https://img.shields.io/badge/Python-3.10,_3.11-3776AB?logo=python&logoColor=white)](https://www.python.org) [![numpy](https://img.shields.io/badge/Numpy-2.0.1-013243?logo=numpy&logoColor=white)](https://numpy.org) [![pandas](https://img.shields.io/badge/Pandas-2.2.2-150458?logo=Pandas&logoColor=white)](https://pandas.pydata.org) [![matplotlib](https://img.shields.io/badge/Matplotlib-3.9.1.post1-12557C)](https://matplotlib.org) [![skyfield](https://img.shields.io/badge/Skyfield-1.49-BD9354)](https://rhodesmill.org/skyfield) [![juliandate](https://img.shields.io/badge/Juliandate-1.0.4-BD9354)](https://pypi.org/project/juliandate) [![tzfpy](https://img.shields.io/badge/tzfpy-0.15.5-blue)](https://github.com/ringsaturn/tzfpy) [![great-circle-calculator](https://img.shields.io/badge/Great_Circle_Calculator-1.3.1-brightgreen)](https://github.com/seangrogan/great_circle_calculator)
 
-This repository contains the source code of our website [Star Path Viewer](https://stardial-astro.github.io/star-path-viewer).
+This repository contains the source code of our [Star Path Viewer](https://stardial-astro.github.io/star-path-viewer) website, along with Python scripts for executing the code.
 
 [→ Team: Stardial](https://github.com/stardial-astro)
 
@@ -18,7 +18,7 @@ This repository contains the source code of our website [Star Path Viewer](https
 - [Overview](#overview)
 - [Features](#features)
 - [Installation](#installation)
-- [Usage](#usage)
+- [Script Usage](#script-usage)
   - [Get times and coordinates of the equinoxes and solstices in a given year](#get-times-and-coordinates-of-the-equinoxes-and-solstices-in-a-given-year)
   - [Plot a star's path on a given date at a given location](#plot-a-stars-path-on-a-given-date-at-a-given-location)
 - [Resources](#resources)
@@ -31,14 +31,14 @@ We are aiming to develop a user-friendly app to facilitate the research in histo
 ## Features
 
 - :globe_with_meridians: Obtain dates, times, and RA/Dec coordinates of equinoxes and solstices by specifying a year and location.
-- :stars: Plots the star path and calculates the rising/setting times based on the provided date, location, and star information.
+- :dizzy: Plots the star path and calculates the rising/setting times based on the provided date, location, and star information.
 - :calendar: Covers a wide time span, from **3001 BCE to 3000 CE**.
-- :ringed_planet: Uses the JPL DE406 ephemeris and Hipparchus Catelogue to calculate the planet and star positions for any given time.
-- :telescope: Accounts for the **proper motion** of a star if the Hipparcos Catalogue number is provided.
+- :ringed_planet: Uses the [JPL DE406 ephemeris and Hipparchus Catelogue](#resources) to calculate the planet and star positions for any given time.
+- :telescope: Accounts for the [proper motion](https://en.wikipedia.org/wiki/Proper_motion) of a star if the Hipparcos Catalogue number is provided.
 - :calendar: Accepts both **Gregorian** and **Julian** calendar date inputs.
 - :star: Supports star or planet input by name, Hipparcos Catalogue number, or ICRS coordinates (RA, Dec).
 - :night_with_stars: Displays star paths with distinct line styles for daytime, twilight, and nighttime.
-- :clock1: Offers both local time and UT1 time in output details (*Daylight Saving Time is not included*).
+- :clock1: Offers both [local time](#resources) and [UT1](https://en.wikipedia.org/wiki/Universal_Time) time in output details (*Daylight Saving Time is not included*).
 
 ## Installation
 
@@ -46,7 +46,7 @@ We are aiming to develop a user-friendly app to facilitate the research in histo
 python3 -m pip install pandas matplotlib skyfield juliandate tzfpy
 ```
 
-## Usage
+## Script Usage
 
 ### Get times and coordinates of the equinoxes and solstices in a given year
 
