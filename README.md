@@ -13,14 +13,13 @@ The Flask server of our website [Star Path Viewer](https://stardial-astro.github
 ## Table of Contents<!-- omit in toc -->
 
 - [Endpoints](#endpoints)
-  - [1. Get dates, times, and coordinates in RA and Dec for the equinoxes and solstices of a given year](#1-get-dates-times-and-coordinates-in-ra-and-dec-for-the-equinoxes-and-solstices-of-a-given-year)
+  - [1. Get dates, times, and and RA/Dec coordinates for equinoxes and solstices by specifying a year and location](#1-get-dates-times-and-and-radec-coordinates-for-equinoxes-and-solstices-by-specifying-a-year-and-location)
   - [2. Get only the date of one of the equinoxes and solstices](#2-get-only-the-date-of-one-of-the-equinoxes-and-solstices)
-  - [3. Plot the path of a celestial object on a local date at a specified location](#3-plot-the-path-of-a-celestial-object-on-a-local-date-at-a-specified-location)
-- [Run the Flask app locally in development mode](#run-the-flask-app-locally-in-development-mode)
+  - [3. Plots the star path and calculates the rising/setting times based on the specified date, location, and star information](#3-plots-the-star-path-and-calculates-the-risingsetting-times-based-on-the-specified-date-location-and-star-information)
 
 ## Endpoints
 
-### 1. Get dates, times, and coordinates in RA and Dec for the equinoxes and solstices of a given year
+### 1. Get dates, times, and and RA/Dec coordinates for equinoxes and solstices by specifying a year and location
 
 `https://starpathcalculator.pythonanywhere.com/seasons`
 
@@ -94,7 +93,7 @@ Example:
 }
 ```
 
-### 3. Plot the path of a celestial object on a local date at a specified location
+### 3. Plots the star path and calculates the rising/setting times based on the specified date, location, and star information
 
 `https://starpathcalculator.pythonanywhere.com/diagram`
 
@@ -121,15 +120,3 @@ Returns:
 - `offset`: timezone offset in decimal hours
 - `svgData`: the Base64-encoded SVG data of the output figure
 - `annotations`: a list of details about the points on the figure, including dates in both the Gregorian and Julian calendars.
-
-## Run the Flask app locally in development mode
-
-```sh
-python3 -m pip install pandas matplotlib skyfield juliandate tzfpy Flask
-```
-
-```sh
-python3 run.py
-```
-
-The server will be running on <https://localhost:5001>

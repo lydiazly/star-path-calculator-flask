@@ -6,12 +6,13 @@ Functions used only for scripts that are executed from the command line.
 
 from typing import List
 import calendar
-import pandas as pd
-# import pickle
 import os
-from config import EPH_DATE_MIN, EPH_DATE_MAX, HIP_BAYER_FILE, HIP_PROPER_FILE
+from config import EPH_DATE_MIN, EPH_DATE_MAX
 
 __all__ = ["format_datetime", "format_datetime_iso", "validate_datetime", "validate_year", "decimal_to_hms", "format_timezone"]
+
+
+data_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'data')
 
 
 # Formats the date and time into strings as '1 Jan 2000 CE' and '12:00:00[.000]'
@@ -94,45 +95,3 @@ def decimal_to_hms(decimal_hours: float) -> dict:
 def format_timezone(tz: float) -> str:
     hms = decimal_to_hms(tz)
     return f"{'-' if tz < 0 else '+'}{hms['hours']:02d}:{hms['minutes']:02d}"
-
-
-def load_hip_ident() -> pd.DataFrame:
-    data_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'data')
-    data_full_path_bayer = os.path.join(data_dir, HIP_BAYER_FILE)
-    data_full_path_proper = os.path.join(data_dir, HIP_PROPER_FILE)
-    df_bayer = pd.read_pickle(data_full_path_bayer)
-    df_proper = pd.read_pickle(data_full_path_proper)
-
-    # Group by HIP and aggregate Bayer Designation and Proper Name with '/'
-    df_bayer_agg = df_bayer.groupby('HIP')['Bayer Designation'].apply(lambda x: '/'.join(x)).reset_index()
-    df_proper_agg = df_proper.groupby('HIP')['Proper Name'].apply(lambda x: '/'.join(x)).reset_index()
-
-    # Merge the aggregated DataFrames on the HIP column
-    df_merged = pd.merge(df_bayer_agg, df_proper_agg, on='HIP', how='outer')
-
-    # Fill NaN values with empty strings
-    df_merged['Bayer Designation'] = df_merged['Bayer Designation'].fillna('')
-    df_merged['Proper Name'] = df_merged['Proper Name'].fillna('')
-
-    # Combine bayer and proper into a single 'name' column
-    df_merged['name'] = df_merged['Bayer Designation'] + '/' + df_merged['Proper Name']
-    df_merged['name'] = df_merged['name'].str.strip('/').str.replace('//', '/')
-
-    # Select only the required columns and rename them
-    df_merged = df_merged[['HIP', 'name']]
-    df_merged.columns = ['hip', 'name']
-
-    return df_merged
-
-
-def df_to_json(df: pd.DataFrame, filename='hip_ident.json'):
-    import json
-    data_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'data')
-    data_dict = df.to_dict(orient='records')
-    with open(os.path.join(data_dir, filename), 'w') as json_file:
-        json.dump(data_dict, json_file, indent=4)
-
-
-def df_to_csv(df: pd.DataFrame, filename='hip_ident.csv'):
-    data_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'data')
-    df.to_csv(os.path.join(data_dir, filename), index=False)

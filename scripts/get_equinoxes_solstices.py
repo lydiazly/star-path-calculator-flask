@@ -17,17 +17,6 @@ from utils.script_utils import format_datetime, format_datetime_iso, validate_ye
 
 
 prog = f"python {os.path.basename(__file__)}"
-# description = "Specify a date and time in UT1 to get the equinox and solstice coordinates in RA and Dec. The default time is 12:00:00."
-# epilog = f"""date range:
-#   {EPH_DATE_MIN_STR} \u2013 {EPH_DATE_MAX_STR} (UT1)
-# examples:
-#   # The current coordinates:
-#   {prog}\n
-#   # The coordinates on 1 Jan 3001 BCE, at 12:00:00:
-#   {prog} -3000\n
-#   # The coordinates on 5 April 3000 CE, at 18:00:00:
-#   {prog} 3000 Apr 5 -t 18
-# """
 description = "Specify a year to obtain the dates, times, and coordinates in RA and Dec for the equinoxes and solstices of that year."
 epilog = f"""year range:
   {EPH_DATE_MIN_STR} \u2013 {EPH_DATE_MAX_STR} (Gregorian)

@@ -25,7 +25,7 @@ epilog = f"""date range:
 examples:
   # Plot the star path of Mars:
   {prog} -o mars\n
-  # Plot the star path of Vega by giving its Hipparcos Catalog number:
+  # Plot the star path of Vega by giving its Hipparcos Catalogue number:
   {prog} -o 91262\n
   # Plot the star path by giving the star's ICRS coordinates (RA, Dec):
   {prog} -o 310.7,-5.1
