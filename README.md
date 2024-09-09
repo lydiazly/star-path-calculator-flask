@@ -23,19 +23,19 @@ This repository contains the source code of our website [Star Path Viewer](https
 
 ## Overview
 
-We are aiming to develop a user-friendly app to facilitate the research in history of astronomy, providing a convenient approach to help researchers get important astronomical information within a span of millennia from the past to the future.
+We are aiming to develop a user-friendly app to facilitate the research in history of astronomy, providing a convenient approach to help researchers get important astronomical information from thousands of years ago to far into the future.
 
 ## Features
 
-:globe_with_meridians: Obtain dates, times, and RA/Dec coordinates for equinoxes and solstices by specifying a year and location.
-:stars: Plots the star path and calculates the rising/setting times based on the provided date, location, and star information.
-:calendar: Covers a wide time span, from **3001 BCE to 3000 CE**.
-:ringed_planet: Uses the JPL DE406 ephemeris and Hipparchus Catelogue to calculate the planet and star positions for any given time.
-:telescope: Accounts for the **proper motion** of a star if the Hipparcos Catalogue number is provided.
-:calendar: Accepts both **Gregorian** and **Julian** calendar date inputs.
-:star: Supports star or planet input by name, Hipparcos Catalogue number, or ICRS coordinates (RA, Dec).
-:night_with_stars: Displays star paths with distinct line styles for daytime, twilight, and nighttime.
-:clock1: Offers both local time and UT1 time in output details (*Daylight Saving Time is not included*).
+- :globe_with_meridians: Obtain dates, times, and RA/Dec coordinates for equinoxes and solstices by specifying a year and location.
+- :stars: Plots the star path and calculates the rising/setting times based on the provided date, location, and star information.
+- :calendar: Covers a wide time span, from **3001 BCE to 3000 CE**.
+- :ringed_planet: Uses the JPL DE406 ephemeris and Hipparchus Catelogue to calculate the planet and star positions for any given time.
+- :telescope: Accounts for the **proper motion** of a star if the Hipparcos Catalogue number is provided.
+- :calendar: Accepts both **Gregorian** and **Julian** calendar date inputs.
+- :star: Supports star or planet input by name, Hipparcos Catalogue number, or ICRS coordinates (RA, Dec).
+- :night_with_stars: Displays star paths with distinct line styles for daytime, twilight, and nighttime.
+- :clock1: Offers both local time and UT1 time in output details (*Daylight Saving Time is not included*).
 
 ## Install
 
