@@ -216,12 +216,12 @@ examples:
 
 - Ephemeris Data
 
-  [JPL Planetary and Lunar Ephemerides](https://ssd.jpl.nasa.gov/planets/eph_export.html)
+  [JPL Planetary and Lunar Ephemerides](https://ssd.jpl.nasa.gov/planets/eph_export.html) (DE406)
 
 - Hipparchus Catalogue
 
   [The Hipparcos and Tycho Catalogues](https://www.cosmos.esa.int/web/hipparcos/catalogues)
-  [FTP](https://cdsarc.cds.unistra.fr/ftp/cats/I/239) (DE406)
+  [FTP](https://cdsarc.cds.unistra.fr/ftp/cats/I/239)
 
 - Bayer Designation and Proper Name
 
