@@ -15,14 +15,15 @@ This repository contains the source code of our [Star Path Viewer](https://star-
 
 ## Table of Contents<!-- omit in toc -->
 
-- [Overview](#overview)
-- [Features](#features)
-- [Installation](#installation)
-- [Script Usage](#script-usage)
-  - [Get times and coordinates of the equinoxes and solstices in a given year](#get-times-and-coordinates-of-the-equinoxes-and-solstices-in-a-given-year)
-  - [Plot a star's path on a given date at a given location](#plot-a-stars-path-on-a-given-date-at-a-given-location)
-- [Resources](#resources)
-- [References](#references)
+- [Star Path Calculator](#star-path-calculator)
+  - [Overview](#overview)
+  - [Features](#features)
+  - [Installation](#installation)
+  - [Script Usage](#script-usage)
+    - [Get times and coordinates of the equinoxes and solstices in a given year](#get-times-and-coordinates-of-the-equinoxes-and-solstices-in-a-given-year)
+    - [Plot a star's path on a given date at a given location](#plot-a-stars-path-on-a-given-date-at-a-given-location)
+  - [Resources](#resources)
+  - [References](#references)
 
 ## Overview
 
@@ -112,60 +113,62 @@ examples:
 Example:
 
 ```bash
-python3 ./scripts/get_star_path.py -2000
+python3  .\get_star_path.py -2000 3 1 --lng 120 --lat 40 -o "jupiter"
 ```
 
 <details>
 <summary>Output:</summary>
 
 ```text
-[Date (Gregorian)] 1 Jan 2001 BCE
-[Location]         lat/lng = 39.904/116.407
-[Celestial Object] Mars
+[Date (Gregorian)] 1 Mar 2001 BCE
+[Location]         lat/lng = 40.000/120.000
+[Celestial Object] Jupiter
 
 [Point Details]
-N1:
-  alt = 49.530
-  az  = 117.752
-  time_local (Gregorian) = -2000-01-01T17:08:22+08:00
-  time_ut1   (Gregorian) = -2000-01-01T09:08:22
-  time_local (Julian)    = -2000-01-18T17:08:22+08:00
-  time_ut1   (Julian)    = -2000-01-18T09:08:22
-N2:
-  alt = 54.497
-  az  = 126.666
-  time_local (Gregorian) = -2000-01-01T17:38:53+08:00
-  time_ut1   (Gregorian) = -2000-01-01T09:38:53
-  time_local (Julian)    = -2000-01-18T17:38:53+08:00
-  time_ut1   (Julian)    = -2000-01-18T09:38:53
-N3:
-  alt = 59.305
-  az  = 138.966
-  time_local (Gregorian) = -2000-01-01T18:12:55+08:00
-  time_ut1   (Gregorian) = -2000-01-01T10:12:55
-  time_local (Julian)    = -2000-01-18T18:12:55+08:00
-  time_ut1   (Julian)    = -2000-01-18T10:12:55
+D1:
+  alt = 17.721
+  az  = 146.433
+  time_local (Gregorian) = -2000-03-01T05:38:06+08:00
+  time_ut1   (Gregorian) = -2000-02-29T21:38:06
+  time_local (Julian)    = -2000-03-18T05:38:06+08:00
+  time_ut1   (Julian)    = -2000-03-17T21:38:06
+D2:
+  alt = 20.742
+  az  = 153.301
+  time_local (Gregorian) = -2000-03-01T06:09:26+08:00
+  time_ut1   (Gregorian) = -2000-02-29T22:09:26
+  time_local (Julian)    = -2000-03-18T06:09:26+08:00
+  time_ut1   (Julian)    = -2000-03-17T22:09:26
+D3:
+  alt = 22.828
+  az  = 159.592
+  time_local (Gregorian) = -2000-03-01T06:36:36+08:00
+  time_ut1   (Gregorian) = -2000-02-29T22:36:36
+  time_local (Julian)    = -2000-03-18T06:36:36+08:00
+  time_ut1   (Julian)    = -2000-03-17T22:36:36
 R:
   alt = -0.567
-  az  = 70.008
-  time_local (Gregorian) = -2000-01-01T12:40:27+08:00
-  time_ut1   (Gregorian) = -2000-01-01T04:40:27
-  time_local (Julian)    = -2000-01-18T12:40:27+08:00
-  time_ut1   (Julian)    = -2000-01-18T04:40:27
+  az  = 122.008
+  time_local (Gregorian) = -2000-03-01T03:25:27+08:00
+  time_ut1   (Gregorian) = -2000-02-29T19:25:27
+  time_local (Julian)    = -2000-03-18T03:25:27+08:00
+  time_ut1   (Julian)    = -2000-03-17T19:25:27
 T:
-  alt = 64.948
+  alt = 25.648
   az  = 180.000
-  time_local (Gregorian) = -2000-01-01T19:33:53+08:00
-  time_ut1   (Gregorian) = -2000-01-01T11:33:53
-  time_local (Julian)    = -2000-01-18T19:33:53+08:00
-  time_ut1   (Julian)    = -2000-01-18T11:33:53
+  time_local (Gregorian) = -2000-03-01T07:59:03+08:00
+  time_ut1   (Gregorian) = -2000-02-29T23:59:03
+  time_local (Julian)    = -2000-03-18T07:59:03+08:00
+  time_ut1   (Julian)    = -2000-03-17T23:59:03
 S:
   alt = -0.567
-  az  = 290.056
-  time_local (Gregorian) = -2000-01-02T02:27:30+08:00
-  time_ut1   (Gregorian) = -2000-01-01T18:27:30
-  time_local (Julian)    = -2000-01-19T02:27:30+08:00
-  time_ut1   (Julian)    = -2000-01-18T18:27:30
+  az  = 237.995
+  time_local (Gregorian) = -2000-03-01T12:32:40+08:00
+  time_ut1   (Gregorian) = -2000-03-01T04:32:40
+  time_local (Julian)    = -2000-03-18T12:32:40+08:00
+  time_ut1   (Julian)    = -2000-03-18T04:32:40
+
+SVG has been saved to 'sp_1726098588.844.svg'
 
 ```
 
