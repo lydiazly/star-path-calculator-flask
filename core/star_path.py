@@ -277,7 +277,7 @@ def plot_twilight_transition_points(fig, ax, altitudes, azimuths, annotations, l
     if lat >= 0:
         cp_coord = (0, lat)
     else:
-        cp_coord = (180, lat)
+        cp_coord = (180, -lat)
 
     label_coord = []
     _offset_scale = 0.6 * 1e6
