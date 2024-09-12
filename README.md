@@ -15,15 +15,14 @@ This repository contains the source code of our [Star Path Viewer](https://star-
 
 ## Table of Contents<!-- omit in toc -->
 
-- [Star Path Calculator](#star-path-calculator)
-  - [Overview](#overview)
-  - [Features](#features)
-  - [Installation](#installation)
-  - [Script Usage](#script-usage)
-    - [Get times and coordinates of the equinoxes and solstices in a given year](#get-times-and-coordinates-of-the-equinoxes-and-solstices-in-a-given-year)
-    - [Plot a star's path on a given date at a given location](#plot-a-stars-path-on-a-given-date-at-a-given-location)
-  - [Resources](#resources)
-  - [References](#references)
+- [Overview](#overview)
+- [Features](#features)
+- [Installation](#installation)
+- [Script Usage](#script-usage)
+  - [1. Get times and coordinates of the equinoxes and solstices in a given year](#1-get-times-and-coordinates-of-the-equinoxes-and-solstices-in-a-given-year)
+  - [2. Plot a star's path on a given date at a given location](#2-plot-a-stars-path-on-a-given-date-at-a-given-location)
+- [Resources](#resources)
+- [References](#references)
 
 ## Overview
 
@@ -49,7 +48,7 @@ python3 -m pip install pandas matplotlib skyfield juliandate tzfpy
 
 ## Script Usage
 
-### Get times and coordinates of the equinoxes and solstices in a given year
+### 1. Get times and coordinates of the equinoxes and solstices in a given year
 
 [get_equinoxes_solstices.py](./scripts/get_equinoxes_solstices.py)
 
@@ -60,7 +59,7 @@ python3 ./scripts/get_equinoxes_solstices.py -2000
 ```
 
 <details>
-<summary>Output:</summary>
+<summary>Output</summary>
 
 ```text
 Dates, times, and ICRS coordinates (J2000) of the equinoxes and solstices in 2001 BCE:
@@ -81,7 +80,7 @@ Dates, times, and ICRS coordinates (J2000) of the equinoxes and solstices in 200
 </details>
 
 <details>
-<summary>Usage:</summary>
+<summary>Usage</summary>
 
 ```text
 usage: python get_equinoxes_solstices.py [-h] [year]
@@ -106,18 +105,18 @@ examples:
 
 </details>
 
-### Plot a star's path on a given date at a given location
+### 2. Plot a star's path on a given date at a given location
 
 [get_star_path.py](./scripts/get_star_path.py)
 
 Example:
 
 ```bash
-python3  .\get_star_path.py -2000 3 1 --lng 120 --lat 40 -o "jupiter"
+python3 ./scripts/get_star_path.py -2000 3 1 --lng 120 --lat 40 -o "jupiter"
 ```
 
 <details>
-<summary>Output:</summary>
+<summary>Output</summary>
 
 ```text
 [Date (Gregorian)] 1 Mar 2001 BCE
@@ -167,19 +166,16 @@ S:
   time_ut1   (Gregorian) = -2000-03-01T04:32:40
   time_local (Julian)    = -2000-03-18T12:32:40+08:00
   time_ut1   (Julian)    = -2000-03-18T04:32:40
-
-SVG has been saved to 'sp_1726098588.844.svg'
-
 ```
 
 </details>
 
 The figure will be saved to `sp_{unix_timestamp}.svg`.
 
-Note that Skyfield counts "34 arcminutes of atmospheric refraction at the horizon" [[link](https://rhodesmill.org/skyfield/almanac.html#risings-and-settings)].
+Note that Skyfield counts "*34 arcminutes of atmospheric refraction at the horizon*" [[link](https://rhodesmill.org/skyfield/almanac.html#risings-and-settings)].
 
 <details>
-<summary>Usage:</summary>
+<summary>Usage</summary>
 
 ```text
 usage: python get_star_path.py [-h] [--lat float] [--lng float] [-o str] [-j] [--name] [year] [month] [day]
