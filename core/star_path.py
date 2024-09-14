@@ -241,7 +241,7 @@ def plot_meridian_transit_points(ax, t, s, lng: float, lat: float):
         ax.annotate('T', (theta, r), textcoords="offset points", xytext=(0, 15), ha='center',va='top',
                     fontsize=10, color='r')
     else:
-        ax.annotate('T', (theta, r), textcoords="offset points", xytext=(0, -15), ha='center',va='top',
+        ax.annotate('T', (theta, r), textcoords="offset points", xytext=(0, -16), ha='center',va='bottom',
                     fontsize=10, color='r')
 
     return alt.degrees, az.degrees
@@ -303,18 +303,19 @@ def plot_twilight_transition_points(fig, ax, altitudes, azimuths, annotations, l
 
     for i in range(len(label_coord)):
         _r = 90 - label_coord[i][1]
-        _theta = np.radians(label_coord[i][0])
-        label_coord_bg = ax.transData.transform((_theta, _r))
-        label_coord_bg = [label_coord_bg[0]/fig.bbox.width, label_coord_bg[1]/fig.bbox.height]
+        if _r <= 90:
+            _theta = np.radians(label_coord[i][0])
+            label_coord_bg = ax.transData.transform((_theta, _r))
+            label_coord_bg = [label_coord_bg[0]/fig.bbox.width, label_coord_bg[1]/fig.bbox.height]
 
-        ttp_coord_bg = ax.transData.transform((theta[i], r[i]))
-        ttp_coord_bg = ([ttp_coord_bg[0]/fig.bbox.width, ttp_coord_bg[1]/fig.bbox.height])
+            ttp_coord_bg = ax.transData.transform((theta[i], r[i]))
+            ttp_coord_bg = ([ttp_coord_bg[0]/fig.bbox.width, ttp_coord_bg[1]/fig.bbox.height])
 
-        ax2.annotate(annotations[i],
-                xy = (ttp_coord_bg[0], ttp_coord_bg[1]),
-                xytext = (label_coord_bg[0], label_coord_bg[1]),
-                arrowprops=dict(color='r', arrowstyle='-', shrinkA=0.2, shrinkB=0.2, lw=0.5),
-                va='center', ha='center', fontsize=10, color='r')
+            ax2.annotate(annotations[i],
+                    xy = (ttp_coord_bg[0], ttp_coord_bg[1]),
+                    xytext = (label_coord_bg[0], label_coord_bg[1]),
+                    arrowprops=dict(color='r', arrowstyle='-', shrinkA=0.2, shrinkB=0.2, lw=0.5),
+                    va='center', ha='center', fontsize=10, color='r')
 
     ax2.axis('off')
 
