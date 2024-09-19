@@ -42,6 +42,14 @@ We are aiming to develop a user-friendly app to facilitate the research in histo
 
 ## Installation
 
+Clone this repository:
+
+```sh
+git clone https://github.com/claude-hao/star-path-calculator.git
+```
+
+Install requirements:
+
 ```sh
 python3 -m pip install pandas matplotlib skyfield juliandate tzfpy
 ```
@@ -50,7 +58,7 @@ python3 -m pip install pandas matplotlib skyfield juliandate tzfpy
 
 ### 1. Get times and coordinates of the equinoxes and solstices in a given year
 
-[get_equinoxes_solstices.py](./scripts/get_equinoxes_solstices.py)
+[scripts/get_equinoxes_solstices.py](./scripts/get_equinoxes_solstices.py)
 
 Example:
 
@@ -107,7 +115,7 @@ examples:
 
 ### 2. Plot a star's path on a given date at a given location
 
-[get_star_path.py](./scripts/get_star_path.py)
+[scripts/get_star_path.py](./scripts/get_star_path.py)
 
 Example:
 
