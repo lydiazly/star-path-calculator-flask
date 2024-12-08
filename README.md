@@ -35,7 +35,7 @@ If `tz` is not provided, `lat` and `lng` must be specified. If `tz`, `lat`, and 
 
 Returns:
 
-- `results`: a list of all the obtained coordinates and times of the equinoxes and solstices
+- `results`: JSON formatted data contains all the obtained coordinates and times of the equinoxes and solstices
 
 Example:
 
@@ -80,7 +80,7 @@ Parameters:
 
 Returns:
 
-- `results`: a list of the obtained coordinates and times of the specified equinox or solstice
+- `results`: JSON formatted data contains the obtained coordinates and times of the specified equinox or solstice
 
 Example:
 
