@@ -24,7 +24,7 @@ import io
 import base64
 import re
 import core.data_loader as dl
-from utils.time_utils import get_standard_offset_by_id, ut1_to_local_standard_time
+from utils.time_utils import get_standard_offset_by_id, ut1_to_standard_time, ut1_to_local_mean_time
 import juliandate
 from great_circle_calculator.great_circle_calculator import distance_between_points, intermediate_point
 
@@ -42,6 +42,9 @@ if dl.eph is None or dl.earth is None:
 
 
 def get_twilight_time(t0: Time, t1: Time, lng: float, lat: float):
+    """
+    Gets twilight transition times.
+    """
 
     loc = wgs84.latlon(longitude_degrees=lng, latitude_degrees=lat)
 
@@ -85,7 +88,7 @@ def get_twilight_time(t0: Time, t1: Time, lng: float, lat: float):
 
 def get_star_altaz(s, t: Time, lng: float, lat: float):
     """
-    Get the altazimuth coordinates of a star at a specific moment.
+    Gets the altazimuth coordinates of a star at a specific moment.
     The horizon angles are not considered.
     The atmospheric refraction is disregarded, neither.
     """
@@ -99,7 +102,7 @@ def get_star_altaz(s, t: Time, lng: float, lat: float):
 
 def get_star_rising_time(s, t: Time, lng: float, lat: float, offset_in_minutes: float):
     """
-    The star rising time is also the starting of the 1-day period for calculation.
+    Gets the star's rising time. The star path is calculated from this moment.
     """
 
     year, month, day, _, _, _ = t.ut1_calendar()
@@ -117,7 +120,7 @@ def get_star_rising_time(s, t: Time, lng: float, lat: float, offset_in_minutes: 
 
 def get_star_setting_time(s, t: Time, t_rising: Time, lng: float, lat: float):
     """
-    Search for the star setting time during this 1-day period since star rising.
+    Gets the star's setting time. The star path's calculation ends at this moment.
     """
 
     t0 = t
@@ -135,6 +138,9 @@ def get_star_setting_time(s, t: Time, t_rising: Time, lng: float, lat: float):
 
 
 def get_star_meridian_transit_time(s, t: Time, lng: float, lat: float):
+    """
+    Gets the star's meridian transit time.
+    """
 
     t0 = t
     t1 = tisca.ut1_jd(t0.ut1 + 2)
@@ -149,8 +155,8 @@ def get_star_meridian_transit_time(s, t: Time, lng: float, lat: float):
 
 def plot_in_style(ax, event, t_jd0, t_jd1, s, lng: float, lat: float):
     """
-    Plot star paths in different styles for different twilight conditions.
-    t0 and t1 are both in units of Julian days.
+    Plots the star path in different styles for different twilight conditions.
+    Input times are in units of Julian days.
     """
 
     pts_num = int((t_jd1 - t_jd0) * 100)
@@ -181,7 +187,7 @@ def plot_in_style(ax, event, t_jd0, t_jd1, s, lng: float, lat: float):
 
 def get_twilight_transition_points(ts, events, s, lng: float, lat: float):
     """
-    Find transition points between different twilight conditions.
+    Gets transition points between different twilight conditions.
     """
 
     altitudes = []
@@ -228,7 +234,7 @@ def get_twilight_transition_points(ts, events, s, lng: float, lat: float):
 
 def plot_meridian_transit_points(ax, t, s, lng: float, lat: float):
     """
-    Find meridian transit points (once in a day).
+    Gets meridian transit points (once in a day).
     """
 
     alt, az = get_star_altaz(s, t, lng, lat)
@@ -249,7 +255,7 @@ def plot_meridian_transit_points(ax, t, s, lng: float, lat: float):
 
 def plot_twilight_transition_points(fig, ax, altitudes, azimuths, annotations, lng, lat):
     """
-    Plot the twilight transition points as well as their labels.
+    Plots twilight transition points as well as their labels.
     """
 
     if len(altitudes) == 0:
@@ -322,9 +328,9 @@ def plot_twilight_transition_points(fig, ax, altitudes, azimuths, annotations, l
 
 def plot_rising_and_setting_points(fig, ax, t0, t1, s, lng:float, lat:float):
     """
-    Plot the star rising and setting points, whose latitudes are both at the refraction limit.
-    They are outside the plotting range, so they are both plotted on the ax2 layer
-    which is above the ax layer where the star paths are drawn on.
+    Plots the star's rising and setting points, whose latitudes are both at the refraction limit.
+    Because their coordinates are out of the plotting range, they are plotted on the ax2 layer.
+    The ax2 layer is above the ax layer, where the star paths are drawn on.
     """
 
     alt0, az0 = get_star_altaz(s, t0, lng, lat)
@@ -361,7 +367,7 @@ def plot_rising_and_setting_points(fig, ax, t0, t1, s, lng:float, lat:float):
 
 def plot_celestial_poles(ax, lat):
     """
-    Plot the north celestial pole or the south celestial pole.
+    Plots the north celestial pole or the south celestial pole.
     """
 
     if lat > 0:
@@ -378,6 +384,10 @@ def plot_celestial_poles(ax, lat):
 
 def get_star_path_diagram(t: Time, lng: float, lat: float, offset_in_minutes: float,
                            name=None, hip: int = -1, radec: Tuple[float, float] = None):
+    """
+    Plots the star path.
+    """
+
     s = None
     if name is not None:
         if name in ['mercury', 'venus', 'mars']:
@@ -495,7 +505,10 @@ def get_star_path_diagram(t: Time, lng: float, lat: float, offset_in_minutes: fl
     return diagram_id, svg_base64, (ttp_alt, ttp_az, ttp_anno, ttp_ts), (rts_alt, rts_az, rts_ts)
 
 
-def get_annotations(ttp, rts, offset_in_minutes: float):
+def get_annotations(ttp, rts, offset_in_minutes: float, lng: float):
+    """
+    Returns styled information of points.
+    """
 
     ttp_alt, ttp_az, ttp_anno, ttp_times = ttp
     rts_alt, rts_az, rts_times = rts
@@ -507,68 +520,89 @@ def get_annotations(ttp, rts, offset_in_minutes: float):
         'alt': None,
         'az': None,
         'time_ut1': None,
-        'time_local': None,
+        'time_standard': None,
+        'time_local_mean': None,
         'time_zone': None,
         'time_ut1_julian': None,
-        'time_local_julian': None
+        'time_standard_julian': None,
+        'time_local_mean_julian': None
     } for i in name_list]
 
     for i in range(len(ttp_anno)):
         ind = name_list.index(ttp_anno[i])
         _time_ut1 = ttp_times[i].ut1_calendar()
-        _time_local = ut1_to_local_standard_time(_time_ut1, offset_in_minutes)
+        _time_standard = ut1_to_standard_time(_time_ut1, offset_in_minutes)
+        _time_local_mean = ut1_to_local_mean_time(_time_ut1, lng)
         _time_ut1 = tisca.ut1(*_time_ut1[:5], round(_time_ut1[5]) + 0.1).ut1_calendar()
-        _time_local = tisca.ut1(*_time_local[:5], round(_time_local[5]) + 0.1).ut1_calendar()
+        _time_standard = tisca.ut1(*_time_standard[:5], round(_time_standard[5]) + 0.1).ut1_calendar()
+        _time_local_mean = tisca.ut1(*_time_local_mean[:5], round(_time_local_mean[5]) + 0.1).ut1_calendar()
         _time_ut1_julian   = juliandate.to_julian(juliandate.from_gregorian(*_time_ut1))
-        _time_local_julian = juliandate.to_julian(juliandate.from_gregorian(*_time_local))
+        _time_standard_julian = juliandate.to_julian(juliandate.from_gregorian(*_time_standard))
+        _time_local_mean_julian = juliandate.to_julian(juliandate.from_gregorian(*_time_local_mean))
         annotations[ind]['is_displayed'] = True
         annotations[ind]['alt'] = float(ttp_alt[i])
         annotations[ind]['az']  = float(ttp_az[i])
-        annotations[ind]['time_ut1']          = tuple(map(int, _time_ut1))
-        annotations[ind]['time_ut1_julian']   = tuple(map(int, _time_ut1_julian[:6]))
-        annotations[ind]['time_local']        = tuple(map(int, _time_local))
-        annotations[ind]['time_local_julian'] = tuple(map(int, _time_local_julian[:6]))
+        annotations[ind]['time_ut1']               = tuple(map(int, _time_ut1))
+        annotations[ind]['time_ut1_julian']        = tuple(map(int, _time_ut1_julian[:6]))
+        annotations[ind]['time_standard']          = tuple(map(int, _time_standard))
+        annotations[ind]['time_standard_julian']   = tuple(map(int, _time_standard_julian[:6]))
+        annotations[ind]['time_local_mean']        = tuple(map(int, _time_local_mean))
+        annotations[ind]['time_local_mean_julian'] = tuple(map(int, _time_local_mean_julian[:6]))
         annotations[ind]['time_zone'] = offset_in_minutes / 60
 
     if len(rts_alt) > 1:
         for i, name in enumerate(['R', 'T', 'S']):
             ind = name_list.index(name)
             _time_ut1 = rts_times[i].ut1_calendar()
-            _time_local = ut1_to_local_standard_time(_time_ut1, offset_in_minutes)
+            _time_standard = ut1_to_standard_time(_time_ut1, offset_in_minutes)
+            _time_local_mean = ut1_to_local_mean_time(_time_ut1, lng)
             _time_ut1 = tisca.ut1(*_time_ut1[:5], round(_time_ut1[5]) + 0.1).ut1_calendar()
-            _time_local = tisca.ut1(*_time_local[:5], round(_time_local[5]) + 0.1).ut1_calendar()
+            _time_standard = tisca.ut1(*_time_standard[:5], round(_time_standard[5]) + 0.1).ut1_calendar()
+            _time_local_mean = tisca.ut1(*_time_local_mean[:5], round(_time_local_mean[5]) + 0.1).ut1_calendar()
             _time_ut1_julian   = juliandate.to_julian(juliandate.from_gregorian(*_time_ut1))
-            _time_local_julian = juliandate.to_julian(juliandate.from_gregorian(*_time_local))
+            _time_standard_julian = juliandate.to_julian(juliandate.from_gregorian(*_time_standard))
+            _time_local_mean_julian = juliandate.to_julian(juliandate.from_gregorian(*_time_local_mean))
             annotations[ind]['is_displayed'] = True
             annotations[ind]['alt'] = float(rts_alt[i])
             annotations[ind]['az']  = float(rts_az[i])
-            annotations[ind]['time_ut1']          = tuple(map(int, _time_ut1))
-            annotations[ind]['time_ut1_julian']   = tuple(map(int, _time_ut1_julian[:6]))
-            annotations[ind]['time_local']        = tuple(map(int, _time_local))
-            annotations[ind]['time_local_julian'] = tuple(map(int, _time_local_julian[:6]))
+            annotations[ind]['time_ut1']               = tuple(map(int, _time_ut1))
+            annotations[ind]['time_ut1_julian']        = tuple(map(int, _time_ut1_julian[:6]))
+            annotations[ind]['time_standard']          = tuple(map(int, _time_standard))
+            annotations[ind]['time_standard_julian']   = tuple(map(int, _time_standard_julian[:6]))
+            annotations[ind]['time_local_mean']        = tuple(map(int, _time_local_mean))
+            annotations[ind]['time_local_mean_julian'] = tuple(map(int, _time_local_mean_julian[:6]))
             annotations[ind]['time_zone'] = offset_in_minutes / 60
 
     elif len(rts_alt) == 1:
         ind = name_list.index('T')
         _time_ut1 = rts_times[0].ut1_calendar()
-        _time_local = ut1_to_local_standard_time(_time_ut1, offset_in_minutes)
+        _time_standard = ut1_to_standard_time(_time_ut1, offset_in_minutes)
+        _time_local_mean = ut1_to_local_mean_time(_time_ut1, lng)
         _time_ut1 = tisca.ut1(*_time_ut1[:5], round(_time_ut1[5]) + 0.1).ut1_calendar()
-        _time_local = tisca.ut1(*_time_local[:5], round(_time_local[5]) + 0.1).ut1_calendar()
+        _time_standard = tisca.ut1(*_time_standard[:5], round(_time_standard[5]) + 0.1).ut1_calendar()
+        _time_local_mean = tisca.ut1(*_time_local_mean[:5], round(_time_local_mean[5]) + 0.1).ut1_calendar()
         _time_ut1_julian   = juliandate.to_julian(juliandate.from_gregorian(*_time_ut1))
-        _time_local_julian = juliandate.to_julian(juliandate.from_gregorian(*_time_local))
+        _time_standard_julian = juliandate.to_julian(juliandate.from_gregorian(*_time_standard))
+        _time_local_mean_julian = juliandate.to_julian(juliandate.from_gregorian(*_time_local_mean))
         annotations[ind]['is_displayed'] = True
         annotations[ind]['alt'] = float(rts_alt[0])
         annotations[ind]['az'] = float(rts_az[0])
-        annotations[ind]['time_ut1']          = tuple(map(int, _time_ut1))
-        annotations[ind]['time_ut1_julian']   = tuple(map(int, _time_ut1_julian[:6]))
-        annotations[ind]['time_local']        = tuple(map(int, _time_local))
-        annotations[ind]['time_local_julian'] = tuple(map(int, _time_local_julian[:6]))
+        annotations[ind]['time_ut1']               = tuple(map(int, _time_ut1))
+        annotations[ind]['time_ut1_julian']        = tuple(map(int, _time_ut1_julian[:6]))
+        annotations[ind]['time_standard']          = tuple(map(int, _time_standard))
+        annotations[ind]['time_standard_julian']   = tuple(map(int, _time_standard_julian[:6]))
+        annotations[ind]['time_local_mean']        = tuple(map(int, _time_local_mean))
+        annotations[ind]['time_local_mean_julian'] = tuple(map(int, _time_local_mean_julian[:6]))
         annotations[ind]['time_zone'] = offset_in_minutes / 60
 
     return annotations
 
 def get_diagram(year: int, month: int, day: int, lat: float, lng: float, tz_id: str,
                 name=None, hip: int = -1, radec: Tuple[float, float] = None) -> dict:
+    """
+    Entry point of getting the star path diagram.
+    """
+
     t1 = tisca.ut1(year, month, day)
 
     offset_in_minutes = get_standard_offset_by_id(tz_id)
@@ -577,7 +611,7 @@ def get_diagram(year: int, month: int, day: int, lat: float, lng: float, tz_id: 
     diagram_id, svg_data, ttp, rts = get_star_path_diagram(t=t1, lng=lng, lat=lat, offset_in_minutes=offset_in_minutes,
                                                             name=name, hip=hip, radec=radec)
 
-    annotations = get_annotations(ttp=ttp, rts=rts, offset_in_minutes=offset_in_minutes)
+    annotations = get_annotations(ttp=ttp, rts=rts, offset_in_minutes=offset_in_minutes, lng=lng)
 
     return {
       "diagram_id": diagram_id,

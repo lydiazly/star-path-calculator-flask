@@ -16,7 +16,7 @@ from core.coordinates import get_coords
 from utils.script_utils import format_datetime, format_datetime_iso, validate_year, EPH_DATE_MIN_STR, EPH_DATE_MAX_STR
 
 
-prog = f"python {os.path.basename(__file__)}"
+prog = f"python3 {os.path.basename(__file__)}"
 description = "Specify a year to obtain the dates, times, and coordinates in RA and Dec of the equinoxes and solstices in that year."
 epilog = f"""year range:
   {EPH_DATE_MIN_STR} \u2013 {EPH_DATE_MAX_STR} (Gregorian)
