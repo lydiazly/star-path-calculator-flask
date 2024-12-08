@@ -51,13 +51,23 @@ def get_standard_offset_by_id(tz_id: str, dst: bool = False) -> float:
     return offset_in_minutes
 
 
-def ut1_to_local_standard_time(t: Tuple, offset_in_minutes: float) -> Tuple:
+def ut1_to_standard_time(t: Tuple, offset_in_minutes: float) -> Tuple:
     '''
-    Adds the offset to get the twilight times list in local standard time
+    Adds the offset to obtain twilight times in standard time
     '''
     temp_t = (t[0], t[1], t[2], t[3], t[4] + offset_in_minutes, t[5])
-    temp_t_local = tisca.ut1(*temp_t).ut1_calendar()
-    return temp_t_local
+    temp_t_standard = tisca.ut1(*temp_t).ut1_calendar()
+    return temp_t_standard
+
+
+def ut1_to_local_mean_time(t: Tuple, lng: float) -> Tuple:
+    '''
+    Adds the offset to obtain twilight times in local mean time
+    '''
+    offset_in_hours = lng / 15
+    temp_t = (t[0], t[1], t[2], t[3] + offset_in_hours, t[4], t[5])
+    temp_t_local_mean = tisca.ut1(*temp_t).ut1_calendar()
+    return temp_t_local_mean
 
 
 def julian_to_gregorian(t_julian: Tuple) -> Tuple:

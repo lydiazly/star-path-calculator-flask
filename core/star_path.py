@@ -24,7 +24,7 @@ import io
 import base64
 import re
 import core.data_loader as dl
-from utils.time_utils import get_standard_offset_by_id, ut1_to_local_standard_time
+from utils.time_utils import get_standard_offset_by_id, ut1_to_standard_time, ut1_to_local_mean_time
 import juliandate
 from great_circle_calculator.great_circle_calculator import distance_between_points, intermediate_point
 
@@ -495,7 +495,7 @@ def get_star_path_diagram(t: Time, lng: float, lat: float, offset_in_minutes: fl
     return diagram_id, svg_base64, (ttp_alt, ttp_az, ttp_anno, ttp_ts), (rts_alt, rts_az, rts_ts)
 
 
-def get_annotations(ttp, rts, offset_in_minutes: float):
+def get_annotations(ttp, rts, offset_in_minutes: float, lng: float):
 
     ttp_alt, ttp_az, ttp_anno, ttp_times = ttp
     rts_alt, rts_az, rts_times = rts
@@ -507,62 +507,79 @@ def get_annotations(ttp, rts, offset_in_minutes: float):
         'alt': None,
         'az': None,
         'time_ut1': None,
-        'time_local': None,
+        'time_standard': None,
+        'time_local_mean': None,
         'time_zone': None,
         'time_ut1_julian': None,
-        'time_local_julian': None
+        'time_standard_julian': None,
+        'time_local_mean_julian': None
     } for i in name_list]
 
     for i in range(len(ttp_anno)):
         ind = name_list.index(ttp_anno[i])
         _time_ut1 = ttp_times[i].ut1_calendar()
-        _time_local = ut1_to_local_standard_time(_time_ut1, offset_in_minutes)
+        _time_standard = ut1_to_standard_time(_time_ut1, offset_in_minutes)
+        _time_local_mean = ut1_to_local_mean_time(_time_ut1, lng)
         _time_ut1 = tisca.ut1(*_time_ut1[:5], round(_time_ut1[5]) + 0.1).ut1_calendar()
-        _time_local = tisca.ut1(*_time_local[:5], round(_time_local[5]) + 0.1).ut1_calendar()
+        _time_standard = tisca.ut1(*_time_standard[:5], round(_time_standard[5]) + 0.1).ut1_calendar()
+        _time_local_mean = tisca.ut1(*_time_local_mean[:5], round(_time_local_mean[5]) + 0.1).ut1_calendar()
         _time_ut1_julian   = juliandate.to_julian(juliandate.from_gregorian(*_time_ut1))
-        _time_local_julian = juliandate.to_julian(juliandate.from_gregorian(*_time_local))
+        _time_standard_julian = juliandate.to_julian(juliandate.from_gregorian(*_time_standard))
+        _time_local_mean_julian = juliandate.to_julian(juliandate.from_gregorian(*_time_local_mean))
         annotations[ind]['is_displayed'] = True
         annotations[ind]['alt'] = float(ttp_alt[i])
         annotations[ind]['az']  = float(ttp_az[i])
-        annotations[ind]['time_ut1']          = tuple(map(int, _time_ut1))
-        annotations[ind]['time_ut1_julian']   = tuple(map(int, _time_ut1_julian[:6]))
-        annotations[ind]['time_local']        = tuple(map(int, _time_local))
-        annotations[ind]['time_local_julian'] = tuple(map(int, _time_local_julian[:6]))
+        annotations[ind]['time_ut1']               = tuple(map(int, _time_ut1))
+        annotations[ind]['time_ut1_julian']        = tuple(map(int, _time_ut1_julian[:6]))
+        annotations[ind]['time_standard']          = tuple(map(int, _time_standard))
+        annotations[ind]['time_standard_julian']   = tuple(map(int, _time_standard_julian[:6]))
+        annotations[ind]['time_local_mean']        = tuple(map(int, _time_local_mean))
+        annotations[ind]['time_local_mean_julian'] = tuple(map(int, _time_local_mean_julian[:6]))
         annotations[ind]['time_zone'] = offset_in_minutes / 60
 
     if len(rts_alt) > 1:
         for i, name in enumerate(['R', 'T', 'S']):
             ind = name_list.index(name)
             _time_ut1 = rts_times[i].ut1_calendar()
-            _time_local = ut1_to_local_standard_time(_time_ut1, offset_in_minutes)
+            _time_standard = ut1_to_standard_time(_time_ut1, offset_in_minutes)
+            _time_local_mean = ut1_to_local_mean_time(_time_ut1, lng)
             _time_ut1 = tisca.ut1(*_time_ut1[:5], round(_time_ut1[5]) + 0.1).ut1_calendar()
-            _time_local = tisca.ut1(*_time_local[:5], round(_time_local[5]) + 0.1).ut1_calendar()
+            _time_standard = tisca.ut1(*_time_standard[:5], round(_time_standard[5]) + 0.1).ut1_calendar()
+            _time_local_mean = tisca.ut1(*_time_local_mean[:5], round(_time_local_mean[5]) + 0.1).ut1_calendar()
             _time_ut1_julian   = juliandate.to_julian(juliandate.from_gregorian(*_time_ut1))
-            _time_local_julian = juliandate.to_julian(juliandate.from_gregorian(*_time_local))
+            _time_standard_julian = juliandate.to_julian(juliandate.from_gregorian(*_time_standard))
+            _time_local_mean_julian = juliandate.to_julian(juliandate.from_gregorian(*_time_local_mean))
             annotations[ind]['is_displayed'] = True
             annotations[ind]['alt'] = float(rts_alt[i])
             annotations[ind]['az']  = float(rts_az[i])
-            annotations[ind]['time_ut1']          = tuple(map(int, _time_ut1))
-            annotations[ind]['time_ut1_julian']   = tuple(map(int, _time_ut1_julian[:6]))
-            annotations[ind]['time_local']        = tuple(map(int, _time_local))
-            annotations[ind]['time_local_julian'] = tuple(map(int, _time_local_julian[:6]))
+            annotations[ind]['time_ut1']               = tuple(map(int, _time_ut1))
+            annotations[ind]['time_ut1_julian']        = tuple(map(int, _time_ut1_julian[:6]))
+            annotations[ind]['time_standard']          = tuple(map(int, _time_standard))
+            annotations[ind]['time_standard_julian']   = tuple(map(int, _time_standard_julian[:6]))
+            annotations[ind]['time_local_mean']        = tuple(map(int, _time_local_mean))
+            annotations[ind]['time_local_mean_julian'] = tuple(map(int, _time_local_mean_julian[:6]))
             annotations[ind]['time_zone'] = offset_in_minutes / 60
 
     elif len(rts_alt) == 1:
         ind = name_list.index('T')
         _time_ut1 = rts_times[0].ut1_calendar()
-        _time_local = ut1_to_local_standard_time(_time_ut1, offset_in_minutes)
+        _time_standard = ut1_to_standard_time(_time_ut1, offset_in_minutes)
+        _time_local_mean = ut1_to_local_mean_time(_time_ut1, lng)
         _time_ut1 = tisca.ut1(*_time_ut1[:5], round(_time_ut1[5]) + 0.1).ut1_calendar()
-        _time_local = tisca.ut1(*_time_local[:5], round(_time_local[5]) + 0.1).ut1_calendar()
+        _time_standard = tisca.ut1(*_time_standard[:5], round(_time_standard[5]) + 0.1).ut1_calendar()
+        _time_local_mean = tisca.ut1(*_time_local_mean[:5], round(_time_local_mean[5]) + 0.1).ut1_calendar()
         _time_ut1_julian   = juliandate.to_julian(juliandate.from_gregorian(*_time_ut1))
-        _time_local_julian = juliandate.to_julian(juliandate.from_gregorian(*_time_local))
+        _time_standard_julian = juliandate.to_julian(juliandate.from_gregorian(*_time_standard))
+        _time_local_mean_julian = juliandate.to_julian(juliandate.from_gregorian(*_time_local_mean))
         annotations[ind]['is_displayed'] = True
         annotations[ind]['alt'] = float(rts_alt[0])
         annotations[ind]['az'] = float(rts_az[0])
-        annotations[ind]['time_ut1']          = tuple(map(int, _time_ut1))
-        annotations[ind]['time_ut1_julian']   = tuple(map(int, _time_ut1_julian[:6]))
-        annotations[ind]['time_local']        = tuple(map(int, _time_local))
-        annotations[ind]['time_local_julian'] = tuple(map(int, _time_local_julian[:6]))
+        annotations[ind]['time_ut1']               = tuple(map(int, _time_ut1))
+        annotations[ind]['time_ut1_julian']        = tuple(map(int, _time_ut1_julian[:6]))
+        annotations[ind]['time_standard']          = tuple(map(int, _time_standard))
+        annotations[ind]['time_standard_julian']   = tuple(map(int, _time_standard_julian[:6]))
+        annotations[ind]['time_local_mean']        = tuple(map(int, _time_local_mean))
+        annotations[ind]['time_local_mean_julian'] = tuple(map(int, _time_local_mean_julian[:6]))
         annotations[ind]['time_zone'] = offset_in_minutes / 60
 
     return annotations
@@ -577,7 +594,7 @@ def get_diagram(year: int, month: int, day: int, lat: float, lng: float, tz_id: 
     diagram_id, svg_data, ttp, rts = get_star_path_diagram(t=t1, lng=lng, lat=lat, offset_in_minutes=offset_in_minutes,
                                                             name=name, hip=hip, radec=radec)
 
-    annotations = get_annotations(ttp=ttp, rts=rts, offset_in_minutes=offset_in_minutes)
+    annotations = get_annotations(ttp=ttp, rts=rts, offset_in_minutes=offset_in_minutes, lng=lng)
 
     return {
       "diagram_id": diagram_id,
