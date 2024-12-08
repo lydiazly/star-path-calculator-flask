@@ -10,7 +10,7 @@ from pytz import timezone
 from datetime import datetime
 import juliandate
 
-__all__ = ["find_timezone", "get_standard_offset_by_id", "ut1_to_local_standard_time", "julian_to_gregorian", "gregorian_to_julian"]
+__all__ = ["find_timezone", "get_standard_offset_by_id", "ut1_to_standard_time", "ut1_to_local_mean_time", "julian_to_gregorian", "gregorian_to_julian"]
 
 
 tisca = load.timescale()
@@ -52,18 +52,18 @@ def get_standard_offset_by_id(tz_id: str, dst: bool = False) -> float:
 
 
 def ut1_to_standard_time(t: Tuple, offset_in_minutes: float) -> Tuple:
-    '''
-    Adds the offset to obtain twilight times in standard time
-    '''
+    """
+    Adds the offset to obtain twilight times in standard time.
+    """
     temp_t = (t[0], t[1], t[2], t[3], t[4] + offset_in_minutes, t[5])
     temp_t_standard = tisca.ut1(*temp_t).ut1_calendar()
     return temp_t_standard
 
 
 def ut1_to_local_mean_time(t: Tuple, lng: float) -> Tuple:
-    '''
-    Adds the offset to obtain twilight times in local mean time
-    '''
+    """
+    Adds the offset to obtain twilight times in local mean time.
+    """
     offset_in_hours = lng / 15
     temp_t = (t[0], t[1], t[2], t[3] + offset_in_hours, t[4], t[5])
     temp_t_local_mean = tisca.ut1(*temp_t).ut1_calendar()

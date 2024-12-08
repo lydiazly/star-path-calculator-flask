@@ -18,8 +18,8 @@ from core.star_path import get_diagram
 from utils.script_utils import format_datetime, format_datetime_iso, validate_datetime, format_timezone, EPH_DATE_MIN_STR, EPH_DATE_MAX_STR
 
 
-prog = f"python {os.path.basename(__file__)}"
-description = "Specify a local date, location, and celestial object to draw the star path. Daylight Saving Time is not included."
+prog = f"python3 {os.path.basename(__file__)}"
+description = "Specify a local date, location, and celestial object to draw the star path. Daylight Saving Time (DST) is ignored."
 epilog = f"""date range:
   {EPH_DATE_MIN_STR} \u2013 {EPH_DATE_MAX_STR} (Gregorian)
 examples:
@@ -33,7 +33,6 @@ examples:
 
 
 def main():
-    # TODO: edit help text
     parser = argparse.ArgumentParser(prog=prog, description=description, epilog=epilog, formatter_class=argparse.RawTextHelpFormatter)
     parser.add_argument("year", type=int, nargs="?",
                         help="int, 0 is 1 BCE (default: this year)")
@@ -75,7 +74,7 @@ def main():
             print(f"Invalid month name: '{args.month}'", file=sys.stderr)
             sys.exit(1)
 
-    # Convert from local time to UT1 ------------------------------------------|
+    # Convert from Julian to Gregorian ----------------------------------------|
     if args.julian:
         from utils.time_utils import julian_to_gregorian
         year, month, day, *_ = julian_to_gregorian((year, month, day, 12))  # 12:00:00
@@ -138,12 +137,12 @@ def main():
             print(f'{item["name"]}:')
             print(f'  alt = {item["alt"]:.3f}')
             print(f'  az  = {item["az"]:.3f}')
-            print(f'  time_standard (Gregorian) = {"T".join(format_datetime_iso(*item["time_standard"]))}{format_timezone(item["time_zone"])}')
+            print(f'  time_standard   (Gregorian) = {"T".join(format_datetime_iso(*item["time_standard"]))}{format_timezone(item["time_zone"])}')
             print(f'  time_local_mean (Gregorian) = {"T".join(format_datetime_iso(*item["time_local_mean"]))}')
-            print(f'  time_ut1   (Gregorian) = {"T".join(format_datetime_iso(*item["time_ut1"]))}')
-            print(f'  time_standard (Julian)    = {"T".join(format_datetime_iso(*item["time_standard_julian"]))}{format_timezone(item["time_zone"])}')
+            print(f'  time_ut1        (Gregorian) = {"T".join(format_datetime_iso(*item["time_ut1"]))}')
+            print(f'  time_standard   (Julian)    = {"T".join(format_datetime_iso(*item["time_standard_julian"]))}{format_timezone(item["time_zone"])}')
             print(f'  time_local_mean (Julian)    = {"T".join(format_datetime_iso(*item["time_local_mean_julian"]))}')
-            print(f'  time_ut1   (Julian)    = {"T".join(format_datetime_iso(*item["time_ut1_julian"]))}')
+            print(f'  time_ut1        (Julian)    = {"T".join(format_datetime_iso(*item["time_ut1_julian"]))}')
             # print(f'  time_zone = {item["time_zone"]}')
 
     print(f"\nSVG has been saved to '{filename}'")

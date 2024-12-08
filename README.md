@@ -91,7 +91,7 @@ Dates, times, and ICRS coordinates (J2000) of the equinoxes and solstices in 200
 <summary>Usage</summary>
 
 ```text
-usage: python get_equinoxes_solstices.py [-h] [year]
+usage: python3 get_equinoxes_solstices.py [-h] [year]
 
 Specify a year to obtain the dates, times, and coordinates in RA and Dec of the equinoxes and solstices in that year.
 
@@ -105,10 +105,10 @@ year range:
   -3000-01-29 – 3000-05-06 (Gregorian)
 examples:
   # The current year:
-  python get_equinoxes_solstices.py
+  python3 get_equinoxes_solstices.py
 
   # The equinoxes and solstices of 2001 BCE:
-  python get_equinoxes_solstices.py -2000
+  python3 get_equinoxes_solstices.py -2000
 ```
 
 </details>
@@ -120,7 +120,7 @@ examples:
 Example:
 
 ```bash
-python3 ./scripts/get_star_path.py -2000 3 1 --lng 120 --lat 40 -o "jupiter"
+python3 ./scripts/get_star_path.py -2000 3 1 --lng 116 --lat 40 -o "jupiter"
 ```
 
 <details>
@@ -128,52 +128,64 @@ python3 ./scripts/get_star_path.py -2000 3 1 --lng 120 --lat 40 -o "jupiter"
 
 ```text
 [Date (Gregorian)] 1 Mar 2001 BCE
-[Location]         lat/lng = 40.000/120.000
+[Location]         lat/lng = 40.000/116.000
 [Celestial Object] Jupiter
 
 [Point Details]
 D1:
-  alt = 17.721
-  az  = 146.433
-  time_local (Gregorian) = -2000-03-01T05:38:06+08:00
-  time_ut1   (Gregorian) = -2000-02-29T21:38:06
-  time_local (Julian)    = -2000-03-18T05:38:06+08:00
-  time_ut1   (Julian)    = -2000-03-17T21:38:06
+  alt = 17.723
+  az  = 146.437
+  time_standard   (Gregorian) = -2000-03-01T05:54:05+08:00
+  time_local_mean (Gregorian) = -2000-03-01T05:38:05
+  time_ut1        (Gregorian) = -2000-02-29T21:54:05
+  time_standard   (Julian)    = -2000-03-18T05:54:05+08:00
+  time_local_mean (Julian)    = -2000-03-18T05:38:05
+  time_ut1        (Julian)    = -2000-03-17T21:54:05
 D2:
-  alt = 20.742
-  az  = 153.301
-  time_local (Gregorian) = -2000-03-01T06:09:26+08:00
-  time_ut1   (Gregorian) = -2000-02-29T22:09:26
-  time_local (Julian)    = -2000-03-18T06:09:26+08:00
-  time_ut1   (Julian)    = -2000-03-17T22:09:26
+  alt = 20.744
+  az  = 153.305
+  time_standard   (Gregorian) = -2000-03-01T06:25:25+08:00
+  time_local_mean (Gregorian) = -2000-03-01T06:09:25
+  time_ut1        (Gregorian) = -2000-02-29T22:25:25
+  time_standard   (Julian)    = -2000-03-18T06:25:25+08:00
+  time_local_mean (Julian)    = -2000-03-18T06:09:25
+  time_ut1        (Julian)    = -2000-03-17T22:25:25
 D3:
-  alt = 22.828
-  az  = 159.592
-  time_local (Gregorian) = -2000-03-01T06:36:36+08:00
-  time_ut1   (Gregorian) = -2000-02-29T22:36:36
-  time_local (Julian)    = -2000-03-18T06:36:36+08:00
-  time_ut1   (Julian)    = -2000-03-17T22:36:36
+  alt = 22.829
+  az  = 159.596
+  time_standard   (Gregorian) = -2000-03-01T06:52:35+08:00
+  time_local_mean (Gregorian) = -2000-03-01T06:36:35
+  time_ut1        (Gregorian) = -2000-02-29T22:52:35
+  time_standard   (Julian)    = -2000-03-18T06:52:35+08:00
+  time_local_mean (Julian)    = -2000-03-18T06:36:35
+  time_ut1        (Julian)    = -2000-03-17T22:52:35
 R:
   alt = -0.567
   az  = 122.008
-  time_local (Gregorian) = -2000-03-01T03:25:27+08:00
-  time_ut1   (Gregorian) = -2000-02-29T19:25:27
-  time_local (Julian)    = -2000-03-18T03:25:27+08:00
-  time_ut1   (Julian)    = -2000-03-17T19:25:27
+  time_standard   (Gregorian) = -2000-03-01T03:41:25+08:00
+  time_local_mean (Gregorian) = -2000-03-01T03:25:25
+  time_ut1        (Gregorian) = -2000-02-29T19:41:25
+  time_standard   (Julian)    = -2000-03-18T03:41:25+08:00
+  time_local_mean (Julian)    = -2000-03-18T03:25:25
+  time_ut1        (Julian)    = -2000-03-17T19:41:25
 T:
   alt = 25.648
   az  = 180.000
-  time_local (Gregorian) = -2000-03-01T07:59:03+08:00
-  time_ut1   (Gregorian) = -2000-02-29T23:59:03
-  time_local (Julian)    = -2000-03-18T07:59:03+08:00
-  time_ut1   (Julian)    = -2000-03-17T23:59:03
+  time_standard   (Gregorian) = -2000-03-01T08:15:01+08:00
+  time_local_mean (Gregorian) = -2000-03-01T07:59:01
+  time_ut1        (Gregorian) = -2000-03-01T00:15:01
+  time_standard   (Julian)    = -2000-03-18T08:15:01+08:00
+  time_local_mean (Julian)    = -2000-03-18T07:59:01
+  time_ut1        (Julian)    = -2000-03-18T00:15:01
 S:
   alt = -0.567
-  az  = 237.995
-  time_local (Gregorian) = -2000-03-01T12:32:40+08:00
-  time_ut1   (Gregorian) = -2000-03-01T04:32:40
-  time_local (Julian)    = -2000-03-18T12:32:40+08:00
-  time_ut1   (Julian)    = -2000-03-18T04:32:40
+  az  = 237.996
+  time_standard   (Gregorian) = -2000-03-01T12:48:38+08:00
+  time_local_mean (Gregorian) = -2000-03-01T12:32:38
+  time_ut1        (Gregorian) = -2000-03-01T04:48:38
+  time_standard   (Julian)    = -2000-03-18T12:48:38+08:00
+  time_local_mean (Julian)    = -2000-03-18T12:32:38
+  time_ut1        (Julian)    = -2000-03-18T04:48:38
 ```
 
 </details>
@@ -186,9 +198,9 @@ Note that Skyfield counts "*34 arcminutes of atmospheric refraction at the horiz
 <summary>Usage</summary>
 
 ```text
-usage: python get_star_path.py [-h] [--lat float] [--lng float] [-o str] [-j] [--name] [year] [month] [day]
+usage: python3 get_star_path.py [-h] [--lat float] [--lng float] [-o str] [-j] [--name] [year] [month] [day]
 
-Specify a local date, location, and celestial object to draw the star path. Daylight Saving Time is not included.
+Specify a local date, location, and celestial object to draw the star path. Daylight Saving Time (DST) is ignored.
 
 positional arguments:
   year                  int, 0 is 1 BCE (default: this year)
@@ -208,13 +220,13 @@ date range:
   -3000-01-29 – 3000-05-06 (Gregorian)
 examples:
   # Plot the star path of Mars:
-  python get_star_path.py -o mars
+  python3 get_star_path.py -o mars
 
   # Plot the star path of Vega by giving its Hipparcos Catalogue number:
-  python get_star_path.py -o 91262
+  python3 get_star_path.py -o 91262
 
   # Plot the star path by giving the star's ICRS coordinates (RA, Dec):
-  python get_star_path.py -o 310.7,-5.1
+  python3 get_star_path.py -o 310.7,-5.1
 ```
 
 </details>
