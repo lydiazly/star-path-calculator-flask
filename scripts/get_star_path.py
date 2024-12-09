@@ -45,7 +45,7 @@ def main():
     parser.add_argument("--lng", "--lon", dest="lng", metavar="float", type=float, default=116.4074,
                         help="longitude in decimal degrees (default: %(default)s)")
     parser.add_argument("-o", "--obj", metavar="str", type=str, default="Mars",
-                        help="planet name, Hipparchus Catalogue number, or the ICRS coordinates in the format 'ra,dec' (default: %(default)s)")
+                        help="planet name, Hipparcos Catalogue number, or the ICRS coordinates in the format 'ra,dec' (default: %(default)s)")
     parser.add_argument('-j', '--julian', action='store_true',
                         help='use Julian calendar (default: Gregorian calendar)')
     parser.add_argument('--name', action='store_true',
@@ -98,14 +98,14 @@ def main():
             print(f"Invalid 'ra,dec' format: '{args.obj}'", file=sys.stderr)
             sys.exit(1)
     elif args.obj.isdigit():
-        # Hipparchus Catalogue number
+        # Hipparcos Catalogue number
         hip = int(args.obj)
         if print_hip_name:
             from utils.star_utils import hip_to_name
             hip_name = hip_to_name(hip)
             if hip_name:
                 print(f"Star Name: {hip_name},", end=" ")
-        print(f"Hipparchus Catalogue Number: {hip}")
+        print(f"Hipparcos Catalogue Number: {hip}")
     else:
         # Planet name
         name = args.obj.lower()

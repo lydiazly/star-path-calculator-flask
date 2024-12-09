@@ -15,10 +15,12 @@ __all__ = ["format_datetime", "format_datetime_iso", "validate_datetime", "valid
 data_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'data')
 
 
-# Formats the date and time into strings as '1 Jan 2000 CE' and '12:00:00[.000]'
 def format_datetime(year: int, month: int = 1, day: int = 1,
                     hour: int = 12, minute: int = 0, second: float = 0,
                     month_first=False, abbr=True, year_only=False) -> List[str]:
+    """
+    Formats the date and time into strings as '1 Jan 2000 CE' and '12:00:00[.000]'
+    """
     year_str = f"{year} CE" if year > 0 else f"{-year + 1} BCE"
     month_str = calendar.month_abbr[month] if abbr else calendar.month_name[month]
     date_str = f"{month_str} {day}, {year_str}" if month_first else f"{day} {month_str} {year_str}"
@@ -27,9 +29,11 @@ def format_datetime(year: int, month: int = 1, day: int = 1,
     return [year_str] if year_only else [date_str, time_str]
 
 
-# Formats the date and time into ISO format strings '2000-01-01 12:00:00[.000]'
 def format_datetime_iso(year: int, month: int = 1, day: int = 1,
                         hour: int = 12, minute: int = 0, second: float = 0) -> List[str]:
+    """
+    Formats the date and time into ISO format strings '2000-01-01 12:00:00[.000]'
+    """
     date_str = f"{year}-{month:02d}-{day:02d}"
     sec_str = f"{int(second):02d}" if float(second).is_integer() else f"{second:06.3f}"
     time_str = f"{hour:02d}:{minute:02d}:{sec_str}"
@@ -73,8 +77,10 @@ def validate_year(year: int):
         raise ValueError(f"Out of the ephemeris date range: {EPH_DATE_MIN_STR} \u2013 {EPH_DATE_MAX_STR}")
 
 
-# Converts decimal hours to HMS (Hours, Minutes, Seconds).
 def decimal_to_hms(decimal_hours: float) -> dict:
+    """
+    Converts decimal hours to HMS (Hours, Minutes, Seconds).
+    """
     sign = -1 if decimal_hours < 0 else 1
     abs_decimal_hours = abs(decimal_hours)
     abs_hours = int(abs_decimal_hours)
@@ -91,7 +97,9 @@ def decimal_to_hms(decimal_hours: float) -> dict:
     return {'sign': sign, 'hours': abs_hours, 'minutes': minutes, 'seconds': seconds}
 
 
-# Formats a decimal UTC offset into a string.
 def format_timezone(tz: float) -> str:
+    """
+    Formats a decimal UTC offset into a string.
+    """
     hms = decimal_to_hms(tz)
     return f"{'-' if tz < 0 else '+'}{hms['hours']:02d}:{hms['minutes']:02d}"
