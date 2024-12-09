@@ -33,9 +33,9 @@ We are aiming to develop a user-friendly app to facilitate the research in histo
 
 - :globe_with_meridians: Obtains the dates, times, and [RA/Dec coordinates](https://en.wikipedia.org/wiki/Equatorial_coordinate_system) of **equinoxes** and **solstices** by specifying a year and location.
 - :dizzy: Plots an arc across the celestial sphere representing the **apparent motion** of a star in the sky.
-- :pushpin: Calculates the star's **rising/setting/meridian-transition times** based on the provided date, location, and star.
+- :sunrise: Calculates the star's **rising/setting/meridian-transit times** based on the provided date, location, and star.
 - :sunrise_over_mountains: Marks the [civil and nautical twilights](https://en.wikipedia.org/wiki/Twilight).
-- :calendar: Covers dates from **3001 BCE to 3000 CE**.
+- :classical_building: Covers dates from **3001 BCE to 3000 CE**.
 - :ringed_planet: Utilizes [JPL DE406 ephemeris](https://ssd.jpl.nasa.gov/planets/eph_export.html) and [Hipparcos Catelogue](https://www.cosmos.esa.int/web/hipparcos/home) to calculate positions of planets and stars for any given time.
 - :telescope: Includes [proper motion](https://en.wikipedia.org/wiki/Proper_motion) of a star if the Hipparcos Catalogue number is provided.
 - :calendar: Accepts the **[Gregorian](https://en.wikipedia.org/wiki/Gregorian_calendar)** or **[Julian](https://en.wikipedia.org/wiki/Julian_calendar)** calendar date input.
