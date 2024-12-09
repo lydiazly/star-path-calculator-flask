@@ -23,6 +23,7 @@ This repository contains the source code of our [Star Path Viewer](https://star-
   - [2. Plot a star's path on a given date at a given location](#2-plot-a-stars-path-on-a-given-date-at-a-given-location)
 - [Resources](#resources)
 - [References](#references)
+- [Changelog](#changelog)
 
 ## Overview
 
@@ -30,15 +31,17 @@ We are aiming to develop a user-friendly app to facilitate the research in histo
 
 ## Features
 
-- :globe_with_meridians: Obtain dates, times, and RA/Dec coordinates of equinoxes and solstices by specifying a year and location.
-- :dizzy: Plots the star path and calculates the rising/setting times based on the provided date, location, and star information.
-- :calendar: Covers a wide time span, from **3001 BCE to 3000 CE**.
-- :ringed_planet: Uses the [JPL DE406 ephemeris and Hipparchus Catelogue](#resources) to calculate the planet and star positions for any given time.
-- :telescope: Accounts for the [proper motion](https://en.wikipedia.org/wiki/Proper_motion) of a star if the Hipparcos Catalogue number is provided.
-- :calendar: Accepts both **Gregorian** and **Julian** calendar date inputs.
-- :star: Supports star or planet input by name, Hipparcos Catalogue number, or ICRS coordinates (RA, Dec).
-- :night_with_stars: Displays star paths with distinct line styles for daytime, twilight, and nighttime.
-- :clock1: Offers both [local time](#resources) and [UT1](https://en.wikipedia.org/wiki/Universal_Time) time in output details (*Daylight Saving Time is not included*).
+- :globe_with_meridians: Obtains the dates, times, and [RA/Dec coordinates](https://en.wikipedia.org/wiki/Equatorial_coordinate_system) of **equinoxes** and **solstices** by specifying a year and location.
+- :dizzy: Plots an arc across the celestial sphere representing the **apparent motion** of a star in the sky.
+- :pushpin: Calculates the star's **rising/setting/meridian-transition times** based on the provided date, location, and star.
+- :sunrise_over_mountains: Marks the [civil and nautical twilights](https://en.wikipedia.org/wiki/Twilight).
+- :calendar: Covers dates from **3001 BCE to 3000 CE**.
+- :ringed_planet: Utilizes [JPL DE406 ephemeris](https://ssd.jpl.nasa.gov/planets/eph_export.html) and [Hipparcos Catelogue](https://www.cosmos.esa.int/web/hipparcos/home) to calculate positions of planets and stars for any given time.
+- :telescope: Includes [proper motion](https://en.wikipedia.org/wiki/Proper_motion) of a star if the Hipparcos Catalogue number is provided.
+- :calendar: Accepts the **[Gregorian](https://en.wikipedia.org/wiki/Gregorian_calendar)** or **[Julian](https://en.wikipedia.org/wiki/Julian_calendar)** calendar date input.
+- :star: Supports star or planet input by **name**, **Hipparcos Catalogue number**, or [ICRS coordinates](https://en.wikipedia.org/wiki/International_Celestial_Reference_System_and_its_realizations) **(RA, Dec)**.
+- :night_with_stars: Displays star paths with distinct line styles for daytime, twilight stages, and nighttime.
+- :clock1: Provides **[standard time](https://en.wikipedia.org/wiki/Standard_time)**, **[local mean time (LMT)](https://en.wikipedia.org/wiki/Local_mean_time)**, and **[UT1 time](https://en.wikipedia.org/wiki/Universal_Time)** in the results for the user's reference (*no Daylight Saving Time (DST) adjustments in this project*).
 
 ## Installation
 
@@ -49,6 +52,12 @@ git clone https://github.com/claude-hao/star-path-calculator.git
 ```
 
 Install requirements:
+
+```sh
+python3 -m pip install -r requirements.txt
+```
+
+or
 
 ```sh
 python3 -m pip install pandas matplotlib skyfield juliandate tzfpy
@@ -212,7 +221,7 @@ options:
   --lat float           latitude in decimal degrees (default: 39.9042)
   --lng float, --lon float
                         longitude in decimal degrees (default: 116.4074)
-  -o str, --obj str     planet name, Hipparchus Catalogue number, or the ICRS coordinates in the format 'ra,dec' (default: Mars)
+  -o str, --obj str     planet name, Hipparcos Catalogue number, or the ICRS coordinates in the format 'ra,dec' (default: Mars)
   -j, --julian          use Julian calendar (default: Gregorian calendar)
   --name                print the proper name or the Bayer designation, if available (default: False)
 
@@ -233,22 +242,13 @@ examples:
 
 ## Resources
 
-- Ephemeris Data
+- Ephemeris Data: [JPL Planetary and Lunar Ephemerides](https://ssd.jpl.nasa.gov/planets/eph_export.html) (DE406)
 
-  [JPL Planetary and Lunar Ephemerides](https://ssd.jpl.nasa.gov/planets/eph_export.html) (DE406)
+- [The Hipparcos and Tycho Catalogues](https://www.cosmos.esa.int/web/hipparcos/catalogues) [[FTP](https://cdsarc.cds.unistra.fr/ftp/cats/I/239)]
 
-- Hipparchus Catalogue
+- Bayer Designation and Proper Name [[FTP (ident4, ident6)](https://cdsarc.cds.unistra.fr/ftp/I/239/version_cd/tables)]
 
-  [The Hipparcos and Tycho Catalogues](https://www.cosmos.esa.int/web/hipparcos/catalogues)
-  [FTP](https://cdsarc.cds.unistra.fr/ftp/cats/I/239)
-
-- Bayer Designation and Proper Name
-
-  [FTP](https://cdsarc.cds.unistra.fr/ftp/I/239/version_cd/tables) (ident4, ident6)
-
-- Timezone
-
-  [Timezone Boundary Builder](https://github.com/evansiroky/timezone-boundary-builder)
+- Timezone: [Timezone Boundary Builder](https://github.com/evansiroky/timezone-boundary-builder)
 
 ## References
 
@@ -257,3 +257,8 @@ examples:
 - [Rise, Set, and Twilight Definitions](https://aa.usno.navy.mil/faq/RST_defs)
 
 - R. Tousey and M. J. Koomen, "The Visibility of Stars and Planets During Twilight," *Journal of the Optical Society of America*, Vol. 43, pp. 177-183, 1953. [Online]. Available: <https://opg.optica.org/josa/viewmedia.cfm?uri=josa-43-3-177&seq=0&html=true>
+
+## Changelog
+
+- 2024-12-08
+  - Added Local Mean Time (LMT).
