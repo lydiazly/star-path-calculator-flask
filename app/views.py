@@ -4,7 +4,7 @@ from flask import request, jsonify, render_template, current_app as app
 # from flask_limiter.util import get_remote_address
 from core.coordinates import get_seasons
 from core.star_path import get_diagram
-from utils.time_utils import get_standard_offset_by_id, ut1_to_local_standard_time, julian_to_gregorian, gregorian_to_julian
+from utils.time_utils import get_standard_offset_by_id, ut1_to_standard_time, julian_to_gregorian, gregorian_to_julian
 
 
 EQX_SOL_KEYS = {
@@ -61,7 +61,7 @@ def seasons():
 
         # Convert from UT1 to Standard Time
         for key in EQX_SOL_KEYS.values():
-            t_local = ut1_to_local_standard_time(results[key], offset_in_minutes=offset_in_minutes)
+            t_local = ut1_to_standard_time(results[key], offset_in_minutes=offset_in_minutes)
             results[key] = (*map(int, t_local[0:5]), float(t_local[-1]))
 
     except Exception as e:
@@ -101,7 +101,7 @@ def equinox():
         results = get_seasons(year)[EQX_SOL_KEYS[flag]]  # time, keep the elements as numbers: (int, int, int, int, int, float)
 
         # Convert from UT1 to Standard Time
-        t_local = ut1_to_local_standard_time(results, offset_in_minutes=offset_in_minutes)
+        t_local = ut1_to_standard_time(results, offset_in_minutes=offset_in_minutes)
         results = (*map(int, t_local[0:5]), float(t_local[-1]))
 
     except Exception as e:
