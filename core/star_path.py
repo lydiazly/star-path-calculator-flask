@@ -418,10 +418,10 @@ def get_star_path_diagram(t: Time, lng: float, lat: float, offset_in_minutes: fl
     t_transit = get_star_meridian_transit_time(s, t_rising, lng, lat)
 
     # Set to 'none' to ensure the text is not converted to paths
-    # plt.rcParams['svg.fonttype'] = 'none'
+    plt.rcParams['svg.fonttype'] = 'none'
 
     # Set font
-    # plt.rcParams['font.family'] = 'Arial'
+    plt.rcParams['font.family'] = 'Arial'
 
     fig, ax = plt.subplots(figsize=(10, 10), subplot_kw={'projection': 'polar'})
     ax.set_position([0.1, 0.1, 0.8, 0.8])
