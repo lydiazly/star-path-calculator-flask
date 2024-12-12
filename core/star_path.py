@@ -35,8 +35,6 @@ __all__ = ["get_star_path_diagram", "get_annotations"]
 tisca = load.timescale()
 refraction_limit = -34 / 60
 
-r_max = 90
-
 label_fontsize = 10
 
 # Ensure ephemeris data is loaded
@@ -173,7 +171,7 @@ def plot_in_style(ax, event, t_jd0, t_jd1, s, lng: float, lat: float):
         altitudes = np.append(altitudes, [alt.degrees])
         azimuths = np.append(azimuths, [az.degrees])
 
-    r = r_max - altitudes
+    r = 90 - altitudes
     theta = np.radians(azimuths)
 
     if event == 0 or event == 1:
@@ -243,7 +241,7 @@ def plot_meridian_transit_points(ax, t, s, lng: float, lat: float):
 
     alt, az = get_star_altaz(s, t, lng, lat)
 
-    r = r_max - alt.degrees
+    r = 90 - alt.degrees
     theta = np.radians(az.degrees)
 
     ax.plot(theta, r, 'ro', ms=6)
@@ -265,7 +263,7 @@ def plot_twilight_transition_points(fig, ax, altitudes, azimuths, annotations, l
     if len(altitudes) == 0:
         return
 
-    r = r_max - np.array(altitudes)
+    r = 90 - np.array(altitudes)
     theta = np.radians(azimuths)
 
     for i, j, k in zip(theta, r, annotations):
@@ -311,20 +309,19 @@ def plot_twilight_transition_points(fig, ax, altitudes, azimuths, annotations, l
     ax2.set_ylim(0, 1)
 
     for i in range(len(label_coord)):
-        _r = r_max - label_coord[i][1]
-        if _r <= r_max:
-            _theta = np.radians(label_coord[i][0])
-            label_coord_bg = ax.transData.transform((_theta, _r))
-            label_coord_bg = [label_coord_bg[0]/fig.bbox.width, label_coord_bg[1]/fig.bbox.height]
+        _r = 90 - label_coord[i][1]
+        _theta = np.radians(label_coord[i][0])
+        label_coord_bg = ax.transData.transform((_theta, _r))
+        label_coord_bg = [label_coord_bg[0]/fig.bbox.width, label_coord_bg[1]/fig.bbox.height]
 
-            ttp_coord_bg = ax.transData.transform((theta[i], r[i]))
-            ttp_coord_bg = ([ttp_coord_bg[0]/fig.bbox.width, ttp_coord_bg[1]/fig.bbox.height])
+        ttp_coord_bg = ax.transData.transform((theta[i], r[i]))
+        ttp_coord_bg = ([ttp_coord_bg[0]/fig.bbox.width, ttp_coord_bg[1]/fig.bbox.height])
 
-            ax2.annotate(annotations[i],
-                         xy = (ttp_coord_bg[0], ttp_coord_bg[1]),
-                         xytext = (label_coord_bg[0], label_coord_bg[1]),
-                         arrowprops=dict(color='r', arrowstyle='-', shrinkA=0.2, shrinkB=0.2, lw=0.5),
-                         va='center', ha='center', fontsize=label_fontsize, color='r')
+        ax2.annotate(annotations[i],
+                     xy = (ttp_coord_bg[0], ttp_coord_bg[1]),
+                     xytext = (label_coord_bg[0], label_coord_bg[1]),
+                     arrowprops=dict(color='r', arrowstyle='-', shrinkA=0.2, shrinkB=0.2, lw=0.5),
+                     va='center', ha='center', fontsize=label_fontsize, color='r')
 
     ax2.axis('off')
 
@@ -339,9 +336,9 @@ def plot_rising_and_setting_points(fig, ax, t0, t1, s, lng:float, lat:float):
     alt0, az0 = get_star_altaz(s, t0, lng, lat)
     alt1, az1 = get_star_altaz(s, t1, lng, lat)
 
-    r0 = r_max - alt0.degrees
+    r0 = 90 - alt0.degrees
     theta0 = np.radians(az0.degrees)
-    r1 = r_max - alt1.degrees
+    r1 = 90 - alt1.degrees
     theta1 = np.radians(az1.degrees)
 
     # Get the coordinates of the points on fig layer, which are originally drawn on the ax layer.
@@ -374,13 +371,13 @@ def plot_celestial_poles(ax, lat):
     """
 
     if lat > 0:
-        r = r_max - lat
+        r = 90 - lat
         theta = 0
         ax.plot(theta, r, 'b+', ms=8)
         ax.annotate('NCP', (theta, r), textcoords="offset points", xytext=(-6, 0),
                     ha='right', va='center', fontsize=label_fontsize, color='b')
     elif lat < 0:
-        r = r_max + lat
+        r = 90 + lat
         theta = np.radians(180)
         ax.plot(theta, r, 'b+', ms=8)
         ax.annotate('SCP', (theta, r), textcoords="offset points", xytext=(-6, 0),
@@ -430,7 +427,7 @@ def get_star_path_diagram(t: Time, lng: float, lat: float, offset_in_minutes: fl
 
     fig, ax = plt.subplots(figsize=(10, 10), subplot_kw={'projection': 'polar'})
     ax.set_position([0.1, 0.1, 0.8, 0.8])
-    ax.set_ylim(0, r_max)
+    ax.set_ylim(0, 90)
     ax.set_theta_offset(np.pi/2)
 
     if y_rising and y_setting:
@@ -568,74 +565,17 @@ def get_annotations(ttp, rts, offset_in_minutes: float, lng: float):
         ind = name_list.index(ttp_anno[i])
         set_annotation_values(annotations, ind, ttp_times[i], ttp_alt[i], ttp_az[i],
                               offset_in_minutes=offset_in_minutes, lng=lng)
-        # _time_ut1        = ttp_times[i].ut1_calendar()
-        # _time_standard   = ut1_to_standard_time(_time_ut1, offset_in_minutes)
-        # _time_local_mean = ut1_to_local_mean_time(_time_ut1, lng)
-        # _time_ut1        = tisca.ut1(*_time_ut1[:5], round(_time_ut1[5]) + 0.1).ut1_calendar()
-        # _time_standard   = tisca.ut1(*_time_standard[:5], round(_time_standard[5]) + 0.1).ut1_calendar()
-        # _time_local_mean = tisca.ut1(*_time_local_mean[:5], round(_time_local_mean[5]) + 0.1).ut1_calendar()
-        # _time_ut1_julian        = juliandate.to_julian(juliandate.from_gregorian(*_time_ut1))
-        # _time_standard_julian   = juliandate.to_julian(juliandate.from_gregorian(*_time_standard))
-        # _time_local_mean_julian = juliandate.to_julian(juliandate.from_gregorian(*_time_local_mean))
-        # annotations[ind]['is_displayed'] = True
-        # annotations[ind]['alt'] = float(ttp_alt[i])
-        # annotations[ind]['az']  = float(ttp_az[i])
-        # annotations[ind]['time_ut1']               = tuple(map(int, _time_ut1))
-        # annotations[ind]['time_ut1_julian']        = tuple(map(int, _time_ut1_julian[:6]))
-        # annotations[ind]['time_standard']          = tuple(map(int, _time_standard))
-        # annotations[ind]['time_standard_julian']   = tuple(map(int, _time_standard_julian[:6]))
-        # annotations[ind]['time_local_mean']        = tuple(map(int, _time_local_mean))
-        # annotations[ind]['time_local_mean_julian'] = tuple(map(int, _time_local_mean_julian[:6]))
-        # annotations[ind]['time_zone'] = offset_in_minutes / 60
 
     if len(rts_alt) > 1:
         for i, name in enumerate(['R', 'T', 'S']):
             ind = name_list.index(name)
             set_annotation_values(annotations, ind, rts_times[i], rts_alt[i], rts_az[i],
                                   offset_in_minutes=offset_in_minutes, lng=lng)
-            # _time_ut1        = rts_times[i].ut1_calendar()
-            # _time_standard   = ut1_to_standard_time(_time_ut1, offset_in_minutes)
-            # _time_local_mean = ut1_to_local_mean_time(_time_ut1, lng)
-            # _time_ut1        = tisca.ut1(*_time_ut1[:5], round(_time_ut1[5]) + 0.1).ut1_calendar()
-            # _time_standard   = tisca.ut1(*_time_standard[:5], round(_time_standard[5]) + 0.1).ut1_calendar()
-            # _time_local_mean = tisca.ut1(*_time_local_mean[:5], round(_time_local_mean[5]) + 0.1).ut1_calendar()
-            # _time_ut1_julian        = juliandate.to_julian(juliandate.from_gregorian(*_time_ut1))
-            # _time_standard_julian   = juliandate.to_julian(juliandate.from_gregorian(*_time_standard))
-            # _time_local_mean_julian = juliandate.to_julian(juliandate.from_gregorian(*_time_local_mean))
-            # annotations[ind]['is_displayed'] = True
-            # annotations[ind]['alt'] = float(rts_alt[i])
-            # annotations[ind]['az']  = float(rts_az[i])
-            # annotations[ind]['time_ut1']               = tuple(map(int, _time_ut1))
-            # annotations[ind]['time_ut1_julian']        = tuple(map(int, _time_ut1_julian[:6]))
-            # annotations[ind]['time_standard']          = tuple(map(int, _time_standard))
-            # annotations[ind]['time_standard_julian']   = tuple(map(int, _time_standard_julian[:6]))
-            # annotations[ind]['time_local_mean']        = tuple(map(int, _time_local_mean))
-            # annotations[ind]['time_local_mean_julian'] = tuple(map(int, _time_local_mean_julian[:6]))
-            # annotations[ind]['time_zone'] = offset_in_minutes / 60
 
     elif len(rts_alt) == 1:
         ind = name_list.index('T')
         set_annotation_values(annotations, ind, rts_times[0], rts_alt[0], rts_az[0],
                               offset_in_minutes=offset_in_minutes, lng=lng)
-        # _time_ut1        = rts_times[0].ut1_calendar()
-        # _time_standard   = ut1_to_standard_time(_time_ut1, offset_in_minutes)
-        # _time_local_mean = ut1_to_local_mean_time(_time_ut1, lng)
-        # _time_ut1        = tisca.ut1(*_time_ut1[:5], round(_time_ut1[5]) + 0.1).ut1_calendar()
-        # _time_standard   = tisca.ut1(*_time_standard[:5], round(_time_standard[5]) + 0.1).ut1_calendar()
-        # _time_local_mean = tisca.ut1(*_time_local_mean[:5], round(_time_local_mean[5]) + 0.1).ut1_calendar()
-        # _time_ut1_julian        = juliandate.to_julian(juliandate.from_gregorian(*_time_ut1))
-        # _time_standard_julian   = juliandate.to_julian(juliandate.from_gregorian(*_time_standard))
-        # _time_local_mean_julian = juliandate.to_julian(juliandate.from_gregorian(*_time_local_mean))
-        # annotations[ind]['is_displayed'] = True
-        # annotations[ind]['alt'] = float(rts_alt[0])
-        # annotations[ind]['az']  = float(rts_az[0])
-        # annotations[ind]['time_ut1']               = tuple(map(int, _time_ut1))
-        # annotations[ind]['time_ut1_julian']        = tuple(map(int, _time_ut1_julian[:6]))
-        # annotations[ind]['time_standard']          = tuple(map(int, _time_standard))
-        # annotations[ind]['time_standard_julian']   = tuple(map(int, _time_standard_julian[:6]))
-        # annotations[ind]['time_local_mean']        = tuple(map(int, _time_local_mean))
-        # annotations[ind]['time_local_mean_julian'] = tuple(map(int, _time_local_mean_julian[:6]))
-        # annotations[ind]['time_zone'] = offset_in_minutes / 60
 
     return annotations
 
