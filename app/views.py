@@ -145,7 +145,7 @@ def diagram():
     elif ra is not None and dec is not None:
         obj = {"radec": (ra, dec)}
     else:
-        return jsonify({"error": "Either planet name, Hipparchus Catalogue number, or (ra, dec) is not provided."}), 400
+        return jsonify({"error": "Either planet name, Hipparcos Catalogue number, or (ra, dec) is not provided."}), 400
 
     # Convert to Gregorian if the request is in Julian
     if cal == JULIAN:

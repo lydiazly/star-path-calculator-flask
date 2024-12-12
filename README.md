@@ -105,7 +105,7 @@ Parameters:
 - `day`: (*required*) a day of the month.
 - `lat`: (*required*) same as above
 - `lng`: (*required*) same as above
-- `name` | `hip` | `ra`, `dec`: (*required*) planet name (case insensitive), Hipparchus Catalogue number, or a RA/Dec pair
+- `name` | `hip` | `ra`, `dec`: (*required*) planet name (case insensitive), Hipparcos Catalogue number, or a RA/Dec pair
 - `tz`: the timezone identifier of this location
 - `cal`: calendar
   - `cal=` or not provided: Gregorian calendar
