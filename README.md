@@ -36,7 +36,7 @@ We are aiming to develop a user-friendly app to facilitate the research in histo
 - :sunrise: Calculates the star's **rising/setting/meridian-transit times** based on the provided date, location, and star.
 - :sunrise_over_mountains: Marks the [civil and nautical twilights](https://en.wikipedia.org/wiki/Twilight).
 - :classical_building: Covers dates from **3001 BCE to 3000 CE**.
-- :ringed_planet: Utilizes [JPL DE406 ephemeris](https://ssd.jpl.nasa.gov/planets/eph_export.html) and [Hipparcos Catelogue](https://www.cosmos.esa.int/web/hipparcos/home) to calculate positions of planets and stars for any given time.
+- :ringed_planet: Utilizes [JPL DE406 ephemeris](https://ssd.jpl.nasa.gov/planets/eph_export.html) and [Hipparcos Catalogue](https://www.cosmos.esa.int/web/hipparcos/home) to calculate positions of planets and stars for any given time.
 - :telescope: Includes [proper motion](https://en.wikipedia.org/wiki/Proper_motion) of a star if the Hipparcos Catalogue number is provided.
 - :calendar: Accepts the **[Gregorian](https://en.wikipedia.org/wiki/Gregorian_calendar)** or **[Julian](https://en.wikipedia.org/wiki/Julian_calendar)** calendar date input.
 - :star: Supports star or planet input by **name**, **Hipparcos Catalogue number**, or [ICRS coordinates](https://en.wikipedia.org/wiki/International_Celestial_Reference_System_and_its_realizations) **(RA, Dec)**.
@@ -201,7 +201,7 @@ S:
 
 The figure will be saved to `sp_{unix_timestamp}.svg`.
 
-Note that Skyfield counts "*34 arcminutes of atmospheric refraction at the horizon*" [[link](https://rhodesmill.org/skyfield/almanac.html#risings-and-settings)].
+> :bulb: Note that the package [Skyfield](https://rhodesmill.org/skyfield) defines the sunrise and sunset "[as the moment when the center of the sun is 50 arcminutes below the horizon, to account for both the average *solar radius of 16 arcminutes* and for roughly *34 arcminutes of atmospheric refraction* at the horizon](https://rhodesmill.org/skyfield/almanac.html#risings-and-settings)."
 
 <details>
 <summary>Usage</summary>
