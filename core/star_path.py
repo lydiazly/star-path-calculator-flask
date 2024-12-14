@@ -409,7 +409,8 @@ def get_star_path_diagram(t: Time, lng: float, lat: float, offset_in_minutes: fl
         except KeyError:
             raise ValueError("Invalid Hipparcos Catalogue number.")
     elif radec and len(radec) == 2:
-        s = Star(ra_hours=float(radec[0]), dec_degrees=float(radec[1]))
+        s = Star(ra_hours=float(radec[0]/360*24), dec_degrees=float(radec[1]))
+        # change the unit of RA from degrees to hours
 
     if not s:
         raise ValueError("Invalid celestial object.")
