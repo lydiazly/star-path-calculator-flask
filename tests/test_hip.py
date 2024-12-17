@@ -26,8 +26,7 @@ def parse_hip_from_file(filename):
     To generate the file, in the root dir:
     $ python -c "from utils.data_utils import hip_validation; hip_validation()" > tests/hip_invalid.txt
     """
-    hip_no_entry = []
-    hip_invalid = []
+    hip_no_entry, hip_invalid = [], []
     with open(filename, "r") as file:
         for line in file:
             hip = line.split(":")[0].strip()
@@ -46,7 +45,7 @@ hip_invalid, hip_no_entry = parse_hip_from_file(os.path.join(os.path.dirname(os.
 @pytest.mark.parametrize("hip_invalid", hip_invalid)
 def test_hip_invalid(hip_invalid):
     """Tests HIP entries where the ra/dec is NaN."""
-    ra = dl.hip_df.loc[hip_invalid]['ra_degrees']
+    ra = dl.hip_df.loc[hip_invalid, 'ra_degrees']
     assert np.isnan(ra), f"Expected NaN but got {ra}."
 
 

@@ -1,7 +1,7 @@
 # Star Path Calculator
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
-[![python](https://img.shields.io/badge/Python-3.10,_3.11-3776AB?logo=python&logoColor=white)](https://www.python.org) [![numpy](https://img.shields.io/badge/Numpy-2.0.1-013243?logo=numpy&logoColor=white)](https://numpy.org) [![pandas](https://img.shields.io/badge/Pandas-2.2.2-150458?logo=Pandas&logoColor=white)](https://pandas.pydata.org) [![matplotlib](https://img.shields.io/badge/Matplotlib-3.9.1.post1-12557C)](https://matplotlib.org) [![skyfield](https://img.shields.io/badge/Skyfield-1.49-BD9354)](https://rhodesmill.org/skyfield) [![juliandate](https://img.shields.io/badge/Juliandate-1.0.4-BD9354)](https://pypi.org/project/juliandate) [![tzfpy](https://img.shields.io/badge/tzfpy-0.15.5-blue)](https://github.com/ringsaturn/tzfpy) [![great-circle-calculator](https://img.shields.io/badge/Great_Circle_Calculator-1.3.1-brightgreen)](https://github.com/seangrogan/great_circle_calculator)
+[![python](https://img.shields.io/badge/Python-3.10,_3.11-3776AB?logo=python&logoColor=white)](https://www.python.org) [![numpy](https://img.shields.io/badge/Numpy-2.0.1-013243?logo=numpy&logoColor=white)](https://numpy.org) [![pandas](https://img.shields.io/badge/Pandas-2.2.2-150458?logo=Pandas&logoColor=white)](https://pandas.pydata.org) [![matplotlib](https://img.shields.io/badge/Matplotlib-3.9.1.post1-12557C)](https://matplotlib.org) [![pytest](https://img.shields.io/badge/pytest-8.3.4-0A9EDC)](https://pytest.org/) [![skyfield](https://img.shields.io/badge/Skyfield-1.49-BD9354)](https://rhodesmill.org/skyfield) [![juliandate](https://img.shields.io/badge/Juliandate-1.0.4-BD9354)](https://pypi.org/project/juliandate) [![tzfpy](https://img.shields.io/badge/tzfpy-0.15.5-blue)](https://github.com/ringsaturn/tzfpy) [![great-circle-calculator](https://img.shields.io/badge/Great_Circle_Calculator-1.3.1-brightgreen)](https://github.com/seangrogan/great_circle_calculator)
 
 This repository contains the source code of our [Star Path Viewer](https://star-path-viewer.pages.dev/) website, along with Python scripts for executing the code.
 
@@ -60,7 +60,7 @@ python3 -m pip install -r requirements.txt
 or
 
 ```sh
-python3 -m pip install pandas matplotlib skyfield juliandate tzfpy
+python3 -m pip install pandas matplotlib skyfield juliandate tzfpy pytest
 ```
 
 ## Script Usage
@@ -142,7 +142,7 @@ python3 ./scripts/get_star_path.py -2000 3 1 --lng 116 --lat 40 -o "jupiter"
 
 [Point Details]
 D1:
-  alt = 17.723
+  alt = 17.774
   az  = 146.437
   time_standard   (Gregorian) = -2000-03-01T05:54:05+08:00
   time_local_mean (Gregorian) = -2000-03-01T05:38:05
@@ -151,7 +151,7 @@ D1:
   time_local_mean (Julian)    = -2000-03-18T05:38:05
   time_ut1        (Julian)    = -2000-03-17T21:54:05
 D2:
-  alt = 20.744
+  alt = 20.787
   az  = 153.305
   time_standard   (Gregorian) = -2000-03-01T06:25:25+08:00
   time_local_mean (Gregorian) = -2000-03-01T06:09:25
@@ -160,7 +160,7 @@ D2:
   time_local_mean (Julian)    = -2000-03-18T06:09:25
   time_ut1        (Julian)    = -2000-03-17T22:25:25
 D3:
-  alt = 22.829
+  alt = 22.868
   az  = 159.596
   time_standard   (Gregorian) = -2000-03-01T06:52:35+08:00
   time_local_mean (Gregorian) = -2000-03-01T06:36:35
@@ -169,16 +169,16 @@ D3:
   time_local_mean (Julian)    = -2000-03-18T06:36:35
   time_ut1        (Julian)    = -2000-03-17T22:52:35
 R:
-  alt = -0.567
-  az  = 122.008
-  time_standard   (Gregorian) = -2000-03-01T03:41:25+08:00
-  time_local_mean (Gregorian) = -2000-03-01T03:25:25
-  time_ut1        (Gregorian) = -2000-02-29T19:41:25
-  time_standard   (Julian)    = -2000-03-18T03:41:25+08:00
-  time_local_mean (Julian)    = -2000-03-18T03:25:25
-  time_ut1        (Julian)    = -2000-03-17T19:41:25
+  alt = -0.000
+  az  = 122.000
+  time_standard   (Gregorian) = -2000-03-01T03:41:22+08:00
+  time_local_mean (Gregorian) = -2000-03-01T03:25:22
+  time_ut1        (Gregorian) = -2000-02-29T19:41:22
+  time_standard   (Julian)    = -2000-03-18T03:41:22+08:00
+  time_local_mean (Julian)    = -2000-03-18T03:25:22
+  time_ut1        (Julian)    = -2000-03-17T19:41:22
 T:
-  alt = 25.648
+  alt = 25.682
   az  = 180.000
   time_standard   (Gregorian) = -2000-03-01T08:15:01+08:00
   time_local_mean (Gregorian) = -2000-03-01T07:59:01
@@ -187,21 +187,21 @@ T:
   time_local_mean (Julian)    = -2000-03-18T07:59:01
   time_ut1        (Julian)    = -2000-03-18T00:15:01
 S:
-  alt = -0.567
-  az  = 237.996
-  time_standard   (Gregorian) = -2000-03-01T12:48:38+08:00
-  time_local_mean (Gregorian) = -2000-03-01T12:32:38
-  time_ut1        (Gregorian) = -2000-03-01T04:48:38
-  time_standard   (Julian)    = -2000-03-18T12:48:38+08:00
-  time_local_mean (Julian)    = -2000-03-18T12:32:38
-  time_ut1        (Julian)    = -2000-03-18T04:48:38
+  alt = -0.000
+  az  = 238.003
+  time_standard   (Gregorian) = -2000-03-01T12:48:40+08:00
+  time_local_mean (Gregorian) = -2000-03-01T12:32:40
+  time_ut1        (Gregorian) = -2000-03-01T04:48:40
+  time_standard   (Julian)    = -2000-03-18T12:48:40+08:00
+  time_local_mean (Julian)    = -2000-03-18T12:32:40
+  time_ut1        (Julian)    = -2000-03-18T04:48:40
 ```
 
 </details>
 
 The figure will be saved to `sp_{unix_timestamp}.svg`.
 
-> :bulb: Note that the package [Skyfield](https://rhodesmill.org/skyfield) defines the sunrise and sunset "[as the moment when the center of the sun is 50 arcminutes below the horizon, to account for both the average *solar radius of 16 arcminutes* and for roughly *34 arcminutes of atmospheric refraction* at the horizon](https://rhodesmill.org/skyfield/almanac.html#risings-and-settings)."
+> :bulb: Note that the [atmospheric refraction](https://en.wikipedia.org/wiki/Atmospheric_refraction) effect has been accounted for.
 
 <details>
 <summary>Usage</summary>
@@ -259,6 +259,9 @@ examples:
 - R. Tousey and M. J. Koomen, "The Visibility of Stars and Planets During Twilight," *Journal of the Optical Society of America*, Vol. 43, pp. 177-183, 1953. [Online]. Available: <https://opg.optica.org/josa/viewmedia.cfm?uri=josa-43-3-177&seq=0&html=true>
 
 ## Changelog
+
+- 2024-12-16
+  - Included atmospheric refraction in position calculation.
 
 - 2024-12-08
   - Added Local Mean Time (LMT).
