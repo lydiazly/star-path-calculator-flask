@@ -82,7 +82,7 @@ class StarObject:
                     raise ValueError("WARNING: No RA/Dec data available for this star in the Hipparcos Catalogue.")
                 s = Star.from_dataframe(_s)
             except KeyError:
-                raise ValueError("WARNING: Entry not found in Hipparcos Catalogue.")
+                raise ValueError("WARNING: Entry not found in the Hipparcos Catalogue.")
         elif self.radec and len(self.radec) == 2:
             # The unit of RA is converted from degrees to hours
             s = Star(ra_hours=float(self.radec[0]/360*24), dec_degrees=float(self.radec[1]))
