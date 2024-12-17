@@ -25,7 +25,7 @@ if dl.eph is None or dl.earth is None:
 
 def get_coords(year: int) -> dict:
     """
-    Calculates the time and coordinates of equinoxes and solstices for the given year.
+    Calculates the times and coordinates of equinoxes and solstices for the given year.
 
     Parameters:
         year (int): The year in Gregorian calendar.
@@ -78,7 +78,7 @@ def get_coords(year: int) -> dict:
 
 def get_seasons(year: int) -> dict:
     """
-    Calculates the time of equinoxes and solstices for the given year.
+    Calculates the times of equinoxes and solstices for the given year.
 
     Parameters:
         year (int): The year in Gregorian calendar.

@@ -1,0 +1,397 @@
+- hip=421: mag=8.83, radec=(nan, nan)
+* hip=672: no entry
+- hip=1338: mag=9.2, radec=(nan, nan)
+* hip=1569: no entry
+- hip=1902: mag=8.88, radec=(nan, nan)
+- hip=2189: mag=7.82, radec=(nan, nan)
+- hip=3158: mag=9.59, radec=(nan, nan)
+- hip=3482: mag=8.96, radec=(nan, nan)
+* hip=3814: no entry
+- hip=3856: mag=13.26, radec=(nan, nan)
+* hip=5200: no entry
+- hip=5502: mag=11.57, radec=(nan, nan)
+* hip=5791: no entry
+- hip=6132: mag=11.14, radec=(nan, nan)
+- hip=7635: mag=11.24, radec=(nan, nan)
+* hip=8402: no entry
+- hip=8538: mag=10.69, radec=(nan, nan)
+- hip=8713: mag=10.5, radec=(nan, nan)
+- hip=8781: mag=9.26, radec=(nan, nan)
+- hip=9429: mag=11.77, radec=(nan, nan)
+* hip=9584: no entry
+* hip=9626: no entry
+- hip=9867: mag=10.23, radec=(nan, nan)
+- hip=10270: mag=10.75, radec=(nan, nan)
+- hip=10659: mag=8.69, radec=(nan, nan)
+- hip=10689: mag=12.54, radec=(nan, nan)
+* hip=11119: no entry
+- hip=11692: mag=8.78, radec=(nan, nan)
+- hip=11829: mag=8.75, radec=(nan, nan)
+* hip=11916: no entry
+* hip=11961: no entry
+- hip=12103: mag=11.18, radec=(nan, nan)
+* hip=12388: no entry
+- hip=13235: mag=12.07, radec=(nan, nan)
+- hip=14275: mag=9.01, radec=(nan, nan)
+- hip=14277: mag=9.82, radec=(nan, nan)
+- hip=14951: mag=9.95, radec=(nan, nan)
+* hip=15088: no entry
+* hip=15417: no entry
+* hip=15502: no entry
+- hip=16216: mag=11.41, radec=(nan, nan)
+- hip=16218: mag=10.23, radec=(nan, nan)
+- hip=17201: mag=8.96, radec=(nan, nan)
+- hip=18045: mag=11.2, radec=(nan, nan)
+* hip=18193: no entry
+* hip=18200: no entry
+- hip=18377: mag=10.15, radec=(nan, nan)
+- hip=18404: mag=11.85, radec=(nan, nan)
+* hip=19006: no entry
+- hip=19424: mag=8.81, radec=(nan, nan)
+- hip=19708: mag=9.67, radec=(nan, nan)
+* hip=20461: no entry
+- hip=20488: mag=9.29, radec=(nan, nan)
+- hip=21185: mag=12.79, radec=(nan, nan)
+- hip=22992: mag=9.48, radec=(nan, nan)
+- hip=23299: mag=9.71, radec=(nan, nan)
+- hip=24042: mag=10.0, radec=(nan, nan)
+* hip=24045: no entry
+- hip=24078: mag=11.39, radec=(nan, nan)
+- hip=24360: mag=12.03, radec=(nan, nan)
+- hip=24539: mag=7.76, radec=(nan, nan)
+- hip=24648: mag=9.39, radec=(nan, nan)
+* hip=24908: no entry
+- hip=25050: mag=9.81, radec=(nan, nan)
+- hip=25105: mag=10.93, radec=(nan, nan)
+* hip=25384: no entry
+- hip=25836: mag=12.09, radec=(nan, nan)
+* hip=26911: no entry
+- hip=27262: mag=9.32, radec=(nan, nan)
+* hip=27274: no entry
+- hip=27464: mag=8.67, radec=(nan, nan)
+- hip=27981: mag=12.75, radec=(nan, nan)
+* hip=28058: no entry
+- hip=28121: mag=12.39, radec=(nan, nan)
+* hip=28810: no entry
+- hip=29119: mag=8.54, radec=(nan, nan)
+- hip=31067: mag=6.18, radec=(nan, nan)
+* hip=31077: no entry
+- hip=31132: mag=10.96, radec=(nan, nan)
+- hip=31153: mag=12.88, radec=(nan, nan)
+- hip=31157: mag=10.83, radec=(nan, nan)
+- hip=31437: mag=10.3, radec=(nan, nan)
+* hip=31441: no entry
+- hip=31500: mag=7.37, radec=(nan, nan)
+- hip=31825: mag=9.67, radec=(nan, nan)
+* hip=31865: no entry
+* hip=31869: no entry
+- hip=31999: mag=7.9, radec=(nan, nan)
+- hip=32000: mag=7.9, radec=(nan, nan)
+- hip=32340: mag=10.64, radec=(nan, nan)
+* hip=32720: no entry
+- hip=32914: mag=11.43, radec=(nan, nan)
+* hip=33870: no entry
+* hip=33967: no entry
+- hip=34226: mag=9.08, radec=(nan, nan)
+* hip=34232: no entry
+- hip=34467: mag=11.02, radec=(nan, nan)
+* hip=34593: no entry
+- hip=34716: mag=7.35, radec=(nan, nan)
+- hip=34836: mag=8.86, radec=(nan, nan)
+* hip=35175: no entry
+- hip=35195: mag=7.72, radec=(nan, nan)
+* hip=35292: no entry
+- hip=35311: mag=11.09, radec=(nan, nan)
+- hip=35571: mag=11.4, radec=(nan, nan)
+- hip=35964: mag=11.51, radec=(nan, nan)
+- hip=36007: mag=8.59, radec=(nan, nan)
+- hip=36109: mag=10.95, radec=(nan, nan)
+* hip=36230: no entry
+* hip=36353: no entry
+- hip=36609: mag=8.87, radec=(nan, nan)
+- hip=36642: mag=8.59, radec=(nan, nan)
+- hip=36649: mag=13.64, radec=(nan, nan)
+- hip=37417: mag=8.9, radec=(nan, nan)
+* hip=37807: no entry
+- hip=38256: mag=11.18, radec=(nan, nan)
+- hip=38398: mag=12.03, radec=(nan, nan)
+* hip=38450: no entry
+* hip=38452: no entry
+- hip=38562: mag=9.71, radec=(nan, nan)
+- hip=38821: mag=11.87, radec=(nan, nan)
+* hip=39151: no entry
+* hip=39615: no entry
+- hip=39753: mag=9.41, radec=(nan, nan)
+* hip=40207: no entry
+- hip=40272: mag=12.03, radec=(nan, nan)
+* hip=41023: no entry
+- hip=41110: mag=9.7, radec=(nan, nan)
+- hip=41397: mag=10.14, radec=(nan, nan)
+- hip=41405: mag=9.73, radec=(nan, nan)
+- hip=41884: mag=10.19, radec=(nan, nan)
+* hip=43168: no entry
+- hip=43283: mag=10.83, radec=(nan, nan)
+- hip=43329: mag=8.86, radec=(nan, nan)
+- hip=43344: mag=9.45, radec=(nan, nan)
+- hip=43708: mag=11.94, radec=(nan, nan)
+- hip=43820: mag=8.05, radec=(nan, nan)
+- hip=43946: mag=8.13, radec=(nan, nan)
+- hip=44039: mag=11.17, radec=(nan, nan)
+- hip=44197: mag=9.4, radec=(nan, nan)
+- hip=45108: mag=10.85, radec=(nan, nan)
+- hip=45109: mag=10.29, radec=(nan, nan)
+* hip=45172: no entry
+- hip=45205: mag=12.18, radec=(nan, nan)
+- hip=45792: mag=12.4, radec=(nan, nan)
+- hip=46500: mag=10.91, radec=(nan, nan)
+- hip=47386: mag=9.2, radec=(nan, nan)
+* hip=47481: no entry
+* hip=47855: no entry
+- hip=48307: mag=9.27, radec=(nan, nan)
+- hip=48645: mag=8.54, radec=(nan, nan)
+- hip=48665: mag=9.53, radec=(nan, nan)
+* hip=48831: no entry
+* hip=49190: no entry
+* hip=49361: no entry
+* hip=49550: no entry
+* hip=50224: no entry
+- hip=50572: mag=7.19, radec=(nan, nan)
+- hip=50640: mag=12.44, radec=(nan, nan)
+- hip=50751: mag=9.44, radec=(nan, nan)
+- hip=51426: mag=7.7, radec=(nan, nan)
+* hip=51431: no entry
+- hip=51496: mag=10.57, radec=(nan, nan)
+- hip=51588: mag=12.16, radec=(nan, nan)
+- hip=52021: mag=12.98, radec=(nan, nan)
+* hip=52081: no entry
+- hip=52585: mag=9.03, radec=(nan, nan)
+* hip=52754: no entry
+- hip=52800: mag=6.94, radec=(nan, nan)
+- hip=53310: mag=10.82, radec=(nan, nan)
+- hip=53573: mag=10.05, radec=(nan, nan)
+- hip=54144: mag=10.08, radec=(nan, nan)
+- hip=54171: mag=9.8, radec=(nan, nan)
+- hip=54353: mag=9.53, radec=(nan, nan)
+* hip=54637: no entry
+- hip=54812: mag=9.98, radec=(nan, nan)
+- hip=54948: mag=8.85, radec=(nan, nan)
+- hip=55203: mag=3.79, radec=(nan, nan)
+* hip=55419: no entry
+- hip=55622: mag=12.25, radec=(nan, nan)
+- hip=55826: mag=9.11, radec=(nan, nan)
+* hip=56283: no entry
+* hip=56288: no entry
+* hip=56804: no entry
+- hip=56934: mag=12.47, radec=(nan, nan)
+- hip=57037: mag=10.84, radec=(nan, nan)
+* hip=57147: no entry
+* hip=57354: no entry
+* hip=58156: no entry
+* hip=58209: no entry
+- hip=58999: mag=12.41, radec=(nan, nan)
+- hip=59018: mag=10.87, radec=(nan, nan)
+* hip=59097: no entry
+- hip=59154: mag=10.01, radec=(nan, nan)
+- hip=59189: mag=9.21, radec=(nan, nan)
+- hip=59273: mag=6.65, radec=(nan, nan)
+* hip=59304: no entry
+* hip=59860: no entry
+- hip=59963: mag=10.13, radec=(nan, nan)
+- hip=60178: mag=9.99, radec=(nan, nan)
+- hip=60450: mag=11.16, radec=(nan, nan)
+* hip=60606: no entry
+* hip=60656: no entry
+* hip=60898: no entry
+* hip=61056: no entry
+- hip=61062: mag=9.3, radec=(nan, nan)
+- hip=61200: mag=10.92, radec=(nan, nan)
+- hip=61231: mag=10.38, radec=(nan, nan)
+- hip=62292: mag=10.89, radec=(nan, nan)
+- hip=62295: mag=10.89, radec=(nan, nan)
+- hip=62622: mag=11.18, radec=(nan, nan)
+- hip=62719: mag=12.32, radec=(nan, nan)
+- hip=62937: mag=9.01, radec=(nan, nan)
+- hip=62947: mag=8.37, radec=(nan, nan)
+- hip=62967: mag=10.7, radec=(nan, nan)
+* hip=63146: no entry
+* hip=63158: no entry
+- hip=63447: mag=11.78, radec=(nan, nan)
+* hip=64239: no entry
+- hip=64354: mag=8.97, radec=(nan, nan)
+* hip=65576: no entry
+- hip=65863: mag=10.48, radec=(nan, nan)
+- hip=65908: mag=10.18, radec=(nan, nan)
+- hip=66187: mag=11.43, radec=(nan, nan)
+* hip=66518: no entry
+- hip=66677: mag=12.84, radec=(nan, nan)
+- hip=66747: mag=9.0, radec=(nan, nan)
+* hip=67089: no entry
+* hip=67295: no entry
+- hip=67616: mag=9.47, radec=(nan, nan)
+* hip=67920: no entry
+* hip=67924: no entry
+- hip=68059: mag=8.29, radec=(nan, nan)
+* hip=68098: no entry
+- hip=68588: mag=13.09, radec=(nan, nan)
+- hip=68820: mag=9.3, radec=(nan, nan)
+- hip=69192: mag=7.72, radec=(nan, nan)
+* hip=69217: no entry
+- hip=69782: mag=9.7, radec=(nan, nan)
+- hip=70878: mag=10.3, radec=(nan, nan)
+- hip=70958: mag=12.43, radec=(nan, nan)
+- hip=71228: mag=11.37, radec=(nan, nan)
+- hip=72588: mag=8.52, radec=(nan, nan)
+- hip=72860: mag=10.86, radec=(nan, nan)
+- hip=73533: mag=12.39, radec=(nan, nan)
+* hip=74720: no entry
+- hip=75865: mag=9.32, radec=(nan, nan)
+- hip=75901: mag=9.64, radec=(nan, nan)
+- hip=76059: mag=12.13, radec=(nan, nan)
+- hip=76316: mag=12.41, radec=(nan, nan)
+* hip=76367: no entry
+- hip=76462: mag=12.91, radec=(nan, nan)
+- hip=76640: mag=11.77, radec=(nan, nan)
+- hip=78411: mag=9.7, radec=(nan, nan)
+- hip=78528: mag=13.55, radec=(nan, nan)
+* hip=78626: no entry
+- hip=78727: mag=4.16, radec=(nan, nan)
+* hip=78778: no entry
+- hip=79592: mag=9.7, radec=(nan, nan)
+- hip=79729: mag=8.61, radec=(nan, nan)
+- hip=80579: mag=6.69, radec=(nan, nan)
+- hip=80630: mag=9.64, radec=(nan, nan)
+- hip=80796: mag=11.03, radec=(nan, nan)
+- hip=80880: mag=10.95, radec=(nan, nan)
+* hip=81359: no entry
+- hip=81402: mag=9.78, radec=(nan, nan)
+- hip=81538: mag=12.01, radec=(nan, nan)
+- hip=81694: mag=9.96, radec=(nan, nan)
+- hip=82021: mag=10.37, radec=(nan, nan)
+* hip=82616: no entry
+* hip=82846: no entry
+- hip=82899: mag=12.27, radec=(nan, nan)
+- hip=82904: mag=11.7, radec=(nan, nan)
+* hip=82924: no entry
+* hip=83437: no entry
+* hip=83470: no entry
+* hip=84039: no entry
+- hip=84915: mag=11.09, radec=(nan, nan)
+* hip=85550: no entry
+* hip=85754: no entry
+- hip=85778: mag=10.41, radec=(nan, nan)
+* hip=86018: no entry
+- hip=86257: mag=10.8, radec=(nan, nan)
+- hip=86261: mag=9.67, radec=(nan, nan)
+* hip=86337: no entry
+- hip=86405: mag=12.58, radec=(nan, nan)
+* hip=86909: no entry
+* hip=87011: no entry
+- hip=87122: mag=9.73, radec=(nan, nan)
+- hip=87343: mag=8.01, radec=(nan, nan)
+- hip=87816: mag=10.99, radec=(nan, nan)
+* hip=88138: no entry
+* hip=88168: no entry
+- hip=88444: mag=12.51, radec=(nan, nan)
+- hip=88639: mag=9.6, radec=(nan, nan)
+- hip=88734: mag=11.15, radec=(nan, nan)
+- hip=88759: mag=11.57, radec=(nan, nan)
+* hip=89395: no entry
+* hip=90057: no entry
+- hip=90518: mag=10.76, radec=(nan, nan)
+* hip=90682: no entry
+* hip=90688: no entry
+- hip=91256: mag=11.04, radec=(nan, nan)
+- hip=91724: mag=9.87, radec=(nan, nan)
+* hip=91787: no entry
+* hip=91835: no entry
+- hip=91924: mag=10.54, radec=(nan, nan)
+* hip=92357: no entry
+- hip=92536: mag=9.9, radec=(nan, nan)
+- hip=92584: mag=9.77, radec=(nan, nan)
+- hip=92836: mag=9.96, radec=(nan, nan)
+- hip=92897: mag=11.78, radec=(nan, nan)
+- hip=93018: mag=11.14, radec=(nan, nan)
+- hip=93538: mag=8.42, radec=(nan, nan)
+- hip=93563: mag=10.35, radec=(nan, nan)
+- hip=95493: mag=9.84, radec=(nan, nan)
+- hip=95672: mag=11.03, radec=(nan, nan)
+- hip=95723: mag=11.07, radec=(nan, nan)
+- hip=95811: mag=10.17, radec=(nan, nan)
+- hip=96005: mag=10.27, radec=(nan, nan)
+- hip=96073: mag=9.33, radec=(nan, nan)
+- hip=96108: mag=12.25, radec=(nan, nan)
+- hip=96410: mag=10.79, radec=(nan, nan)
+* hip=96513: no entry
+- hip=96569: mag=10.09, radec=(nan, nan)
+* hip=96578: no entry
+* hip=96685: no entry
+- hip=97202: mag=12.96, radec=(nan, nan)
+- hip=97237: mag=12.38, radec=(nan, nan)
+* hip=97453: no entry
+- hip=97570: mag=12.05, radec=(nan, nan)
+- hip=98625: mag=8.2, radec=(nan, nan)
+* hip=98686: no entry
+- hip=98713: mag=10.33, radec=(nan, nan)
+- hip=98790: mag=11.29, radec=(nan, nan)
+- hip=98811: mag=11.35, radec=(nan, nan)
+- hip=98909: mag=8.22, radec=(nan, nan)
+- hip=99261: mag=8.01, radec=(nan, nan)
+* hip=99413: no entry
+* hip=99630: no entry
+- hip=99861: mag=9.53, radec=(nan, nan)
+- hip=100006: mag=10.51, radec=(nan, nan)
+- hip=100086: mag=9.25, radec=(nan, nan)
+- hip=100109: mag=10.38, radec=(nan, nan)
+- hip=100245: mag=9.0, radec=(nan, nan)
+- hip=100304: mag=11.41, radec=(nan, nan)
+- hip=100364: mag=8.4, radec=(nan, nan)
+* hip=100410: no entry
+* hip=101609: no entry
+* hip=101775: no entry
+* hip=101872: no entry
+* hip=102008: no entry
+* hip=102079: no entry
+- hip=103180: mag=12.07, radec=(nan, nan)
+- hip=103992: mag=9.98, radec=(nan, nan)
+- hip=103995: mag=8.58, radec=(nan, nan)
+- hip=103996: mag=8.6, radec=(nan, nan)
+- hip=104240: mag=10.5, radec=(nan, nan)
+- hip=104243: mag=9.01, radec=(nan, nan)
+* hip=104519: no entry
+- hip=104645: mag=11.95, radec=(nan, nan)
+- hip=105230: mag=11.97, radec=(nan, nan)
+- hip=105296: mag=13.78, radec=(nan, nan)
+* hip=105516: no entry
+- hip=106124: mag=9.48, radec=(nan, nan)
+* hip=106808: no entry
+- hip=108291: mag=10.53, radec=(nan, nan)
+* hip=108292: no entry
+- hip=108802: mag=12.37, radec=(nan, nan)
+* hip=110971: no entry
+- hip=111277: mag=9.5, radec=(nan, nan)
+- hip=111293: mag=9.12, radec=(nan, nan)
+- hip=111432: mag=9.18, radec=(nan, nan)
+- hip=111606: mag=10.83, radec=(nan, nan)
+* hip=111772: no entry
+- hip=111858: mag=11.89, radec=(nan, nan)
+* hip=112054: no entry
+* hip=112313: no entry
+- hip=112316: mag=10.3, radec=(nan, nan)
+* hip=112445: no entry
+- hip=112465: mag=11.59, radec=(nan, nan)
+- hip=112469: mag=10.0, radec=(nan, nan)
+- hip=112856: mag=8.86, radec=(nan, nan)
+* hip=114095: no entry
+* hip=114122: no entry
+- hip=114349: mag=12.41, radec=(nan, nan)
+- hip=115125: mag=5.19, radec=(nan, nan)
+- hip=115269: mag=8.89, radec=(nan, nan)
+* hip=115426: no entry
+* hip=116059: no entry
+* hip=116992: no entry
+- hip=117643: mag=9.24, radec=(nan, nan)
+
+HIP range: [1, 118322]
+has_entry: 118184, no_entry: 138
+valid: 117930
+mag_nan: 0, ra_nan: 254, dec_nan: 254
