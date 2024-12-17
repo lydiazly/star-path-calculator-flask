@@ -200,3 +200,46 @@ def csv_to_json(input_filename='hip_ident_zh.csv'):
     df = pd.read_csv(os.path.join(data_dir, f'{basename}.csv'))
     df = df.fillna('')
     df_to_json(df, f'{basename}.json')
+
+
+def hip_validation(hip_min=None, hip_max=None):
+    import numpy as np
+    import core.data_loader as dl
+
+    if hip_min is None:
+        hip_min = dl.hip_df.head(1).index.item()
+    if hip_max is None:
+        hip_max = dl.hip_df.tail(1).index.item()
+
+    count = 0
+    count_mag_nan = 0
+    count_ra_nan = 0
+    count_dec_nan = 0
+    count_invalid = 0
+    for i in range (hip_min, hip_max+1):
+        try:
+            s = dl.hip_df.loc[i]
+            if any([np.isnan(s['magnitude']), np.isnan(s['ra_degrees']), np.isnan(s['dec_degrees'])]):
+                if np.isnan(s['magnitude']):
+                    count_mag_nan += 1
+                if np.isnan(s['ra_degrees']):
+                    count_ra_nan += 1
+                if np.isnan(s['dec_degrees']):
+                    count_dec_nan += 1
+                print(f"- hip={i}: mag={s['magnitude']}, radec=({s['ra_degrees']}, {s['dec_degrees']})")
+            else:
+                count += 1
+        except KeyError:
+            print(f"* hip={i}: no entry")
+            count_invalid += 1
+
+    print(f"\nHIP range: [{hip_min}, {hip_max}]")
+    print(f"has_entry: {hip_max-hip_min+1-count_invalid}, no_entry: {count_invalid}")
+    print(f"valid: {count}")
+    print(f"mag_nan: {count_mag_nan}, ra_nan: {count_ra_nan}, dec_nan: {count_dec_nan}")
+    """
+    HIP range: [1, 118322]
+    has_entry: 118184, no_entry: 138
+    valid: 117930
+    mag_nan: 0, ra_nan: 254, dec_nan: 254
+    """
