@@ -33,8 +33,8 @@ __all__ = ["get_star_path_diagram", "get_annotations"]
 
 
 tisca = load.timescale()
-refraction_limit = -34 / 60
 
+horizon_degree = -0.5666 - 0.008     # Maually set the refractive angle at the horizon to 34.476'
 label_fontsize = 10
 
 # Ensure ephemeris data is loaded
@@ -92,12 +92,12 @@ def get_star_altaz(s, t: Time, lng: float, lat: float):
     """
     Gets the altazimuth coordinates of a star at a specific moment.
     The horizon angles are not considered.
-    The atmospheric refraction is disregarded, neither.
+    The atmospheric refraction is included by setting parameter "temperature_C" to "standard".
     """
 
     loc = wgs84.latlon(longitude_degrees=lng, latitude_degrees=lat)
     observer = dl.earth + loc
-    alt, az, dist = observer.at(t).observe(s).apparent().altaz()
+    alt, az, dist = observer.at(t).observe(s).apparent().altaz(temperature_C='standard')
 
     return (alt, az)
 
@@ -115,7 +115,7 @@ def get_star_rising_time(s, t: Time, lng: float, lat: float, offset_in_minutes: 
     loc = wgs84.latlon(longitude_degrees=lng, latitude_degrees=lat)
     observer = dl.earth + loc
 
-    t_risings, y_risings = almanac.find_risings(observer, s, t0, t1)
+    t_risings, y_risings = almanac.find_risings(observer, s, t0, t1, horizon_degrees=horizon_degree)
 
     return t_risings[0], y_risings[0]
 
@@ -131,7 +131,7 @@ def get_star_setting_time(s, t: Time, t_rising: Time, lng: float, lat: float):
     loc = wgs84.latlon(longitude_degrees=lng, latitude_degrees=lat)
     observer = dl.earth + loc
 
-    t_settings, y_settings = almanac.find_settings(observer, s, t0, t1)
+    t_settings, y_settings = almanac.find_settings(observer, s, t0, t1, horizon_degrees=horizon_degree)
     for i, ti in zip(range(len(t_settings)), t_settings):
         if ti.ut1 - t_rising.ut1 > 1e-6:
             break
@@ -446,7 +446,7 @@ def get_star_path_diagram(t: Time, lng: float, lat: float, offset_in_minutes: fl
         rts_az.insert(1, mtp_az)
         rts_ts.insert(1, t_transit)
 
-    elif not y_rising and get_star_altaz(s, t_rising, lng, lat)[0].degrees < refraction_limit:
+    elif not y_rising and get_star_altaz(s, t_rising, lng, lat)[0].degrees < 0:
         ttp_alt, ttp_az, ttp_anno, ttp_ts = [], [], [], []
         rts_alt, rts_az, rts_ts = [], [], []
         raise ValueError('WARNING: This star never rises at this location on this date.')
