@@ -34,8 +34,8 @@ __all__ = ["get_diagram"]
 
 tisca = load.timescale()
 
-# Manually set the atmospheric refractive angle at the horizon to 34.476 arcminutes
-horizon_degree = -0.5666 - 0.008
+# Manually set the atmospheric refractive angle at the horizon to 34.452 arcminutes
+horizon_degrees = -0.5666 - 0.0076
 
 label_fontsize = 10
 
@@ -175,7 +175,7 @@ class StarObject:
         loc = wgs84.latlon(longitude_degrees=self.lng, latitude_degrees=self.lat)
         observer = dl.earth + loc
 
-        t_risings, y_risings = almanac.find_risings(observer, self.star, t0, t1, horizon_degrees=horizon_degree)
+        t_risings, y_risings = almanac.find_risings(observer, self.star, t0, t1, horizon_degrees=horizon_degrees)
 
         return t_risings[0], y_risings[0]
 
@@ -191,7 +191,7 @@ class StarObject:
         loc = wgs84.latlon(longitude_degrees=self.lng, latitude_degrees=self.lat)
         observer = dl.earth + loc
 
-        t_settings, y_settings = almanac.find_settings(observer, self.star, t0, t1, horizon_degrees=horizon_degree)
+        t_settings, y_settings = almanac.find_settings(observer, self.star, t0, t1, horizon_degrees=horizon_degrees)
         for i, ti in zip(range(len(t_settings)), t_settings):
             if ti.ut1 - t_rising.ut1 > 1e-6:
                 break
