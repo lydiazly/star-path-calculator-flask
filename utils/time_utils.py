@@ -4,7 +4,7 @@
 Functions to handle time conversions.
 """
 
-from typing import Tuple
+# from typing import Tuple
 from skyfield.api import load
 from pytz import timezone
 from datetime import datetime
@@ -51,7 +51,7 @@ def get_standard_offset_by_id(tz_id: str, dst: bool = False) -> float:
     return offset_in_minutes
 
 
-def ut1_to_standard_time(t: Tuple, offset_in_minutes: float) -> Tuple:
+def ut1_to_standard_time(t: tuple, offset_in_minutes: float) -> tuple:
     """
     Adds the offset to obtain twilight times in standard time.
     """
@@ -60,7 +60,7 @@ def ut1_to_standard_time(t: Tuple, offset_in_minutes: float) -> Tuple:
     return temp_t_standard
 
 
-def ut1_to_local_mean_time(t: Tuple, lng: float) -> Tuple:
+def ut1_to_local_mean_time(t: tuple, lng: float) -> tuple:
     """
     Adds the offset to obtain twilight times in local mean time.
     """
@@ -70,13 +70,13 @@ def ut1_to_local_mean_time(t: Tuple, lng: float) -> Tuple:
     return temp_t_local_mean
 
 
-def julian_to_gregorian(t_julian: Tuple) -> Tuple:
+def julian_to_gregorian(t_julian: tuple) -> tuple:
     t_gregorian = juliandate.to_gregorian(juliandate.from_julian(*t_julian))
     t_gregorian = (*map(int, t_gregorian[0:5]), float(t_gregorian[-2] + t_gregorian[-1] / 1e6))
     return t_gregorian
 
 
-def gregorian_to_julian(t_gregorian: Tuple) -> Tuple:
+def gregorian_to_julian(t_gregorian: tuple) -> tuple:
     t_julian = juliandate.to_julian(juliandate.from_gregorian(*t_gregorian))
     t_julian = (*map(int, t_julian[0:5]), float(t_julian[-2] + t_julian[-1] / 1e6))
     return t_julian

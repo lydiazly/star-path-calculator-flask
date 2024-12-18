@@ -129,7 +129,7 @@ examples:
 Example:
 
 ```bash
-python3 ./scripts/get_star_path.py -2000 3 1 --lng 116 --lat 40 -o "jupiter"
+python3 ./scripts/get_star_path.py -2000 3 1 --lat 40 --lng 116 -o "jupiter"
 ```
 
 <details>
@@ -207,7 +207,7 @@ The figure will be saved to `sp_{unix_timestamp}.svg`.
 <summary>Usage</summary>
 
 ```text
-usage: python3 get_star_path.py [-h] [--lat float] [--lng float] [-o str] [-j] [--name] [year] [month] [day]
+usage: python3 get_star_path.py [-h] [--lat float] [--lng float] [-o str] [-j] [--name] [--no-svg] [year] [month] [day]
 
 Specify a local date, location, and celestial object to draw the star path. Daylight Saving Time (DST) is ignored.
 
@@ -224,6 +224,7 @@ options:
   -o str, --obj str     planet name, Hipparcos Catalogue number, or the ICRS coordinates in the format 'ra,dec' (default: Mars)
   -j, --julian          use Julian calendar (default: Gregorian calendar)
   --name                print the proper name or the Bayer designation, if available (default: False)
+  --no-svg              do not export the SVG image (default: export SVG)
 
 date range:
   -3000-01-29 – 3000-05-06 (Gregorian)

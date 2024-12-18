@@ -46,11 +46,17 @@ def main():
                         help="longitude in decimal degrees (default: %(default)s)")
     parser.add_argument("-o", "--obj", metavar="str", type=str, default="Mars",
                         help="planet name, Hipparcos Catalogue number, or the ICRS coordinates in the format 'ra,dec' (default: %(default)s)")
-    parser.add_argument('-j', '--julian', action='store_true',
-                        help='use Julian calendar (default: Gregorian calendar)')
-    parser.add_argument('--name', action='store_true',
-                        help='print the proper name or the Bayer designation, if available (default: False)')
+    parser.add_argument("-j", "--julian", action="store_true",
+                        help="use Julian calendar (default: Gregorian calendar)")
+    parser.add_argument("--name", action="store_true",
+                        help="print the proper name or the Bayer designation, if available (default: False)")
+    parser.add_argument("--no-svg", dest="svg", action="store_false",
+                        help="do not export the SVG image (default: export SVG)")
     args = parser.parse_args()
+
+    if sys.version_info < (3, 9):
+        print("This program requires Python 3.9 or newer. Please upgrade your Python version.", file=sys.stderr)
+        sys.exit(1)
 
     print_hip_name = args.name
 
@@ -127,9 +133,10 @@ def main():
     filename = f'sp_{results["diagram_id"]}.svg'
 
     # Decode the base64 data to get the SVG content
-    svg_data = base64.b64decode(results["svg_data"]).decode('utf-8')
-    with open(filename, 'w', encoding='utf-8') as file:
-        file.write(svg_data)
+    if args.svg:
+        svg_data = base64.b64decode(results["svg_data"]).decode('utf-8')
+        with open(filename, 'w', encoding='utf-8') as file:
+            file.write(svg_data)
 
     print("\n[Point Details]")
     for item in results["annotations"]:
@@ -145,7 +152,8 @@ def main():
             print(f'  time_ut1        (Julian)    = {"T".join(format_datetime_iso(*item["time_ut1_julian"]))}')
             # print(f'  time_zone = {item["time_zone"]}')
 
-    print(f"\nSVG has been saved to '{filename}'")
+    if args.svg:
+        print(f"\nSVG has been saved to '{filename}'")
 
 
 if __name__ == "__main__":
