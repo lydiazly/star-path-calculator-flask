@@ -4,7 +4,7 @@
 Functions used only for scripts that are executed from the command line.
 """
 
-from typing import List
+# from typing import List
 import calendar
 import os
 from config import EPH_DATE_MIN, EPH_DATE_MAX
@@ -17,7 +17,7 @@ data_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__
 
 def format_datetime(year: int, month: int = 1, day: int = 1,
                     hour: int = 12, minute: int = 0, second: float = 0,
-                    month_first=False, abbr=True, year_only=False) -> List[str]:
+                    month_first=False, abbr=True, year_only=False) -> list[str]:
     """
     Formats the date and time into strings as '1 Jan 2000 CE' and '12:00:00[.000]'
     """
@@ -30,7 +30,7 @@ def format_datetime(year: int, month: int = 1, day: int = 1,
 
 
 def format_datetime_iso(year: int, month: int = 1, day: int = 1,
-                        hour: int = 12, minute: int = 0, second: float = 0) -> List[str]:
+                        hour: int = 12, minute: int = 0, second: float = 0) -> list[str]:
     """
     Formats the date and time into ISO format strings '2000-01-01 12:00:00[.000]'
     """

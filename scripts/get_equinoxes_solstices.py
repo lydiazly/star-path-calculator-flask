@@ -40,6 +40,10 @@ def main():
     #                     help="hh|hh:mm|hh:mm:ss, 24-hour format (default: %(default)s)")
     args = parser.parse_args()
 
+    if sys.version_info < (3, 9):
+        print("This program requires Python 3.9 or newer. Please upgrade your Python version.", file=sys.stderr)
+        sys.exit(1)
+
     # Set date ----------------------------------------------------------------|
     now = datetime.now()
     if args.year is None:
