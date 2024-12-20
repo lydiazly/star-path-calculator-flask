@@ -32,6 +32,8 @@ def get_coords(year: int) -> dict:
 
     Returns:
         dict: A dictionary containing the times and coordinates of equinoxes and solstices.
+        The derived positions are adjusted for light-time delay:
+        https://rhodesmill.org/skyfield/api-position.html#skyfield.positionlib.Barycentric.observe
     """
 
     tisca = load.timescale()
@@ -56,10 +58,6 @@ def get_coords(year: int) -> dict:
         ra_j2000, dec_j2000, _ = astrometric.radec()
         coord_j2000.append([ra_j2000._degrees, dec_j2000._degrees])
 
-    # _vernal_time = ts[0].ut1_calendar()
-    # _summer_time = ts[1].ut1_calendar()
-    # _autumnal_time = ts[2].ut1_calendar()
-    # _winter_time = ts[3].ut1_calendar()
     _vernal_time, _summer_time, _autumnal_time, _winter_time = [ti.ut1_calendar() for ti in ts]
 
     results = {
@@ -103,3 +101,17 @@ def get_seasons(year: int) -> dict:
     }
 
     return results
+
+
+def plot_ve_ra(year_start, year_end, step=1):
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    year_list = range(year_start, year_end+1, step)
+    ra_list = [get_coords(y)['vernal_ra']*3600 for y in year_list]
+
+    coefficients = np.polyfit(year_list, ra_list, 1)
+
+    plt.figure()
+    plt.plot(year_list, ra_list - np.poly1d(coefficients)(year_list))
+    plt.show()
