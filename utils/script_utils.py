@@ -19,7 +19,22 @@ def format_datetime(year: int, month: int = 1, day: int = 1,
                     hour: int = 12, minute: int = 0, second: float = 0,
                     month_first=False, abbr=True, year_only=False) -> list[str]:
     """
-    Formats the date and time into strings as '1 Jan 2000 CE' and '12:00:00[.000]'
+    Formats the datetime into strings in the format '1 Jan 2000 CE' and '12:00:00[.000]'.
+
+    Args:
+        year (int): Year. 0 is 1 BCE.
+        month (int): Month. Starts from 1. Defaults to `1` (January).
+        day (int): Day of the month. Defaults to `1`.
+        hour (int): Hours in 24-hour format. Defaults to `12`.
+        minute (int): Minutes. Defaults to `0`.
+        second (float): Seconds. Defaults to `0`.
+        month_first (bool): Whether to use month-day-year instead of day-month-year format. Defaults to `False`.
+        abbr (bool): Whether to use abbreviation instead of full name for month. Defaults to `True`.
+        year_only (bool): Whether to only return the year. Defaults to `False`.
+
+    Returns:
+        list[str]:
+        If `year_only` is False, the formatted date and the formatted time; otherwise, the year with CE/BCE notations.
     """
     year_str = f"{year} CE" if year > 0 else f"{-year + 1} BCE"
     month_str = calendar.month_abbr[month] if abbr else calendar.month_name[month]
@@ -32,7 +47,19 @@ def format_datetime(year: int, month: int = 1, day: int = 1,
 def format_datetime_iso(year: int, month: int = 1, day: int = 1,
                         hour: int = 12, minute: int = 0, second: float = 0) -> list[str]:
     """
-    Formats the date and time into ISO format strings '2000-01-01 12:00:00[.000]'
+    Formats the datetime into ISO format strings '2000-01-01' and '12:00:00[.000]'.
+
+    Args:
+        year (int): Year. 0 is 1 BCE.
+        month (int): Month. Starts from 1. Defaults to `1` (January).
+        day (int): Day of the month. Defaults to `1`.
+        hour (int): Hours in 24-hour format. Defaults to `12`.
+        minute (int): Minutes. Defaults to `0`.
+        second (float): Seconds. Defaults to `0`.
+
+    Returns:
+        list[str]:
+        The formatted string list [date, time].
     """
     date_str = f"{year}-{month:02d}-{day:02d}"
     sec_str = f"{int(second):02d}" if float(second).is_integer() else f"{second:06.3f}"
@@ -80,6 +107,18 @@ def validate_year(year: int):
 def decimal_to_hms(decimal_hours: float) -> dict:
     """
     Converts decimal hours to HMS (Hours, Minutes, Seconds).
+
+    Args:
+        decimal_hours (float):
+
+    Returns:
+        dict: A dictionary containing a sign and absolute HMS components:
+        {
+            'sign': sign (int),
+            'hours': abs(hours),
+            'minutes': minutes,
+            'seconds': seconds (int)
+        }
     """
     sign = -1 if decimal_hours < 0 else 1
     abs_decimal_hours = abs(decimal_hours)
@@ -100,6 +139,17 @@ def decimal_to_hms(decimal_hours: float) -> dict:
 def format_timezone(tz: float) -> str:
     """
     Formats a decimal UTC offset into a string.
+    Calls `decimal_to_hms` to convert the decimal hours to an HMS dict.
+
+    Args:
+        tz (float): Decimal UTC offset.
+
+    Returns:
+        The formatted UTC offset string.
+
+    Details:
+        This function internally calls:
+        - decimal_to_hms: Converts the decimal hours to an HMS dict.
     """
     hms = decimal_to_hms(tz)
     return f"{'-' if tz < 0 else '+'}{hms['hours']:02d}:{hms['minutes']:02d}"

@@ -583,7 +583,7 @@ class StarObject:
                 'time_ut1_julian':        tuple(map(int, _time_ut1_julian[:6])),
                 'time_standard_julian':   tuple(map(int, _time_standard_julian[:6])),
                 'time_local_mean_julian': tuple(map(int, _time_local_mean_julian[:6])),
-                'time_zone': self.offset_in_minutes / 60,
+                'time_zone': self.offset_in_minutes / 60,  # decimal hours
             })
 
         return annotations
