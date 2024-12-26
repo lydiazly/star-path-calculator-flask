@@ -27,11 +27,13 @@ def get_coords(year: int) -> dict:
     """
     Calculates the times and coordinates of equinoxes and solstices for the given year.
 
-    Parameters:
+    Args:
         year (int): The year in Gregorian calendar.
 
     Returns:
-        dict: A dictionary containing the times and coordinates of equinoxes and solstices.
+        dict: A dictionary containing the times and ICRS coordinates of equinoxes and solstices.
+        The derived positions are adjusted for light-time delay:
+        https://rhodesmill.org/skyfield/api-position.html#skyfield.positionlib.Barycentric.observe
     """
 
     tisca = load.timescale()
@@ -41,32 +43,22 @@ def get_coords(year: int) -> dict:
     # Find the times of the seasons
     ts, ys = find_discrete(t0, t1, seasons(dl.eph))
 
-    # Calculate the J2000 coordinates of the sun at those times
+    # Calculate the ICRS coordinates of the sun at those times
     sun = dl.eph['sun']
 
-    # coord_j2000 = np.zeros(shape=(0,2), dtype=float)
-    # for ti in ts:
-    #     astrometric = dl.earth.at(ti).observe(sun)
-    #     ra_j2000, dec_j2000, _ = astrometric.radec()
-    #     coord_j2000 = np.append(coord_j2000, [[ra_j2000._degrees, dec_j2000._degrees]], axis=0)
-
-    coord_j2000 = []
+    coord_icrs = []
     for ti in ts:
         astrometric = dl.earth.at(ti).observe(sun)
-        ra_j2000, dec_j2000, _ = astrometric.radec()
-        coord_j2000.append([ra_j2000._degrees, dec_j2000._degrees])
+        ra_icrs, dec_icrs, _ = astrometric.radec()
+        coord_icrs.append([ra_icrs._degrees, dec_icrs._degrees])
 
-    # _vernal_time = ts[0].ut1_calendar()
-    # _summer_time = ts[1].ut1_calendar()
-    # _autumnal_time = ts[2].ut1_calendar()
-    # _winter_time = ts[3].ut1_calendar()
     _vernal_time, _summer_time, _autumnal_time, _winter_time = [ti.ut1_calendar() for ti in ts]
 
     results = {
-        'vernal_ra': float(coord_j2000[0][0]), 'vernal_dec': float(coord_j2000[0][1]),
-        'summer_ra': float(coord_j2000[1][0]), 'summer_dec': float(coord_j2000[1][1]),
-        'autumnal_ra': float(coord_j2000[2][0]), 'autumnal_dec': float(coord_j2000[2][1]),
-        'winter_ra': float(coord_j2000[3][0]), 'winter_dec': float(coord_j2000[3][1]),
+        'vernal_ra': float(coord_icrs[0][0]), 'vernal_dec': float(coord_icrs[0][1]),
+        'summer_ra': float(coord_icrs[1][0]), 'summer_dec': float(coord_icrs[1][1]),
+        'autumnal_ra': float(coord_icrs[2][0]), 'autumnal_dec': float(coord_icrs[2][1]),
+        'winter_ra': float(coord_icrs[3][0]), 'winter_dec': float(coord_icrs[3][1]),
         'vernal_time': (*map(int, _vernal_time[:5]), float(_vernal_time[-1])),
         'summer_time': (*map(int, _summer_time[:5]), float(_summer_time[-1])),
         'autumnal_time': (*map(int, _autumnal_time[:5]), float(_autumnal_time[-1])),
@@ -80,7 +72,7 @@ def get_seasons(year: int) -> dict:
     """
     Calculates the times of equinoxes and solstices for the given year.
 
-    Parameters:
+    Args:
         year (int): The year in Gregorian calendar.
 
     Returns:
@@ -103,3 +95,17 @@ def get_seasons(year: int) -> dict:
     }
 
     return results
+
+
+def plot_ve_ra(year_start, year_end, step=1):
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    year_list = range(year_start, year_end+1, step)
+    ra_list = [get_coords(y)['vernal_ra']*3600 for y in year_list]
+
+    coefficients = np.polyfit(year_list, ra_list, 1)
+
+    plt.figure()
+    plt.plot(year_list, ra_list - np.poly1d(coefficients)(year_list))
+    plt.show()
