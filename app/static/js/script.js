@@ -24,18 +24,18 @@ const MONTHS = [
 const pad = number => number.toString().padStart(2, '0');
 
 /**
- * Formats the date and time into strings as 'January 1, 2000 CE' and '12:00:00[.000]'
+ * Formats the datetime into strings in the format 'January 1, 2000 CE' and '12:00:00[.000]'.
  *
- * @param {Object} params - An object containing year, month, day, hour, minute, second
- * @param {number} params.year - 0 is 1 BCE
- * @param {number} [params.month=1] - Starts from 1
- * @param {number} [params.day=1] - Day of the month
- * @param {number} [params.hour=12] - 24-hour format
- * @param {number} [params.minute=0] - Minutes
- * @param {number} [params.second=0] - Seconds (can be an integer or float)
- * @param {boolean} [params.monthFirst=true] - month-day-year or day-month-year
- * @param {boolean} [params.abbr=false] - use abbreviation or full name for month
- * @returns {Object} An object containing two strings: the formatted date and the formatted time.
+ * @param {Object} params - An object containing `year`, `month`, `day`, `hour`, `minute`, `second`, and some switches.
+ * @param {number} params.year - Year. 0 is 1 BCE.
+ * @param {number} [params.month=1] - Month. Starts from 1. Defaults to `1` (January).
+ * @param {number} [params.day=1] - Day of the month. Defaults to `1`.
+ * @param {number} [params.hour=12] - Hours in 24-hour format. Defaults to `12`.
+ * @param {number} [params.minute=0] - Minutes. Defaults to `0`.
+ * @param {number} [params.second=0] - Seconds (integer or float). Defaults to `0`.
+ * @param {boolean} [params.monthFirst=true] - Whether to use month-day-year instead of day-month-year format. Defaults to `true`.
+ * @param {boolean} [params.abbr=false] - Whether to use abbreviation instead of full name for month. Defaults to `false`.
+ * @returns {Object} An object containing three formatted strings: full `date`, `time`, and the `year` only.
  */
 const formatDateTime = ({ year, month = 1, day = 1, hour = 12, minute = 0, second = 0,
                           monthFirst = true, abbr = false }) => {
@@ -45,39 +45,46 @@ const formatDateTime = ({ year, month = 1, day = 1, hour = 12, minute = 0, secon
     ? `${monthStr} ${day}, ${yearStr}`
     : `${day} ${monthStr} ${yearStr}`;
   const secondStr = Number.isInteger(second) ? pad(second) : second.toFixed(3).padStart(6, '0');
+//   const secondStr = second.toFixed().padStart(2, '0');
   const timeStr = `${pad(hour)}:${pad(minute)}:${secondStr}`;
   return { date: dateStr, time: timeStr, year: yearStr };
 };
 
 /**
- * Formats the date and time into ISO format strings '2000-01-01 12:00:00[.000]'
+ * Formats the datetime into ISO format strings '+2000-01-01' and '12:00:00[.000]'
  *
- * @param {Object} params - An object containing year, month, day, hour, minute, second
- * @param {number} params.year - 0 is 1 BCE
- * @param {number} [params.month=1] - Starts from 1
- * @param {number} [params.day=1] - Day of the month
- * @param {number} [params.hour=12] - 24-hour format
- * @param {number} [params.minute=0] - Minutes
- * @param {number} [params.second=0] - Seconds (can be an integer or float)
- * @returns {Object} An object containing two strings: the formatted date and the formatted time.
+ * @param {Object} params - An object containing `year`, `month`, `day`, `hour`, `minute`, and `second`.
+ * @param {number} params.year - Year. 0 is 1 BCE.
+ * @param {number} [params.month=1] - Month. Starts from 1. Defaults to `1` (January).
+ * @param {number} [params.day=1] - Day of the month. Defaults to `1`.
+ * @param {number} [params.hour=12] - Hours in 24-hour format. Defaults to `12`.
+ * @param {number} [params.minute=0] - Minutes. Defaults to `0`.
+ * @param {number} [params.second=0] - Seconds (integer or float). Defaults to `0`.
+ * @returns {Object} An object containing two formatted strings: `date` and `time`.
  */
 const formatDateTimeISO = ({ year, month = 1, day = 1, hour = 12, minute = 0, second = 0 }) => {
-  const dateStr = [year, pad(month), pad(day)].join('-');
+  const yearStr = year >= 0 ? '+' + year.toString().padStart(4, '0') : '-' + (-year).toString().padStart(4, '0');
+  const dateStr = [yearStr, pad(month), pad(day)].join('-');
   const secondStr = Number.isInteger(second) ? pad(second) : second.toFixed(3).padStart(6, '0');
+//   const secondStr = second.toFixed().padStart(2, '0');
   const timeStr = `${pad(hour)}:${pad(minute)}:${secondStr}`;
   return { date: dateStr, time: timeStr };
 };
 
 /**
- * Formats a date and time array into a string.
- * 
- * @param {Object} params - An object containing a date and time array and other parameters
- * @param {number[]} params.dateTime - An array containing [year, month, day, hour, minute, second]
- * @param {boolean} [params.iso=true] - use ISO format or not
- * @param {string} [params.delim=' '] - Delimiter between date and time when using ISO format
- * @param {boolean} [params.monthFirst=true] - month-day-year or day-month-year
- * @param {boolean} [params.abbr=false] - use abbreviation or full name for month
+ * Formats a datetime array into a string.
+ * Calls `formatDateTimeISO` or `formatDateTime` to format the date and time. Then joins them.
+ *
+ * @param {Object} params - An object containing a datetime array and some switches.
+ * @param {number[]} params.dateTime - An array [year, month, day, hour, minute, second].
+ * @param {boolean} [params.iso=true] - Whether to use ISO format or not. Defaults to `true`.
+ * @param {string} [params.delim=' '] - Delimiter between date and time in ISO format. Defaults to `' '`.
+ * @param {boolean} [params.monthFirst=true] - Whether to use month-day-year instead of day-month-year format. Defaults to `true`.
+ * @param {boolean} [params.abbr=false] - Whether to use abbreviation or full name for month. Defaults to `false`.
  * @returns {string} The formatted date and time string.
+ *
+ * @see formatDateTimeISO
+ * @see formatDateTime
  */
 const dateTimeToStr = ({ dateTime, iso = true, delim = ' ', monthFirst = true, abbr = false }) => {
   if (!Array.isArray(dateTime) || dateTime.length < 6) return '';
@@ -86,7 +93,7 @@ const dateTimeToStr = ({ dateTime, iso = true, delim = ' ', monthFirst = true, a
     if (index === 5) return parseFloat(value);  // Parse the second as float
     return parseInt(value);  // Parse other values as int
   });
-  
+
   const dateTimeStrList = iso
     ? formatDateTimeISO({ year, month, day, hour, minute, second })
     : formatDateTime({ year, month, day, hour, minute, second, monthFirst, abbr });
@@ -98,19 +105,23 @@ const dateTimeToStr = ({ dateTime, iso = true, delim = ' ', monthFirst = true, a
 
 /**
  * Formats a date array into a string.
- * 
- * @param {Object} params - An object containing a date array and other parameters
- * @param {number[]} params.date - An array containing [year, month, day]
- * @param {boolean} [params.iso=true] - use ISO format or not
- * @param {boolean} [params.monthFirst=true] - month-day-year or day-month-year
- * @param {boolean} [params.abbr=false] - use abbreviation or full name for month
+ * Calls `formatDateTimeISO` or `formatDateTime` to format the date.
+ *
+ * @param {Object} params - An object containing a date array and some switches.
+ * @param {number[]} params.date - An array [year, month, day].
+ * @param {boolean} [params.iso=true] - Whether to use ISO format. Defaults to `true`.
+ * @param {boolean} [params.monthFirst=true] - Whether to use month-day-year instead of day-month-year format. Defaults to `true`.
+ * @param {boolean} [params.abbr=false] - Whether to use abbreviation instead of full name for month. Defaults to `false`.
  * @returns {string} The formatted date string.
+ *
+ * @see formatDateTimeISO
+ * @see formatDateTime
  */
 const dateToStr = ({ date, iso = true, monthFirst = true, abbr = false }) => {
   if (!Array.isArray(date) || date.length < 3) return '';
 
   const [year, month, day] = date.map((value) => parseInt(value));
-  
+
   const dateStr = iso
     ? formatDateTimeISO({ year, month, day }).date
     : formatDateTime({ year, month, day, monthFirst, abbr }).date;
@@ -215,7 +226,7 @@ async function handleFormSubmit(event) {
     // const hour   = parseInt(document.getElementById('hour').value)   || 12;
     // const minute = 0;
     // const second = 0;
-    
+
     if (!year && year !== 0) {
         year = now.getFullYear();
         // month = now.getMonth() + 1;  // JavaScript months are 0-based
