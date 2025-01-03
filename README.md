@@ -141,6 +141,15 @@ python3 ./scripts/get_star_path.py -2000 3 1 --lat 40 --lng 116 -o "jupiter"
 [Celestial Object] Jupiter
 
 [Point Details]
+R:
+  alt = 0.000
+  az  = 122.000
+  time_standard   (Gregorian) = -2000-03-01T03:41:22+08:00
+  time_local_mean (Gregorian) = -2000-03-01T03:25:22
+  time_ut1        (Gregorian) = -2000-02-29T19:41:22
+  time_standard   (Julian)    = -2000-03-18T03:41:22+08:00
+  time_local_mean (Julian)    = -2000-03-18T03:25:22
+  time_ut1        (Julian)    = -2000-03-17T19:41:22
 D1:
   alt = 17.774
   az  = 146.437
@@ -168,15 +177,6 @@ D3:
   time_standard   (Julian)    = -2000-03-18T06:52:35+08:00
   time_local_mean (Julian)    = -2000-03-18T06:36:35
   time_ut1        (Julian)    = -2000-03-17T22:52:35
-R:
-  alt = -0.000
-  az  = 122.000
-  time_standard   (Gregorian) = -2000-03-01T03:41:22+08:00
-  time_local_mean (Gregorian) = -2000-03-01T03:25:22
-  time_ut1        (Gregorian) = -2000-02-29T19:41:22
-  time_standard   (Julian)    = -2000-03-18T03:41:22+08:00
-  time_local_mean (Julian)    = -2000-03-18T03:25:22
-  time_ut1        (Julian)    = -2000-03-17T19:41:22
 T:
   alt = 25.682
   az  = 180.000
@@ -187,7 +187,7 @@ T:
   time_local_mean (Julian)    = -2000-03-18T07:59:01
   time_ut1        (Julian)    = -2000-03-18T00:15:01
 S:
-  alt = -0.000
+  alt = 0.000
   az  = 238.003
   time_standard   (Gregorian) = -2000-03-01T12:48:40+08:00
   time_local_mean (Gregorian) = -2000-03-01T12:32:40

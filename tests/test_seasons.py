@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-# tests/test_equinox_solstice.py
+# tests/test_seasons.py
 import pytest
-from core.coordinates import get_coords
+from core.coordinates import get_coords, get_seasons
 
 
-@pytest.mark.parametrize("year, data_expected", [
+data_expected = [
     (2000, {
         'vernal_time': (2000, 3, 20, 7, 35, 14.617520176605467),
         'vernal_ra': 0.006200246498259485,
@@ -33,8 +33,16 @@ from core.coordinates import get_coords
         'winter_ra': 269.62621859461376,
         'winter_dec': -23.435556239713698
     }),
-])
+]
 
-def test_coord(year, data_expected):
+
+@pytest.mark.parametrize("year, data_expected", data_expected)
+def test_coords(year, data_expected):
     """Tests calculating the times and coordinates of equinoxes and solstices."""
     assert get_coords(year) == data_expected
+
+
+@pytest.mark.parametrize("year, data_expected", data_expected)
+def test_seasons(year, data_expected):
+    """Tests calculating the times of equinoxes and solstices."""
+    assert get_seasons(year) == {k: data_expected[k] for k in ['vernal_time', 'summer_time', 'autumnal_time', 'winter_time']}

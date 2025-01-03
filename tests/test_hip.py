@@ -5,6 +5,7 @@ import numpy as np
 import os
 import core.data_loader as dl
 
+
 # https://www.cosmos.esa.int/web/hipparcos/catalogues
 @pytest.mark.parametrize("hip_valid, radec_expected", [
     (87937, "269.454, 4.668"),
@@ -37,6 +38,7 @@ def parse_hip_from_file(filename):
                 hip_number = int(hip.split("=")[1].strip())
                 hip_no_entry.append(hip_number)
     return hip_invalid, hip_no_entry
+
 
 # Read HIP numbers from the file
 hip_invalid, hip_no_entry = parse_hip_from_file(os.path.join(os.path.dirname(os.path.abspath(__file__)), "hip_invalid.txt"))

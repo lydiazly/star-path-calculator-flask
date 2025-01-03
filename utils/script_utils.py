@@ -61,7 +61,8 @@ def format_datetime_iso(year: int, month: int = 1, day: int = 1,
         list[str]:
         The formatted string list [date, time].
     """
-    date_str = f"{year}-{month:02d}-{day:02d}"
+    year_str = f"{year:04d}" if year > 0 else f"{year:+05d}"
+    date_str = f"{year_str}-{month:02d}-{day:02d}"
     sec_str = f"{int(second):02d}" if float(second).is_integer() else f"{second:06.3f}"
     time_str = f"{hour:02d}:{minute:02d}:{sec_str}"
     return [date_str, time_str]
@@ -146,10 +147,6 @@ def format_timezone(tz: float) -> str:
 
     Returns:
         The formatted UTC offset string.
-
-    Details:
-        This function internally calls:
-        - decimal_to_hms: Converts the decimal hours to an HMS dict.
     """
     hms = decimal_to_hms(tz)
     return f"{'-' if tz < 0 else '+'}{hms['hours']:02d}:{hms['minutes']:02d}"
