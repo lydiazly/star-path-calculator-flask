@@ -47,7 +47,7 @@ def format_datetime(year: int, month: int = 1, day: int = 1,
 def format_datetime_iso(year: int, month: int = 1, day: int = 1,
                         hour: int = 12, minute: int = 0, second: float = 0) -> list[str]:
     """
-    Formats the datetime into ISO format strings '2000-01-01' and '12:00:00[.000]'.
+    Formats the datetime into ISO format strings '+2000-01-01' and '12:00:00[.000]'.
 
     Args:
         year (int): Year. 0 is 1 BCE.
@@ -61,7 +61,7 @@ def format_datetime_iso(year: int, month: int = 1, day: int = 1,
         list[str]:
         The formatted string list [date, time].
     """
-    year_str = f"{year:04d}" if year > 0 else f"{year:+05d}"
+    year_str = f"{year:+05d}"
     date_str = f"{year_str}-{month:02d}-{day:02d}"
     sec_str = f"{int(second):02d}" if float(second).is_integer() else f"{second:06.3f}"
     time_str = f"{hour:02d}:{minute:02d}:{sec_str}"
