@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# core/coordinates.py
+# core/seasons.py
 """
 Functions to calculate the time and coordinates of equinoxes and solstices.
 
@@ -32,8 +32,8 @@ def get_coords(year: int) -> dict:
 
     Returns:
         dict: A dictionary containing the times and ICRS coordinates of equinoxes and solstices.
-        The derived positions are adjusted for light-time delay:
-        https://rhodesmill.org/skyfield/api-position.html#skyfield.positionlib.Barycentric.observe
+        The derived positions are adjusted for light-time delay
+        (https://rhodesmill.org/skyfield/api-position.html#skyfield.positionlib.Barycentric.observe).
     """
 
     tisca = load.timescale()
@@ -98,10 +98,11 @@ def get_seasons(year: int) -> dict:
 
 
 def plot_ve_ra(year_start, year_end, step=1):
+    """Plots the right ascensions of vernal equinoxes from `year_start` to `year_end`."""
     import numpy as np
     import matplotlib.pyplot as plt
 
-    year_list = range(year_start, year_end+1, step)
+    year_list = list(range(year_start, year_end+1, step))
     ra_list = [get_coords(y)['vernal_ra']*3600 for y in year_list]
 
     coefficients = np.polyfit(year_list, ra_list, 1)

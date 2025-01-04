@@ -111,7 +111,7 @@ options:
   -h, --help  show this help message and exit
 
 year range:
-  -3000/+3000 (Gregorian)
+  -2999/+2999 (Gregorian)
 examples:
   # The current year:
   python3 get_equinoxes_solstices.py
@@ -249,7 +249,7 @@ examples:
 
 - Bayer Designation and Proper Name [[FTP (ident4, ident6)](https://cdsarc.cds.unistra.fr/ftp/I/239/version_cd/tables)]
 
-- Timezone: [Timezone Boundary Builder](https://github.com/evansiroky/timezone-boundary-builder)
+- Time zones: [Timezone Boundary Builder](https://github.com/evansiroky/timezone-boundary-builder)
 
 ## References
 

@@ -29,16 +29,24 @@ naive_dt = datetime(2000, 1, 1)
 #     now = datetime.now()
 #     return (tz.utcoffset(now) - tz.dst(now)).total_seconds() / 60
 
+
 # def find_timezone(lat: float, lng: float) -> str:
 #     from timezonefinder import TimezoneFinder
 #     tf = TimezoneFinder()
 #     tz_id = tf.timezone_at(lng=lng, lat=lat)
 #     return tz_id
 
+
 def find_timezone(lat: float, lng: float) -> str:
+    """
+    Returns the time zone identifier (https://github.com/ringsaturn/tzfpy).
+    """
     from tzfpy import get_tz
     tz_id = get_tz(lng, lat)
+    if tz_id == 'Asia/Urumqi':
+        tz_id = 'Asia/Shanghai'
     return tz_id
+
 
 def get_standard_offset_by_id(tz_id: str, dst: bool = False) -> float:
     """

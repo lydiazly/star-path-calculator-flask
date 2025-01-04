@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# core/coordinates.py
+# core/seasons.py
 """
 Functions to calculate the coordinates of equinoxes and solstices.
 
