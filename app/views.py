@@ -2,7 +2,7 @@
 from flask import request, jsonify, render_template, current_app as app
 # from flask_limiter import Limiter
 # from flask_limiter.util import get_remote_address
-from core.coordinates import get_seasons
+from core.seasons import get_seasons
 from core.star_path import get_diagram
 from utils.time_utils import get_standard_offset_by_id, ut1_to_standard_time, julian_to_gregorian, gregorian_to_julian
 
@@ -39,7 +39,7 @@ JULIAN = "j"
 # @limiter.limit("6/second", override_defaults=False)
 def seasons():
     # [Gregorian]
-    from core.coordinates import get_coords
+    from core.seasons import get_coords
 
     lat   = request.args.get("lat", default=None, type=float)
     lng   = request.args.get("lng", default=None, type=float)

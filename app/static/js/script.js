@@ -1,9 +1,8 @@
 // app/static/js/script.js
 "use strict";
 
-const EPH_DATE_MIN = [-3000, 1, 29];  // 29 January 3001 BCE
+const EPH_DATE_MIN = [-3000, 1, 29];  // 29 January 3001 BCE (Gregorian)
 const EPH_DATE_MAX = [3000, 5, 6];  // 6 May 3000 CE
-// const DATE_IDS = ['year', 'month', 'day', 'hour'];
 const DATE_IDS = ['year'];
 const MONTHS = [
     { abbr: '', name: '' },
@@ -101,31 +100,6 @@ const dateTimeToStr = ({ dateTime, iso = true, delim = ' ', monthFirst = true, a
     ? `${dateTimeStrList.date}${delim}${dateTimeStrList.time}`
     : `${dateTimeStrList.date}, ${dateTimeStrList.time}`;
   return dateTimeStr;
-};
-
-/**
- * Formats a date array into a string.
- * Calls `formatDateTimeISO` or `formatDateTime` to format the date.
- *
- * @param {Object} params - An object containing a date array and some switches.
- * @param {number[]} params.date - An array [year, month, day].
- * @param {boolean} [params.iso=true] - Whether to use ISO format. Defaults to `true`.
- * @param {boolean} [params.monthFirst=true] - Whether to use month-day-year instead of day-month-year format. Defaults to `true`.
- * @param {boolean} [params.abbr=false] - Whether to use abbreviation instead of full name for month. Defaults to `false`.
- * @returns {string} The formatted date string.
- *
- * @see formatDateTimeISO
- * @see formatDateTime
- */
-const dateToStr = ({ date, iso = true, monthFirst = true, abbr = false }) => {
-  if (!Array.isArray(date) || date.length < 3) return '';
-
-  const [year, month, day] = date.map((value) => parseInt(value));
-
-  const dateStr = iso
-    ? formatDateTimeISO({ year, month, day }).date
-    : formatDateTime({ year, month, day, monthFirst, abbr }).date;
-  return dateStr;
 };
 
 function clearForm() {
@@ -242,13 +216,7 @@ async function handleFormSubmit(event) {
 
     /* Display the current value */
     document.getElementById('year').value   = `${year}`;
-    // document.getElementById('month').value  = `${month}`;
-    // document.getElementById('day').value    = `${day}`;
-    // document.getElementById('hour').value   = `${hour}`;
-    // document.getElementById('minute').value = `${minute}`;
-    // document.getElementById('second').value = `${second}`;
 
-    // const apiUrl = `/coords?year=${year}&month=${month}&day=${day}&hour=${hour}&minute=${minute}&second=${second}`;
     const apiUrl = `/seasons?tz=Etc%2FGMT&year=${year}`;
 
     try {

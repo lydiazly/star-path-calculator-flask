@@ -16,7 +16,7 @@ The Flask server of our [Star Path Viewer](https://star-path-viewer.pages.dev/) 
 - [Endpoints](#endpoints)
   - [1. Get dates, times, and and RA/Dec coordinates of equinoxes and solstices by specifying a year and location](#1-get-dates-times-and-and-radec-coordinates-of-equinoxes-and-solstices-by-specifying-a-year-and-location)
   - [2. Get only the date of one of the equinoxes and solstices](#2-get-only-the-date-of-one-of-the-equinoxes-and-solstices)
-  - [3. Plots the star path and calculates the rising/setting times based on the specified date, location, and star information](#3-plots-the-star-path-and-calculates-the-risingsetting-times-based-on-the-specified-date-location-and-star-information)
+  - [3. Plot the star path and calculates the rising/setting times and twilight stages](#3-plot-the-star-path-and-calculates-the-risingsetting-times-and-twilight-stages)
 
 ## Endpoints
 
@@ -26,16 +26,16 @@ The Flask server of our [Star Path Viewer](https://star-path-viewer.pages.dev/) 
 
 Parameters:
 
-- `year`: (*required*) a year in the range of (-3000, 3000). Note that *0* is *1 BCE*
-- `tz`: (*required*) a timezone identifier, e.g., `tz=Asia%2FShanghai`
-- `lat`: the latitude in decimal degrees
-- `lng`: the longitude in decimal degrees
+- `year`: (*required*) a year from -2999 to 2999. 0 equals 1 BCE.
+- `tz`: (*required*) a time zone identifier, e.g., `tz=Asia%2FShanghai`.
+- `lat`: the latitude in decimal degrees.
+- `lng`: the longitude in decimal degrees.
 
 If `tz` is not provided, `lat` and `lng` must be specified. If `tz`, `lat`, and `lng` are given together, only the value of `tz` will be used.
 
 Returns:
 
-- `results`: JSON formatted data contains all the obtained coordinates and times of the equinoxes and solstices
+- `results`: JSON formatted data contains all the obtained coordinates and times of the equinoxes and solstices.
 
 Example:
 
@@ -68,19 +68,19 @@ Example:
 
 Parameters:
 
-- `year`: (*required*) same as above
-- `tz`: (*required*) same as above
-- `lat`: same as above
-- `lng`: same as above
-- `flag`: (*required*)
-  - `flag=ve`: Vernal Equinox
-  - `flag=ss`: Summer Solstice
-  - `flag=ae`: Autumnal Equinox
-  - `flag=ws`: Winter Solstice
+- `year`: (*required*) same as above.
+- `tz`: (*required*) same as above.
+- `lat`: same as above.
+- `lng`: same as above.
+- `flag`: (*required*) season flag.
+  - `flag=ve`: vernal equinox (March equinox).
+  - `flag=ss`: summer solstice (June solstice).
+  - `flag=ae`: autumnal equinox (September equinox).
+  - `flag=ws`: winter solstice (December solstice).
 
 Returns:
 
-- `results`: JSON formatted data contains the obtained coordinates and times of the specified equinox or solstice
+- `results`: JSON formatted data contains the obtained coordinates and times of the specified equinox or solstice.
 
 Example:
 
@@ -94,29 +94,29 @@ Example:
 }
 ```
 
-### 3. Plots the star path and calculates the rising/setting times based on the specified date, location, and star information
+### 3. Plot the star path and calculates the rising/setting times and twilight stages
 
 `https://starpathcalculator.pythonanywhere.com/diagram`
 
 Parameters:
 
-- `year`: (*required*) same as above
-- `month`: (*required*) a month as a number (from 1 to 12).
-- `day`: (*required*) a day of the month.
-- `lat`: (*required*) same as above
-- `lng`: (*required*) same as above
-- `name` | `hip` | `ra`, `dec`: (*required*) planet name (case insensitive), Hipparcos Catalogue number, or a RA/Dec pair
-- `tz`: the timezone identifier of this location
-- `cal`: calendar
-  - `cal=` or not provided: Gregorian calendar
-  - `cal=j`: Julian calendar
+- `year`: (*required*) same as above.
+- `month`: (*required*) month as a number (from 1 to 12).
+- `day`: (*required*) day of the month.
+- `lat`: (*required*) same as above.
+- `lng`: (*required*) same as above.
+- `name` | `hip` | `ra`, `dec`: (*required*) planet name (case insensitive), Hipparcos Catalogue number, or a RA/Dec pair.
+- `tz`: the time zone identifier of this location.
+- `cal`: calendar flag.
+  - `cal=` or not provided: the Gregorian calendar.
+  - `cal=j`: the Julian calendar.
 
 If `tz` is not provided, it will be derived from the `lat` and `lng`.
 Specifying `tz` can enhance speed. However, if `tz` doesn't match the `lat` and `lng`, the result will be incorrect. To optimize performance, we do not verify this match.
 
 Returns:
 
-- `diagramId`: a string of a unix timestamp
-- `offset`: timezone offset in decimal hours
-- `svgData`: the Base64-encoded SVG data of the output figure
+- `diagramId`: a string of a unix timestamp.
+- `offset`: time zone offset in decimal hours.
+- `svgData`: the Base64-encoded SVG data of the output figure.
 - `annotations`: a list of details about the points on the figure, including dates in both the Gregorian and Julian calendars.
