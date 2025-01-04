@@ -47,7 +47,7 @@ def format_datetime(year: int, month: int = 1, day: int = 1,
 def format_datetime_iso(year: int, month: int = 1, day: int = 1,
                         hour: int = 12, minute: int = 0, second: float = 0) -> list[str]:
     """
-    Formats the datetime into ISO format strings '+2000-01-01' and '12:00:00[.000]'.
+    Formats the datetime into ISO 8601 format strings '+2000-01-01' and '12:00:00[.000]'.
 
     Args:
         year (int): Year. 0 is 1 BCE.
@@ -97,12 +97,12 @@ def validate_datetime(year: int, month: int, day: int,
             and (month > EPH_DATE_MAX[1]
                 or (month == EPH_DATE_MAX[1] and day > EPH_DATE_MAX[2])))
     ):
-        raise ValueError(f"Out of the ephemeris date range: {EPH_DATE_MIN_STR} \u2013 {EPH_DATE_MAX_STR}")
+        raise ValueError(f"Out of the ephemeris date range: {EPH_DATE_MIN_STR}/{EPH_DATE_MAX_STR}")
 
 
 def validate_year(year: int):
     if (year <= EPH_DATE_MIN[0] or year >= EPH_DATE_MAX[0]):
-        raise ValueError(f"Out of the ephemeris date range: {EPH_DATE_MIN_STR} \u2013 {EPH_DATE_MAX_STR}")
+        raise ValueError(f"Out of the year range: {EPH_DATE_MIN[0]+1}/+{EPH_DATE_MAX[0]-1}")
 
 
 def decimal_to_hms(decimal_hours: float) -> dict:

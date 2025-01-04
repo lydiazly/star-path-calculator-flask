@@ -111,7 +111,7 @@ options:
   -h, --help  show this help message and exit
 
 year range:
-  -3000-01-29 – 3000-05-06 (Gregorian)
+  -3000/+3000 (Gregorian)
 examples:
   # The current year:
   python3 get_equinoxes_solstices.py
@@ -227,7 +227,7 @@ options:
   --no-svg              do not export the SVG image (default: export SVG)
 
 date range:
-  -3000-01-29 – 3000-05-06 (Gregorian)
+  -3000-01-29/+3000-05-06 (Gregorian)
 examples:
   # Plot the star path of Mars:
   python3 get_star_path.py -o mars

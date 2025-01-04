@@ -21,7 +21,7 @@ from utils.script_utils import format_datetime, format_datetime_iso, validate_da
 prog = f"python3 {os.path.basename(__file__)}"
 description = "Specify a local date, location, and celestial object to draw the star path. Daylight Saving Time (DST) is ignored."
 epilog = f"""date range:
-  {EPH_DATE_MIN_STR} \u2013 {EPH_DATE_MAX_STR} (Gregorian)
+  {EPH_DATE_MIN_STR}/{EPH_DATE_MAX_STR} (Gregorian)
 examples:
   # Plot the star path of Mars:
   {prog} -o mars\n
