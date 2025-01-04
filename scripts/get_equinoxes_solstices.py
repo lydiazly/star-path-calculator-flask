@@ -13,13 +13,13 @@ import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from core.coordinates import get_coords
-from utils.script_utils import format_datetime, format_datetime_iso, validate_year, EPH_DATE_MIN_STR, EPH_DATE_MAX_STR
+from utils.script_utils import format_datetime, format_datetime_iso, validate_year, EPH_DATE_MIN, EPH_DATE_MAX
 
 
 prog = f"python3 {os.path.basename(__file__)}"
 description = "Specify a year to obtain the dates, times, and coordinates in RA and Dec of the equinoxes and solstices in that year."
 epilog = f"""year range:
-  {EPH_DATE_MIN_STR} \u2013 {EPH_DATE_MAX_STR} (Gregorian)
+  {EPH_DATE_MIN[0]}/+{EPH_DATE_MAX[0]} (Gregorian)
 examples:
   # The current year:
   {prog}\n
