@@ -51,7 +51,7 @@ const formatDateTime = ({ year, month = 1, day = 1, hour = 12, minute = 0, secon
 };
 
 /**
- * Formats the datetime into ISO format strings '+2000-01-01' and '12:00:00[.000]'
+ * Formats the datetime into ISO 8601 format strings '+2000-01-01' and '12:00:00[.000]'
  *
  * @param {Object} params - An object containing `year`, `month`, `day`, `hour`, `minute`, and `second`.
  * @param {number} params.year - Year. 0 is 1 BCE.
@@ -236,7 +236,7 @@ async function handleFormSubmit(event) {
     /* Validation for date */
     if (year <= EPH_DATE_MIN[0] || year >= EPH_DATE_MAX[0]) {
       document.getElementById("results").innerHTML = "";
-      document.getElementById("error").innerHTML = `<p>Out of the ephemeris date range: ${dateToStr({ date: EPH_DATE_MIN })}&nbsp;\u2013&nbsp;${dateToStr({ date: EPH_DATE_MAX })}</p>`;
+      document.getElementById("error").innerHTML = `<p>Out of the year range: ${EPH_DATE_MIN[0]+1}/+${EPH_DATE_MAX[0]-1}</p>`;
       return;
     }
 
