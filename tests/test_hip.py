@@ -7,14 +7,16 @@ import core.data_loader as dl
 
 
 # https://www.cosmos.esa.int/web/hipparcos/catalogues
-@pytest.mark.parametrize("hip_valid, radec_expected", [
-    (87937, "269.454, 4.668"),
-    ( 8102, "26.021, -15.940"),
-    (32349, "101.289, -16.713"),
-    (71683, "219.920, -60.835"),
-    (70890, "217.449, -62.681"),
-])
-
+@pytest.mark.parametrize(
+    "hip_valid, radec_expected",
+    [
+        (87937, "269.454, 4.668"),
+        ( 8102, "26.021, -15.940"),
+        (32349, "101.289, -16.713"),
+        (71683, "219.920, -60.835"),
+        (70890, "217.449, -62.681"),
+    ]
+)
 def test_hip_valid(hip_valid, radec_expected):
     """Tests valid HIP entries."""
     s = dl.hip_df.loc[hip_valid]
