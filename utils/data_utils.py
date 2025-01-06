@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # utils/data_utils.py
 """
-Functions used only for organizing and processing data.
+Functions used only for preparing the data.
 """
 
 import pandas as pd

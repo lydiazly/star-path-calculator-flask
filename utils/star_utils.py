@@ -18,6 +18,7 @@ df_hip_name.set_index('hip', inplace=True)
 
 
 def hip_to_name(hip: int) -> str:
+    """Finds the name of a given HIP."""
     try:
         name = df_hip_name.loc[hip, 'name']
     except KeyError:

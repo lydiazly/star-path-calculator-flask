@@ -36,6 +36,8 @@ def format_datetime(year: int, month: int = 1, day: int = 1,
         list[str]:
         If `year_only` is False, the formatted date and the formatted time; otherwise, the year with CE/BCE notations.
     """
+    if month <= 0 or month > 12:
+        raise ValueError("Month index out of range.")
     year_str = f"{year} CE" if year > 0 else f"{-year + 1} BCE"
     month_str = calendar.month_abbr[month] if abbr else calendar.month_name[month]
     date_str = f"{month_str} {day}, {year_str}" if month_first else f"{day} {month_str} {year_str}"
@@ -137,16 +139,16 @@ def decimal_to_hms(decimal_hours: float) -> dict:
     return {'sign': sign, 'hours': abs_hours, 'minutes': minutes, 'seconds': seconds}
 
 
-def format_timezone(tz: float) -> str:
+def format_timezone(offset_in_hours: float) -> str:
     """
-    Formats a decimal UTC offset into a string.
+    Formats a decimal UT1 offset in hours into a string.
     Calls `decimal_to_hms` to convert the decimal hours to an HMS dict.
 
     Args:
-        tz (float): Decimal UTC offset.
+        offset_in_hours (float): Decimal UT1 offset in hours.
 
     Returns:
-        The formatted UTC offset string.
+        The formatted UT1 offset string.
     """
-    hms = decimal_to_hms(tz)
-    return f"{'-' if tz < 0 else '+'}{hms['hours']:02d}:{hms['minutes']:02d}"
+    hms = decimal_to_hms(offset_in_hours)
+    return f"{'-' if offset_in_hours < 0 else '+'}{hms['hours']:02d}:{hms['minutes']:02d}"

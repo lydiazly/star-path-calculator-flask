@@ -39,7 +39,6 @@ test_cases = [
     ),
 ]
 
-
 @pytest.mark.parametrize("year, results_expected", test_cases)
 def test_coords(year, results_expected):
     """Tests calculating the times and coordinates of equinoxes and solstices."""
@@ -50,3 +49,28 @@ def test_coords(year, results_expected):
 def test_seasons(year, results_expected):
     """Tests calculating the times of equinoxes and solstices."""
     assert get_seasons(year) == {k: results_expected[k] for k in ['vernal_time', 'summer_time', 'autumnal_time', 'winter_time']}
+
+
+error_cases = [-3000, 3000]
+range_error_message = r"^ephemeris segment only covers dates [-+]?[0-9]{4}-[0-9]{2}-[0-9]{2} through [-+]?[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+
+@pytest.mark.parametrize("year_out_of_range", error_cases)
+def test_coords_raises_error(year_out_of_range):
+    """
+    Tests that `get_coords` raises a `EphemerisRangeError` when the year is out of range.
+    Verifies that the error message matches the expected text.
+    """
+    from skyfield.errors import EphemerisRangeError
+    with pytest.raises(EphemerisRangeError, match=range_error_message):
+        get_coords(year_out_of_range)
+
+
+@pytest.mark.parametrize("year_out_of_range", error_cases)
+def test_seasons_error(year_out_of_range):
+    """
+    Tests that `get_seasons` raises an `EphemerisRangeError` when the year is out of range.
+    Verifies that the error message matches the expected text.
+    """
+    from skyfield.errors import EphemerisRangeError
+    with pytest.raises(EphemerisRangeError, match=range_error_message):
+        get_seasons(year_out_of_range)

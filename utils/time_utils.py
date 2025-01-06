@@ -19,7 +19,7 @@ naive_dt = datetime(2000, 1, 1)
 
 # def get_standard_offset(lng: float, lat: float) -> float:
 #     """
-#     Returns a location's standard offset from UTC in minutes.
+#     Returns a location's standard offset from UT1 in minutes.
 #     The daylight savings time is disregarded.
 #     """
 #     tf = TimezoneFinder()
@@ -50,7 +50,7 @@ def find_timezone(lat: float, lng: float) -> str:
 
 def get_standard_offset_by_id(tz_id: str, dst: bool = False) -> float:
     """
-    Returns a location's standard offset from UTC in minutes.
+    Returns a location's standard offset from UT1 in minutes.
     The daylight savings time is disregarded.
     """
     tz = timezone(tz_id)
@@ -61,7 +61,7 @@ def get_standard_offset_by_id(tz_id: str, dst: bool = False) -> float:
 
 def ut1_to_standard_time(t: tuple, offset_in_minutes: float) -> tuple:
     """
-    Adds the offset to obtain twilight times in standard time.
+    Adds the offset in minutes to obtain the standard time.
     """
     temp_t = (t[0], t[1], t[2], t[3], t[4] + offset_in_minutes, t[5])
     temp_t_standard = tisca.ut1(*temp_t).ut1_calendar()
@@ -70,7 +70,7 @@ def ut1_to_standard_time(t: tuple, offset_in_minutes: float) -> tuple:
 
 def ut1_to_local_mean_time(t: tuple, lng: float) -> tuple:
     """
-    Adds the offset to obtain twilight times in local mean time.
+    Adds the offset in hours to obtain the local mean time.
     """
     offset_in_hours = lng / 15
     temp_t = (t[0], t[1], t[2], t[3] + offset_in_hours, t[4], t[5])

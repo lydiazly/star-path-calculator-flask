@@ -144,57 +144,57 @@ python3 ./scripts/get_star_path.py -2000 3 1 --lat 40 --lng 116 -o "jupiter"
 R:
   alt = 0.000
   az  = 122.000
-  time_standard   (Gregorian) = -2000-03-01T03:41:22+08:00
-  time_local_mean (Gregorian) = -2000-03-01T03:25:22
-  time_ut1        (Gregorian) = -2000-02-29T19:41:22
-  time_standard   (Julian)    = -2000-03-18T03:41:22+08:00
-  time_local_mean (Julian)    = -2000-03-18T03:25:22
-  time_ut1        (Julian)    = -2000-03-17T19:41:22
+  time_standard   (Gregorian) = -2000-03-01 03:41:22 UT1+08:00
+  time_local_mean (Gregorian) = -2000-03-01 03:25:22
+  time_ut1        (Gregorian) = -2000-02-29 19:41:22
+  time_standard   (Julian)    = -2000-03-18 03:41:22 UT1+08:00
+  time_local_mean (Julian)    = -2000-03-18 03:25:22
+  time_ut1        (Julian)    = -2000-03-17 19:41:22
 D1:
   alt = 17.774
   az  = 146.437
-  time_standard   (Gregorian) = -2000-03-01T05:54:05+08:00
-  time_local_mean (Gregorian) = -2000-03-01T05:38:05
-  time_ut1        (Gregorian) = -2000-02-29T21:54:05
-  time_standard   (Julian)    = -2000-03-18T05:54:05+08:00
-  time_local_mean (Julian)    = -2000-03-18T05:38:05
-  time_ut1        (Julian)    = -2000-03-17T21:54:05
+  time_standard   (Gregorian) = -2000-03-01 05:54:05 UT1+08:00
+  time_local_mean (Gregorian) = -2000-03-01 05:38:05
+  time_ut1        (Gregorian) = -2000-02-29 21:54:05
+  time_standard   (Julian)    = -2000-03-18 05:54:05 UT1+08:00
+  time_local_mean (Julian)    = -2000-03-18 05:38:05
+  time_ut1        (Julian)    = -2000-03-17 21:54:05
 D2:
   alt = 20.787
   az  = 153.305
-  time_standard   (Gregorian) = -2000-03-01T06:25:25+08:00
-  time_local_mean (Gregorian) = -2000-03-01T06:09:25
-  time_ut1        (Gregorian) = -2000-02-29T22:25:25
-  time_standard   (Julian)    = -2000-03-18T06:25:25+08:00
-  time_local_mean (Julian)    = -2000-03-18T06:09:25
-  time_ut1        (Julian)    = -2000-03-17T22:25:25
+  time_standard   (Gregorian) = -2000-03-01 06:25:25 UT1+08:00
+  time_local_mean (Gregorian) = -2000-03-01 06:09:25
+  time_ut1        (Gregorian) = -2000-02-29 22:25:25
+  time_standard   (Julian)    = -2000-03-18 06:25:25 UT1+08:00
+  time_local_mean (Julian)    = -2000-03-18 06:09:25
+  time_ut1        (Julian)    = -2000-03-17 22:25:25
 D3:
   alt = 22.868
   az  = 159.596
-  time_standard   (Gregorian) = -2000-03-01T06:52:35+08:00
-  time_local_mean (Gregorian) = -2000-03-01T06:36:35
-  time_ut1        (Gregorian) = -2000-02-29T22:52:35
-  time_standard   (Julian)    = -2000-03-18T06:52:35+08:00
-  time_local_mean (Julian)    = -2000-03-18T06:36:35
-  time_ut1        (Julian)    = -2000-03-17T22:52:35
+  time_standard   (Gregorian) = -2000-03-01 06:52:35 UT1+08:00
+  time_local_mean (Gregorian) = -2000-03-01 06:36:35
+  time_ut1        (Gregorian) = -2000-02-29 22:52:35
+  time_standard   (Julian)    = -2000-03-18 06:52:35 UT1+08:00
+  time_local_mean (Julian)    = -2000-03-18 06:36:35
+  time_ut1        (Julian)    = -2000-03-17 22:52:35
 T:
   alt = 25.682
   az  = 180.000
-  time_standard   (Gregorian) = -2000-03-01T08:15:01+08:00
-  time_local_mean (Gregorian) = -2000-03-01T07:59:01
-  time_ut1        (Gregorian) = -2000-03-01T00:15:01
-  time_standard   (Julian)    = -2000-03-18T08:15:01+08:00
-  time_local_mean (Julian)    = -2000-03-18T07:59:01
-  time_ut1        (Julian)    = -2000-03-18T00:15:01
+  time_standard   (Gregorian) = -2000-03-01 08:15:01 UT1+08:00
+  time_local_mean (Gregorian) = -2000-03-01 07:59:01
+  time_ut1        (Gregorian) = -2000-03-01 00:15:01
+  time_standard   (Julian)    = -2000-03-18 08:15:01 UT1+08:00
+  time_local_mean (Julian)    = -2000-03-18 07:59:01
+  time_ut1        (Julian)    = -2000-03-18 00:15:01
 S:
   alt = 0.000
   az  = 238.003
-  time_standard   (Gregorian) = -2000-03-01T12:48:40+08:00
-  time_local_mean (Gregorian) = -2000-03-01T12:32:40
-  time_ut1        (Gregorian) = -2000-03-01T04:48:40
-  time_standard   (Julian)    = -2000-03-18T12:48:40+08:00
-  time_local_mean (Julian)    = -2000-03-18T12:32:40
-  time_ut1        (Julian)    = -2000-03-18T04:48:40
+  time_standard   (Gregorian) = -2000-03-01 12:48:40 UT1+08:00
+  time_local_mean (Gregorian) = -2000-03-01 12:32:40
+  time_ut1        (Gregorian) = -2000-03-01 04:48:40
+  time_standard   (Julian)    = -2000-03-18 12:48:40 UT1+08:00
+  time_local_mean (Julian)    = -2000-03-18 12:32:40
+  time_ut1        (Julian)    = -2000-03-18 04:48:40
 ```
 
 </details>

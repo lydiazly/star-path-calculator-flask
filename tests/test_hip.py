@@ -4,6 +4,7 @@ import pytest
 import numpy as np
 import os
 import core.data_loader as dl
+from utils.star_utils import hip_to_name
 
 
 # https://www.cosmos.esa.int/web/hipparcos/catalogues
@@ -45,7 +46,6 @@ def parse_hip_from_file(filename):
 # Read HIP numbers from the file
 hip_invalid, hip_no_entry = parse_hip_from_file(os.path.join(os.path.dirname(os.path.abspath(__file__)), "hip_invalid.txt"))
 
-
 @pytest.mark.parametrize("hip_invalid", hip_invalid)
 def test_hip_invalid(hip_invalid):
     """Tests HIP entries where the ra/dec is NaN."""
@@ -58,3 +58,19 @@ def test_hip_no_entry(hip_no_entry):
     """Tests non-existent HIP entries."""
     with pytest.raises(KeyError, match=f"{hip_no_entry}"):
         dl.hip_df.loc[hip_no_entry]
+
+
+@pytest.mark.parametrize(
+    "hip, name_expected",
+    [
+        (91262, 'alf_Lyr/3_Lyr/Vega'),
+        (11767, 'alf_UMi/1_UMi/Polaris'),
+        (82080, 'eps_UMi/22_UMi'),
+        (102098, 'alf_Cyg/50_Cyg/Deneb'),
+        (0, ''),
+        (123, ''),
+    ]
+)
+def test_hip_to_name(hip, name_expected):
+    """Tests finding the name of a given HIP."""
+    assert hip_to_name(hip) == name_expected
