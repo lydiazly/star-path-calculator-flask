@@ -41,7 +41,7 @@ We are aiming to develop a user-friendly app to facilitate the research in histo
 - :calendar: Accepts the **[Gregorian](https://en.wikipedia.org/wiki/Gregorian_calendar)** or **[Julian](https://en.wikipedia.org/wiki/Julian_calendar)** calendar date input.
 - :star: Supports star or planet input by **name**, **Hipparcos Catalogue number**, or [ICRS coordinates](https://en.wikipedia.org/wiki/International_Celestial_Reference_System_and_its_realizations) **(RA, Dec)**.
 - :night_with_stars: Displays star paths with distinct line styles for daytime, twilight stages, and nighttime.
-- :clock1: Provides **[standard time](https://en.wikipedia.org/wiki/Standard_time)**, **[local mean time (LMT)](https://en.wikipedia.org/wiki/Local_mean_time)**, and **[UT1 time](https://en.wikipedia.org/wiki/Universal_Time)** in the results for the user's reference (*no Daylight Saving Time (DST) adjustments in this project*).
+- :clock1: Provides **[standard time](https://en.wikipedia.org/wiki/Standard_time)**, **[local mean time (LMT)](https://en.wikipedia.org/wiki/Local_mean_time)**, and **[UT1 time](https://en.wikipedia.org/wiki/Universal_Time)** in the results for the user's reference. (*The offsets are from UT1 and no Daylight Saving Time (DST) adjustments in this project.*)
 
 ## Installation
 
@@ -249,7 +249,7 @@ examples:
 
 - Bayer Designation and Proper Name [[FTP (ident4, ident6)](https://cdsarc.cds.unistra.fr/ftp/I/239/version_cd/tables)]
 
-- Time zones: [Timezone Boundary Builder](https://github.com/evansiroky/timezone-boundary-builder)
+- Time Zones: [Timezone Boundary Builder](https://github.com/evansiroky/timezone-boundary-builder)
 
 ## References
 
