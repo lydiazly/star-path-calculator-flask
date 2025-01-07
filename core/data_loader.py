@@ -2,7 +2,9 @@
 # core/data_loader.py
 
 """
-Use global variables eph and earth by referencing, e.g.:
+Initiates global variables `eph` and `earth`.
+
+Usage:
 ```
 import core.data_loader as dl
 some_value = dl.eph.some_method()
