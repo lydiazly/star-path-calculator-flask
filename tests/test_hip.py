@@ -30,21 +30,21 @@ def parse_hip_from_file(filename):
     To generate the file, in the root dir:
     $ python -c "from utils.data_utils import hip_validation; hip_validation()" > tests/hip_invalid.txt
     """
-    hip_no_entry, hip_invalid = [], []
+    hip_missing, hip_invalid = [], []
     with open(filename, "r") as file:
         for line in file:
             hip = line.split(":")[0].strip()
             if hip.startswith("-"):  # invalid (no radec)
                 hip_number = int(hip.split("=")[1].strip())
                 hip_invalid.append(hip_number)
-            elif hip.startswith("*"):  # no entry
+            elif hip.startswith("*"):  # missing
                 hip_number = int(hip.split("=")[1].strip())
-                hip_no_entry.append(hip_number)
-    return hip_invalid, hip_no_entry
+                hip_missing.append(hip_number)
+    return hip_invalid, hip_missing
 
 
 # Read HIP numbers from the file
-hip_invalid, hip_no_entry = parse_hip_from_file(os.path.join(os.path.dirname(os.path.abspath(__file__)), "hip_invalid.txt"))
+hip_invalid, hip_missing = parse_hip_from_file(os.path.join(os.path.dirname(os.path.abspath(__file__)), "hip_invalid.txt"))
 
 @pytest.mark.parametrize("hip_invalid", hip_invalid)
 def test_hip_invalid(hip_invalid):
@@ -53,11 +53,11 @@ def test_hip_invalid(hip_invalid):
     assert np.isnan(ra), f"Expected NaN but got {ra}."
 
 
-@pytest.mark.parametrize("hip_no_entry", hip_no_entry)
-def test_hip_no_entry(hip_no_entry):
+@pytest.mark.parametrize("hip_missing", hip_missing)
+def test_hip_no_entry(hip_missing):
     """Tests non-existent HIP entries."""
-    with pytest.raises(KeyError, match=f"{hip_no_entry}"):
-        dl.hip_df.loc[hip_no_entry]
+    with pytest.raises(KeyError, match=f"{hip_missing}"):
+        dl.hip_df.loc[hip_missing]
 
 
 @pytest.mark.parametrize(
