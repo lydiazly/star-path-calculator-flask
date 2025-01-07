@@ -234,21 +234,34 @@ def csv_to_json(input_filename='hip_ident_zh.csv'):
 
 
 def hip_validation(hip_min=None, hip_max=None):
+    """
+    HIP range: [1, 120416]
+    first/last HIP: 1/118322
+    entries: 118218
+    missing in [1, 118322]: 138
+    valid: 117955
+    mag_nan: 1, ra_nan: 263, dec_nan: 263
+    """
     import numpy as np
     import core.data_loader as dl
 
+    idx = dl.hip_df.index
+    hip_first = dl.hip_df.head(1).index.item()
+    hip_last = dl.hip_df.tail(1).index.item()
     if hip_min is None:
-        hip_min = dl.hip_df.head(1).index.item()
+        hip_min = dl.hip_df.index.min()
     if hip_max is None:
-        hip_max = dl.hip_df.tail(1).index.item()
+        hip_max = dl.hip_df.index.max()
 
-    count = 0
+    count_in = 0
+    count_valid = 0
     count_mag_nan = 0
     count_ra_nan = 0
     count_dec_nan = 0
-    count_invalid = 0
-    for i in range (hip_min, hip_max+1):
-        try:
+    count_missing = 0
+    for i in range(hip_min, hip_max+1):
+        if i in idx:
+            count_in += 1
             s = dl.hip_df.loc[i]
             if any([np.isnan(s['magnitude']), np.isnan(s['ra_degrees']), np.isnan(s['dec_degrees'])]):
                 if np.isnan(s['magnitude']):
@@ -259,21 +272,19 @@ def hip_validation(hip_min=None, hip_max=None):
                     count_dec_nan += 1
                 print(f"- hip={i}: mag={s['magnitude']}, radec=({s['ra_degrees']}, {s['dec_degrees']})")
             else:
-                count += 1
-        except KeyError:
+                count_valid += 1
+                if i < hip_first or i > hip_last:
+                    print(f"+ hip={i}: mag={s['magnitude']}, radec=({s['ra_degrees']}, {s['dec_degrees']})")
+        elif i >= hip_first and i <= hip_last:
+            count_missing += 1
             print(f"* hip={i}: no entry")
-            count_invalid += 1
 
     print(f"\nHIP range: [{hip_min}, {hip_max}]")
-    print(f"has_entry: {hip_max-hip_min+1-count_invalid}, no_entry: {count_invalid}")
-    print(f"valid: {count}")
+    print(f"first/last HIP: {hip_first}/{hip_last}")
+    print(f"entries: {count_in}")
+    print(f"missing in [{hip_first}, {hip_last}]: {count_missing}")
+    print(f"valid: {count_valid}")
     print(f"mag_nan: {count_mag_nan}, ra_nan: {count_ra_nan}, dec_nan: {count_dec_nan}")
-    """
-    HIP range: [1, 118322]
-    has_entry: 118184, no_entry: 138
-    valid: 117930
-    mag_nan: 0, ra_nan: 254, dec_nan: 254
-    """
 
 
 def docx_to_pkl():

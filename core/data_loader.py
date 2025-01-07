@@ -57,5 +57,6 @@ def load_data():
         else:
             _f = load.open(data_full_path)
         hip_df = hipparcos.load_dataframe(_f)
+        _f.close()
     except Exception as e:
         raise Exception(f"Failed to load Hipparcos data: {str(e)}")
