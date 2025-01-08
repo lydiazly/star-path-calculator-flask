@@ -14,7 +14,7 @@ __all__ = []
 data_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'data')
 
 
-def convert_id(id_value):
+def convert_id(id_value) -> str:
     """
     Converts Bayer Designation IDs for consistency.
 
@@ -53,19 +53,20 @@ def convert_id(id_value):
     return "".join(result)
 
 
-def merge_pinyin_with_apostrophe(pinyin_word_list):
-    """Helper function to join Pinyin characters."""
+def join_pinyin_syllables(syllable_list: list) -> str:
+    """Helper function to join pinyin syllables."""
     vowels = {'a', 'e', 'i', 'o', 'u'}
-    result = pinyin_word_list[0].title()
-    for i in range(1, len(pinyin_word_list)):
-        if pinyin_word_list[i][0] in vowels:
+    result = syllable_list[0].title()
+    for i in range(1, len(syllable_list)):
+        # Add an apostrophe if the next syllable begins with a vowel
+        if syllable_list[i][0] in vowels:
             result += "'"
-        result += pinyin_word_list[i].title() if pinyin_word_list[i-1][0] == '(' else pinyin_word_list[i]
+        result += syllable_list[i].title() if syllable_list[i-1][0] == '(' else syllable_list[i]
     return result
 
 
-def process_text(text):
-    """Helper function to process a Pinyin word."""
+def process_pinyin(text: str) -> str:
+    """Helper function to process pinyin."""
     from pypinyin import pinyin, load_phrases_dict, Style
     # from pypinyin_dict.phrase_pinyin_data import large_pinyin
     from pypinyin_dict.phrase_pinyin_data import zdic_cibs
@@ -79,29 +80,34 @@ def process_text(text):
     load_phrases_dict(pinyin_overwrite)
 
     pinyin_list = list(itertools.product(*pinyin(text, style=Style.NORMAL, heteronym=True, v_to_u=True)))
-    return ','.join([merge_pinyin_with_apostrophe(p) for p in pinyin_list]).replace('ü', 'u')
+    # pinyin_str = ','.join([join_pinyin_syllables(w) for w in pinyin_list]).replace('ü', 'u')
+    pinyin_str = ','.join([join_pinyin_syllables(w) for w in pinyin_list])  # Retains 'ü'
+    # pinyin_with_tone_list = list(itertools.product(*pinyin(text, heteronym=True, v_to_u=True)))
+    # pinyin_with_tone_str = ','.join([' '.join([c.title() for c in w]) for w in pinyin_with_tone_list])
+    return pinyin_str
 
 
-def get_pinyin(text):
-    """Converts a word to Pinyin."""
+def get_pinyin(text: str) -> str:
+    """Converts a word to pinyin."""
     if pd.isnull(text) or text == '':
         return ''
 
     if '/' in text:
-        pinyin_combined = '/'.join([process_text(s) for s in text.split('/')])
+        pinyin_combined = '/'.join([process_pinyin(s) for s in text.split('/')])
     else:
-        pinyin_combined = process_text(text)
+        pinyin_combined = process_pinyin(text)
 
     print(f'{text}\t{pinyin_combined}')
     return pinyin_combined
 
 
 def load_name_zh() -> pd.DataFrame:
-    """Reads the table containing Traditional Chinese names then add Simplified Chinese and Pinyin columns."""
-    df = pd.read_csv(os.path.join(data_dir, 'star-name-zh.csv'))
-    df.sort_values(by=['Const', 'Id', 'Name_en'], inplace=True)
-    df.reset_index(drop=True, inplace=True)
-    df_to_csv(df, 'star-name-zh_sorted.csv')
+    """Reads the table containing Traditional Chinese names then add Simplified Chinese and pinyin columns."""
+    # df = pd.read_csv(os.path.join(data_dir, 'star-name-zh.csv'))
+    # df.sort_values(by=['Const', 'Id', 'Name_en'], inplace=True)
+    # df.reset_index(drop=True, inplace=True)
+    # df_to_csv(df, 'star-name-zh_sorted.csv')
+    df = pd.read_csv(os.path.join(data_dir, 'star-name-zh_sorted.csv'))
 
     df['Id_new'] = df['Id'].apply(convert_id)
     df['Bayer Designation'] = df['Id_new'] + "_" + df['Const']
@@ -112,10 +118,10 @@ def load_name_zh() -> pd.DataFrame:
 
     # Add Simplified Chinese column
     import opencc
-    converter = opencc.OpenCC('hk2s.json')  # Traditional (HK) to Simplified
+    converter = opencc.OpenCC('hk2s.json')  # Traditional (HK) to simplified
     df_name_zh['Name_zh'] = df_name_zh['Name_zh_hk'].apply(converter.convert)
 
-    # Add Pinyin column
+    # Add pinyin column
     df_name_zh['Pinyin'] = df_name_zh['Name_zh'].apply(get_pinyin)
     df_to_csv(df_name_zh, 'bayer-zh.csv')
     return df_name_zh
@@ -130,7 +136,7 @@ def load_hip_ident() -> pd.DataFrame:
     2. Correct Bayer Designations.
     3. Group by HIP and merge on HIP.
     4. Combine names into a single 'name' column.
-    5. Save to 'hip_ident_zh.csv'.
+    5. Save to 'hip_ident_zh.csv' and returns the DataFrame.
     """
     import numpy as np
 
@@ -220,6 +226,7 @@ def df_to_json(df: pd.DataFrame, filename='hip_ident.json'):
     data_dict = df.to_dict(orient='records')
     with open(os.path.join(data_dir, filename), 'w') as json_file:
         json.dump(data_dict, json_file, indent=4)
+        json_file.write("\n")
 
 
 def df_to_csv(df: pd.DataFrame, filename='hip_ident.csv'):

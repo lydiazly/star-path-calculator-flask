@@ -17,7 +17,7 @@ data_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__
 
 def format_datetime(year: int, month: int = 1, day: int = 1,
                     hour: int = 12, minute: int = 0, second: float = 0,
-                    month_first=False, abbr=True, year_only=False) -> list[str]:
+                    month_first=False, abbr=True, year_only=False) -> (str | tuple[str, str]):
     """
     Formats the datetime into strings in the format '1 Jan 2000 CE' and '12:00:00[.000]'.
 
@@ -33,8 +33,8 @@ def format_datetime(year: int, month: int = 1, day: int = 1,
         year_only (bool): Whether to only return the year. Defaults to `False`.
 
     Returns:
-        list[str]:
-        If `year_only` is False, the formatted date and the formatted time; otherwise, the year with CE/BCE notations.
+        tuple[str, str] | str:
+        If `year_only` is False, the formatted string tuple (date, time); otherwise, the year string with CE/BCE notations.
     """
     if month <= 0 or month > 12:
         raise ValueError("Month index out of range.")
@@ -43,11 +43,11 @@ def format_datetime(year: int, month: int = 1, day: int = 1,
     date_str = f"{month_str} {day}, {year_str}" if month_first else f"{day} {month_str} {year_str}"
     sec_str = f"{int(second):02d}" if float(second).is_integer() else f"{second:06.3f}"
     time_str = f"{hour:02d}:{minute:02d}:{sec_str}"
-    return [year_str] if year_only else [date_str, time_str]
+    return year_str if year_only else (date_str, time_str)
 
 
 def format_datetime_iso(year: int, month: int = 1, day: int = 1,
-                        hour: int = 12, minute: int = 0, second: float = 0) -> list[str]:
+                        hour: int = 12, minute: int = 0, second: float = 0) -> tuple[str, str]:
     """
     Formats the datetime into ISO 8601 format strings '+2000-01-01' and '12:00:00[.000]'.
 
@@ -60,14 +60,14 @@ def format_datetime_iso(year: int, month: int = 1, day: int = 1,
         second (float): Seconds. Defaults to `0`.
 
     Returns:
-        list[str]:
-        The formatted string list [date, time].
+        tuple[str, str]:
+        The formatted string tuple (date, time).
     """
     year_str = f"{year:+05d}"
     date_str = f"{year_str}-{month:02d}-{day:02d}"
     sec_str = f"{int(second):02d}" if float(second).is_integer() else f"{second:06.3f}"
     time_str = f"{hour:02d}:{minute:02d}:{sec_str}"
-    return [date_str, time_str]
+    return date_str, time_str
 
 
 EPH_DATE_MIN_STR, _ = format_datetime_iso(*EPH_DATE_MIN)
