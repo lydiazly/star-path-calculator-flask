@@ -55,7 +55,7 @@ def main():
         print(str(e), file=sys.stderr)
         sys.exit(1)
 
-    year_str, *_ = format_datetime(*datetime_list, year_only=True)
+    year_str = format_datetime(*datetime_list, year_only=True)
 
     print(f"Dates, times, and ICRS coordinates (J2000) of the equinoxes and solstices in {year_str}:")
     print(f'\n[Vernal Equinox]   {" ".join(format_datetime_iso(*results["vernal_time"]))} (UT1)')

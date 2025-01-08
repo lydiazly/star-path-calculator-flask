@@ -7,15 +7,15 @@ from utils.script_utils import format_datetime, format_datetime_iso, validate_da
 @pytest.mark.parametrize(
     "datetime_dict, datetime_str_expected",
     [
-        ({'year': 2000, 'year_only': True}, ['2000 CE']),
-        ({'year': 0, 'year_only': True},    ['1 BCE']),
-        ({'year': -3000, 'year_only': True}, ['3001 BCE']),
-        ({'year': -30000, 'year_only': True}, ['30001 BCE']),
-        ({'year': 2024, 'month': 9, 'day': 2, 'hour': 23, 'minute': 59, 'second': 59.999}, ['2 Sep 2024 CE', '23:59:59.999']),
-        ({'year': 0, 'month': 12, 'day': 31, 'hour': 23, 'minute': 59, 'second': 59.9999}, ['31 Dec 1 BCE', '23:59:60.000']),
-        ({'year': -500, 'month': 1, 'day': 3, 'month_first': True}, ['Jan 3, 501 BCE', '12:00:00']),
-        ({'year': -500, 'month': 1, 'day': 3, 'month_first': True, 'abbr': False}, ['January 3, 501 BCE', '12:00:00']),
-        ({'year': -500, 'month': 1, 'day': 3, 'abbr': False}, ['3 January 501 BCE', '12:00:00']),
+        ({'year': 2000, 'year_only': True}, '2000 CE'),
+        ({'year': 0, 'year_only': True}, '1 BCE'),
+        ({'year': -3000, 'year_only': True}, '3001 BCE'),
+        ({'year': -30000, 'year_only': True}, '30001 BCE'),
+        ({'year': 2024, 'month': 9, 'day': 2, 'hour': 23, 'minute': 59, 'second': 59.999}, ('2 Sep 2024 CE', '23:59:59.999')),
+        ({'year': 0, 'month': 12, 'day': 31, 'hour': 23, 'minute': 59, 'second': 59.9999}, ('31 Dec 1 BCE', '23:59:60.000')),
+        ({'year': -500, 'month': 1, 'day': 3, 'month_first': True}, ('Jan 3, 501 BCE', '12:00:00')),
+        ({'year': -500, 'month': 1, 'day': 3, 'month_first': True, 'abbr': False}, ('January 3, 501 BCE', '12:00:00')),
+        ({'year': -500, 'month': 1, 'day': 3, 'abbr': False}, ('3 January 501 BCE', '12:00:00')),
     ]
 )
 def test_format_datetime(datetime_dict, datetime_str_expected):
@@ -36,12 +36,12 @@ def test_format_datetime_error(month_out_of_range):
 @pytest.mark.parametrize(
     "datetime_tuple, datetime_str_expected",
     [
-        ((2000,),                   ['+2000-01-01', '12:00:00']),
-        ((20000, 12, 31),          ['+20000-12-31', '12:00:00']),
-        ((100, 2, 15, 1, 1, 1),     ['+0100-02-15', '01:01:01']),
-        ((0, 1, 1, 0, 0, 0.12345),  ['+0000-01-01', '00:00:00.123']),
-        ((-3000, 1, 1, 0, 0, 0.1),  ['-3000-01-01', '00:00:00.100']),
-        ((-30000,),                ['-30000-01-01', '12:00:00']),
+        ((2000,),                   ('+2000-01-01', '12:00:00')),
+        ((20000, 12, 31),          ('+20000-12-31', '12:00:00')),
+        ((100, 2, 15, 1, 1, 1),     ('+0100-02-15', '01:01:01')),
+        ((0, 1, 1, 0, 0, 0.12345),  ('+0000-01-01', '00:00:00.123')),
+        ((-3000, 1, 1, 0, 0, 0.1),  ('-3000-01-01', '00:00:00.100')),
+        ((-30000,),                ('-30000-01-01', '12:00:00')),
     ]
 )
 def test_format_datetime_iso(datetime_tuple, datetime_str_expected):
