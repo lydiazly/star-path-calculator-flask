@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 # utils/star_utils.py
-"""
-Functions to handle Hipparcos Catalogue number, names, etc.
-"""
-
+"""Functions to handle Hipparcos Catalogue number, names, etc."""
 import pandas as pd
 import os
 from config import HIP_NAME_FILE

@@ -1,9 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""
-The main script to calculate and print coordinates from the terminal.
-"""
-
+"""Script to calculate and print coordinates."""
 import argparse
 from datetime import datetime
 import sys

@@ -1,15 +1,12 @@
 # -*- coding: utf-8 -*-
 # core/seasons.py
-"""
-Functions to calculate the time and coordinates of equinoxes and solstices.
+"""Functions to calculate the time and coordinates of equinoxes and solstices.
 
-Use global variables eph and earth by referencing, e.g.:
-```
-import core.data_loader as dl
-some_value = dl.eph.some_method()
-```
+Refer to the global variables `eph` and `earth` by:
+>>> import core.data_loader as dl
+>>> eph = dl.eph
+>>> earth = dl.earth
 """
-
 from skyfield.api import load
 from skyfield.almanac import find_discrete, seasons
 import core.data_loader as dl
@@ -24,8 +21,7 @@ if dl.eph is None or dl.earth is None:
 
 
 def get_coords(year: int) -> dict:
-    """
-    Calculates the times and coordinates of equinoxes and solstices for the given year.
+    """Calculates the times and coordinates of equinoxes and solstices for the given year.
 
     Args:
         year (int): The year in Gregorian calendar.
@@ -35,7 +31,6 @@ def get_coords(year: int) -> dict:
         The derived positions are adjusted for light-time delay
         (https://rhodesmill.org/skyfield/api-position.html#skyfield.positionlib.Barycentric.observe).
     """
-
     tisca = load.timescale()
     t0 = tisca.ut1(year, 1, 1, 0, 0, 0)
     t1 = tisca.ut1(year + 1, 1, 1, 0, 0, 0)
@@ -69,8 +64,7 @@ def get_coords(year: int) -> dict:
 
 
 def get_seasons(year: int) -> dict:
-    """
-    Calculates the times of equinoxes and solstices for the given year.
+    """Calculates the times of equinoxes and solstices for the given year.
 
     Args:
         year (int): The year in Gregorian calendar.
@@ -78,7 +72,6 @@ def get_seasons(year: int) -> dict:
     Returns:
         dict: A dictionary containing the times of equinoxes and solstices.
     """
-
     tisca = load.timescale()
     t0 = tisca.ut1(year, 1, 1, 0, 0, 0)
     t1 = tisca.ut1(year + 1, 1, 1, 0, 0, 0)

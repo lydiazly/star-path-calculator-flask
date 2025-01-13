@@ -1,16 +1,14 @@
 # -*- coding: utf-8 -*-
 # core/data_loader.py
 
-"""
-Initiates global variables `eph` and `earth`.
+"""Loads data and initiates global variables `eph`, `earth`, and `hip_df`.
 
-Usage:
-```
-import core.data_loader as dl
-some_value = dl.eph.some_method()
-```
+Example usage:
+    >>> import core.data_loader as dl
+    >>> earth = dl.earth
+    >>> earth.target_name
+    '399 EARTH'
 """
-
 from skyfield.api import load, load_file
 from skyfield.data import hipparcos
 import os
@@ -28,6 +26,7 @@ data_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__
 
 
 def load_data():
+    """Loads the ephemeris data and the Hipparcos Catalogue."""
     global eph, earth, hip_df
 
     os.makedirs(data_dir, exist_ok=True)

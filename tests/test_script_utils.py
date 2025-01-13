@@ -25,8 +25,7 @@ def test_format_datetime(datetime_dict, datetime_str_expected):
 
 @pytest.mark.parametrize("month_out_of_range", [(2000, -1), (2000, 0), (2000, 13)])
 def test_format_datetime_error(month_out_of_range):
-    """
-    Tests that `format_datetime` raises an `ValueError` when the month is out of range.
+    """Tests that `format_datetime` raises an `ValueError` when the month is out of range.
     Verifies that the error message matches the expected text.
     """
     with pytest.raises(ValueError, match=r"^Month index out of range\.$"):

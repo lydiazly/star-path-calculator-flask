@@ -25,8 +25,8 @@ def test_hip_valid(hip_valid, radec_expected):
 
 
 def parse_hip_from_file(filename):
-    """
-    Parses the file containing invalid HIP numbers.
+    """Parses the file containing invalid HIP numbers.
+
     To generate the file, in the root dir:
     $ python -c "from utils.data_utils import hip_validation; hip_validation()" > tests/hip_invalid.txt
     """
