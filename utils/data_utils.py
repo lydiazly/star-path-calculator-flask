@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 # utils/data_utils.py
-"""
-Functions used only for preparing the data.
-"""
-
+"""Functions used only for preparing the data."""
 import pandas as pd
 # import pickle
 import os
@@ -15,8 +12,7 @@ data_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__
 
 
 def convert_id(id_value) -> str:
-    """
-    Converts Bayer Designation IDs for consistency.
+    """Converts Bayer Designation IDs for consistency.
 
     Examples:
       a --> alf
@@ -128,8 +124,7 @@ def load_name_zh() -> pd.DataFrame:
 
 
 def load_hip_ident() -> pd.DataFrame:
-    """
-    Merges proper names and Bayer Designations with Chinese names.
+    """Merges proper names and Bayer Designations with Chinese names.
 
     Does the following:
     1. Read proper names, Bayer Designations, and Chinese names from files.
@@ -241,7 +236,8 @@ def csv_to_json(input_filename='hip_ident_zh.csv'):
 
 
 def hip_validation(hip_min=None, hip_max=None):
-    """
+    """ Validates HIP in the data source.
+
     HIP range: [1, 120416]
     first/last HIP: 1/118322
     entries: 118218
@@ -296,7 +292,10 @@ def hip_validation(hip_min=None, hip_max=None):
 
 def docx_to_pkl():
     """Reads docx files and saves the entries to pkl files."""
-    from docx import Document
+    try:
+        from docx import Document
+    except ModuleNotFoundError:
+        raise ModuleNotFoundError("Module docx not found. Install by:\npython -m pip install python-docx")
 
     col_name = "Proper Name"
     doc_name = "ident6.docx"

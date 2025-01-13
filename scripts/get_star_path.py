@@ -1,9 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""
-The main script to plot the star path from the terminal.
-"""
-
+"""Script to plot the star path."""
 import argparse
 from datetime import datetime
 import calendar

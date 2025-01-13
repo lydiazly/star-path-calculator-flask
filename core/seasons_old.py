@@ -1,15 +1,12 @@
 # -*- coding: utf-8 -*-
 # core/seasons.py
-"""
-Functions to calculate the coordinates of equinoxes and solstices.
+"""[Deprecated] Functions to calculate the time and coordinates of equinoxes and solstices.
 
-Use global variables eph and earth by referencing, e.g.:
-```
-import core.data_loader as dl
-some_value = dl.eph.some_method()
-```
+Refer to the global variables `eph` and `earth` by:
+>>> import core.data_loader as dl
+>>> eph = dl.eph
+>>> earth = dl.earth
 """
-
 from typing import Tuple
 from skyfield.api import load, Star, Angle, Timescale
 from skyfield.framelib import ecliptic_frame

@@ -56,8 +56,7 @@ range_error_message = r"^ephemeris segment only covers dates [-+]?[0-9]{4}-[0-9]
 
 @pytest.mark.parametrize("year_out_of_range", error_cases)
 def test_coords_raises_error(year_out_of_range):
-    """
-    Tests that `get_coords` raises a `EphemerisRangeError` when the year is out of range.
+    """Tests that `get_coords` raises a `EphemerisRangeError` when the year is out of range.
     Verifies that the error message matches the expected text.
     """
     from skyfield.errors import EphemerisRangeError
@@ -67,8 +66,7 @@ def test_coords_raises_error(year_out_of_range):
 
 @pytest.mark.parametrize("year_out_of_range", error_cases)
 def test_seasons_error(year_out_of_range):
-    """
-    Tests that `get_seasons` raises an `EphemerisRangeError` when the year is out of range.
+    """Tests that `get_seasons` raises an `EphemerisRangeError` when the year is out of range.
     Verifies that the error message matches the expected text.
     """
     from skyfield.errors import EphemerisRangeError

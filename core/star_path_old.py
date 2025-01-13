@@ -1,19 +1,17 @@
 # -*- coding: utf-8 -*-
 # core/star_path.py
-"""
-Functions to plot star paths.
+"""[Deprecated] Functions to plot star paths.
 
-Use global variables eph and earth by referencing, e.g.:
-```
-import core.data_loader as dl
-some_value = dl.eph.some_method()
-```
+Refer to the global variables `eph`, `earth`, and `hip_df` by:
+>>> import core.data_loader as dl
+>>> eph = dl.eph
+>>> earth = dl.earth
+>>> hip_df = dl.hip_df
 """
-
 import matplotlib
 matplotlib.use('Agg')  # Use the Agg backend for non-interactive plotting
 
-from typing import Tuple
+# from typing import Tuple
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.patheffects as path_effects
@@ -46,10 +44,7 @@ if dl.eph is None or dl.earth is None:
 
 
 def get_twilight_time(t0: Time, t1: Time, lng: float, lat: float):
-    """
-    Gets twilight transition times.
-    """
-
+    """Gets twilight transition times."""
     loc = wgs84.latlon(longitude_degrees=lng, latitude_degrees=lat)
 
     f = almanac.dark_twilight_day(dl.eph, loc)
@@ -91,12 +86,11 @@ def get_twilight_time(t0: Time, t1: Time, lng: float, lat: float):
 
 
 def get_star_altaz(s, t: Time, lng: float, lat: float):
-    """
-    Gets the altazimuth coordinates of a star at a specific moment.
+    """Gets the altazimuth coordinates of a star at a specific moment.
+
     The horizon angles are not considered.
     The atmospheric refraction is included by setting parameter "temperature_C" to "standard".
     """
-
     loc = wgs84.latlon(longitude_degrees=lng, latitude_degrees=lat)
     observer = dl.earth + loc
     alt, az, dist = observer.at(t).observe(s).apparent().altaz(temperature_C='standard')
@@ -105,10 +99,7 @@ def get_star_altaz(s, t: Time, lng: float, lat: float):
 
 
 def get_star_rising_time(s, t: Time, lng: float, lat: float, offset_in_minutes: float):
-    """
-    Gets the star's rising time. The star path is calculated from this moment.
-    """
-
+    """Gets the star's rising time. The star path is calculated from this moment."""
     year, month, day, _, _, _ = t.ut1_calendar()
 
     t0 = tisca.ut1(year, month, day, 0, 0 - offset_in_minutes, 0)
@@ -123,10 +114,7 @@ def get_star_rising_time(s, t: Time, lng: float, lat: float, offset_in_minutes: 
 
 
 def get_star_setting_time(s, t: Time, t_rising: Time, lng: float, lat: float):
-    """
-    Gets the star's setting time. The star path's calculation ends at this moment.
-    """
-
+    """Gets the star's setting time. The star path's calculation ends at this moment."""
     t0 = t
     t1 = tisca.ut1_jd(t0.ut1 + 3)
 
@@ -142,10 +130,7 @@ def get_star_setting_time(s, t: Time, t_rising: Time, lng: float, lat: float):
 
 
 def get_star_meridian_transit_time(s, t: Time, lng: float, lat: float):
-    """
-    Gets the star's meridian transit time.
-    """
-
+    """Gets the star's meridian transit time."""
     t0 = t
     t1 = tisca.ut1_jd(t0.ut1 + 2)
 
@@ -158,11 +143,10 @@ def get_star_meridian_transit_time(s, t: Time, lng: float, lat: float):
 
 
 def plot_in_style(ax, event, t_jd0, t_jd1, s, lng: float, lat: float):
-    """
-    Plots the star path in different styles for different twilight conditions.
+    """Plots the star path in different styles for different twilight stages.
+
     Input times are in units of Julian days.
     """
-
     pts_num = int((t_jd1 - t_jd0) * 100)
     t_jds = np.linspace(t_jd0, t_jd1, pts_num if pts_num > 10 else 10)
 
@@ -190,10 +174,7 @@ def plot_in_style(ax, event, t_jd0, t_jd1, s, lng: float, lat: float):
 
 
 def get_twilight_transition_points(ts, events, s, lng: float, lat: float):
-    """
-    Gets transition points between different twilight conditions.
-    """
-
+    """Gets transition points between different twilight conditions."""
     altitudes = []
     azimuths = []
     annotations = []
@@ -237,10 +218,7 @@ def get_twilight_transition_points(ts, events, s, lng: float, lat: float):
 
 
 def plot_meridian_transit_points(ax, t, s, lng: float, lat: float):
-    """
-    Gets meridian transit points (once in a day).
-    """
-
+    """Gets meridian transit points (once in a day)."""
     alt, az = get_star_altaz(s, t, lng, lat)
 
     r = 90 - alt.degrees
@@ -258,10 +236,7 @@ def plot_meridian_transit_points(ax, t, s, lng: float, lat: float):
 
 
 def plot_twilight_transition_points(fig, ax, altitudes, azimuths, annotations, lng, lat):
-    """
-    Plots twilight transition points as well as their labels.
-    """
-
+    """Plots twilight transition points as well as their labels."""
     if len(altitudes) == 0:
         return
 
@@ -329,12 +304,11 @@ def plot_twilight_transition_points(fig, ax, altitudes, azimuths, annotations, l
 
 
 def plot_rising_and_setting_points(fig, ax, t0, t1, s, lng:float, lat:float):
-    """
-    Plots the star's rising and setting points, whose latitudes are both at the refraction limit.
-    Because their coordinates are out of the plotting range, they are plotted on the ax2 layer.
+    """Plots the star's rising and setting points, whose latitudes are both at the refraction limit.
+
+    Since their coordinates are out of the plotting range, they are plotted on the ax2 layer.
     The ax2 layer is above the ax layer, where the star paths are drawn on.
     """
-
     alt0, az0 = get_star_altaz(s, t0, lng, lat)
     alt1, az1 = get_star_altaz(s, t1, lng, lat)
 
@@ -368,10 +342,7 @@ def plot_rising_and_setting_points(fig, ax, t0, t1, s, lng:float, lat:float):
 
 
 def plot_celestial_poles(ax, lat):
-    """
-    Plots the north/south celestial pole.
-    """
-
+    """Plots the north/south celestial pole."""
     if lat > 0:
         r = 90 - lat
         theta = 0
@@ -387,11 +358,8 @@ def plot_celestial_poles(ax, lat):
 
 
 def get_star_path_diagram(t: Time, lng: float, lat: float, offset_in_minutes: float,
-                          name=None, hip: int = -1, radec: Tuple[float, float] = None):
-    """
-    Plots the star path.
-    """
-
+                          name=None, hip: int = -1, radec: tuple[float, float] = None):
+    """Plots the star path."""
     s = None
     if name is not None:
         if name in ['mercury', 'venus', 'mars']:
@@ -517,9 +485,7 @@ def get_star_path_diagram(t: Time, lng: float, lat: float, offset_in_minutes: fl
 
 
 def set_annotation_values(annotations, ind, t, alt, az, offset_in_minutes: float, lng: float):
-    """
-    Helper function to set the annotations.
-    """
+    """Helper function to set the annotations."""
     _time_ut1        = t.ut1_calendar()
     _time_standard   = ut1_to_standard_time(_time_ut1, offset_in_minutes)
     _time_local_mean = ut1_to_local_mean_time(_time_ut1, lng)
@@ -542,10 +508,7 @@ def set_annotation_values(annotations, ind, t, alt, az, offset_in_minutes: float
 
 
 def get_annotations(ttp, rts, offset_in_minutes: float, lng: float):
-    """
-    Returns styled information of points.
-    """
-
+    """Returns styled information of points."""
     ttp_alt, ttp_az, ttp_anno, ttp_times = ttp
     rts_alt, rts_az, rts_times = rts
 
@@ -583,11 +546,8 @@ def get_annotations(ttp, rts, offset_in_minutes: float, lng: float):
     return annotations
 
 def get_diagram_old(year: int, month: int, day: int, lat: float, lng: float, tz_id: str,
-                name=None, hip: int = -1, radec: Tuple[float, float] = None) -> dict:
-    """
-    Entry point of getting the star path diagram.
-    """
-
+                name=None, hip: int = -1, radec: tuple[float, float] = None) -> dict:
+    """Entry point of getting the star path diagram."""
     t1 = tisca.ut1(year, month, day)
 
     offset_in_minutes = get_standard_offset_by_id(tz_id)

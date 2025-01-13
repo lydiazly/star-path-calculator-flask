@@ -1,15 +1,13 @@
 # -*- coding: utf-8 -*-
 # core/star_path.py
-"""
-Functions to plot star paths.
+"""Functions to plot star paths.
 
-Use global variables eph and earth by referencing, e.g.:
-```
-import core.data_loader as dl
-some_value = dl.eph.some_method()
-```
+Refer to the global variables `eph`, `earth`, and `hip_df` by:
+>>> import core.data_loader as dl
+>>> eph = dl.eph
+>>> earth = dl.earth
+>>> hip_df = dl.hip_df
 """
-
 import matplotlib
 matplotlib.use('Agg')  # Use the Agg backend for non-interactive plotting
 
@@ -47,6 +45,7 @@ if dl.eph is None or dl.earth is None:
 
 #------------------------------------------------------------------------------|
 class StarObject:
+    """Main class for creating a Star object and generating a star path."""
     def __init__(self, year: int, month: int, day: int,
                  lat: float, lng: float, tz_id: str,
                  name=None, hip: int = -1, radec: tuple[float, float] = None):
@@ -108,12 +107,11 @@ class StarObject:
 
 
     def _get_star_altaz(self, t: Time):
-        """
-        Gets the altazimuth coordinates of a star at a specific moment.
+        """Gets the altazimuth coordinates of a star at a specific moment.
+
         The horizon angles are not considered.
         The atmospheric refraction is included by setting parameter `temperature_C` to 'standard' (10 degree Celsius).
         """
-
         loc = wgs84.latlon(longitude_degrees=self.lng, latitude_degrees=self.lat)
         observer = dl.earth + loc
         alt, az, dist = observer.at(t).observe(self.star).apparent().altaz(temperature_C='standard')
@@ -122,10 +120,7 @@ class StarObject:
 
 
     def _get_twilight_time(self, t0: Time, t1: Time):
-        """
-        Gets twilight transition times.
-        """
-
+        """Gets twilight transition times."""
         loc = wgs84.latlon(longitude_degrees=self.lng, latitude_degrees=self.lat)
 
         f = almanac.dark_twilight_day(dl.eph, loc)
@@ -167,10 +162,7 @@ class StarObject:
 
 
     def _get_star_rising_time(self):
-        """
-        Gets the star's rising time. The star path is calculated from this moment.
-        """
-
+        """Gets the star's rising time. The star path is calculated from this moment."""
         t0 = self._t
         # t1 = tisca.ut1(self.year, self.month, self.day + 3, 0, 0 - self.offset_in_minutes, 0)
         t1 = tisca.ut1_jd(t0.ut1 + 3)
@@ -184,10 +176,7 @@ class StarObject:
 
 
     def _get_star_setting_time(self, t_rising: Time):
-        """
-        Gets the star's setting time. The star path's calculation ends at this moment.
-        """
-
+        """Gets the star's setting time. The star path's calculation ends at this moment."""
         t0 = self._t
         t1 = tisca.ut1_jd(t0.ut1 + 3)
 
@@ -203,10 +192,7 @@ class StarObject:
 
 
     def _get_star_meridian_transit_time(self, t_rising: Time):
-        """
-        Gets the star's meridian transit time.
-        """
-
+        """Gets the star's meridian transit time."""
         t0 = t_rising
         t1 = tisca.ut1_jd(t0.ut1 + 2)
 
@@ -219,10 +205,7 @@ class StarObject:
 
 
     def _get_twilight_transition_points(self, ts: list, events: list):
-        """
-        Gets transition points between different twilight conditions.
-        """
-
+        """Gets transition points between different twilight conditions."""
         names = []
         altitudes = []
         azimuths = []
@@ -266,11 +249,10 @@ class StarObject:
 
 
     def _plot_in_style(self, ax, event, t_jd0, t_jd1):
-        """
-        Plots the star path in different styles for different twilight stages.
+        """Plots the star path in different styles for different twilight stages.
+
         Input times are in units of Julian days.
         """
-
         pts_num = int((t_jd1 - t_jd0) * 100)
         t_jds = np.linspace(t_jd0, t_jd1, pts_num if pts_num > 10 else 10)
 
@@ -298,10 +280,7 @@ class StarObject:
 
 
     def _plot_meridian_transit_points(self, ax, t_transit: Time):
-        """
-        Gets meridian transit points (once in a day).
-        """
-
+        """Gets meridian transit points (once in a day)."""
         alt, az = self._get_star_altaz(t_transit)
 
         r = 90 - alt.degrees
@@ -319,10 +298,7 @@ class StarObject:
 
 
     def _plot_twilight_transition_points(self, fig, ax, altitudes, azimuths, names):
-        """
-        Plots twilight transition points as well as their labels.
-        """
-
+        """Plots twilight transition points as well as their labels."""
         if len(altitudes) == 0:
             return
 
@@ -390,12 +366,11 @@ class StarObject:
 
 
     def _plot_rising_and_setting_points(self, fig, ax, t0, t1):
-        """
-        Plots the star's rising and setting points, whose latitudes are both at the refraction limit.
-        Because their coordinates are out of the plotting range, they are plotted on the ax2 layer.
+        """Plots the star's rising and setting points, whose latitudes are both at the refraction limit.
+
+        Since their coordinates are out of the plotting range, they are plotted on the ax2 layer.
         The ax2 layer is above the ax layer, where the star paths are drawn on.
         """
-
         alt0, az0 = self._get_star_altaz(t0)
         alt1, az1 = self._get_star_altaz(t1)
 
@@ -429,10 +404,7 @@ class StarObject:
 
 
     def _plot_celestial_poles(self, ax):
-        """
-        Plots the north/south celestial pole.
-        """
-
+        """Plots the north/south celestial pole."""
         if self.lat > 0:
             r = 90 - self.lat
             theta = 0
@@ -448,10 +420,7 @@ class StarObject:
 
 
     def _get_star_path_diagram(self):
-        """
-        Plots the star path.
-        """
-
+        """Plots the star path."""
         t_rising, y_rising = self._get_star_rising_time()
         t_setting, y_setting = self._get_star_setting_time(t_rising)
         ts, events = self._get_twilight_time(t_rising, t_setting)
@@ -553,10 +522,7 @@ class StarObject:
 
 
     def _get_annotations(self, points: list):
-        """
-        Returns styled information of points.
-        """
-
+        """Returns styled information of points."""
         # Sort the points by the UT1 time
         sorted_points = sorted(points, key=lambda p: p[3].ut1)
 
@@ -592,10 +558,7 @@ class StarObject:
 #------------------------------------------------------------------------------|
 def get_diagram(year: int, month: int, day: int, lat: float, lng: float, tz_id: str,
                 name=None, hip: int = -1, radec: tuple[float, float] = None) -> dict:
-    """
-    Entry point of getting the star path diagram.
-    """
-
+    """Entry point of getting the star path diagram."""
     star_obj = StarObject(year, month, day, lat=lat, lng=lng, tz_id=tz_id, name=name, hip=hip, radec=radec)
 
     # print(star_obj.year, star_obj.month, star_obj.day, star_obj.lat, star_obj.lng, star_obj.offset_in_minutes)
