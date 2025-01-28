@@ -3,7 +3,7 @@
 import os
 import json
 import pytest
-from core.star_path import StarObject
+from core.star_path import StarObject, get_diagram
 
 
 def load_test_cases():
@@ -15,9 +15,7 @@ def load_test_cases():
 @pytest.mark.parametrize("test_case", load_test_cases())
 def test_annotations(test_case):
     """Tests the annotations of the generated diagram."""
-    s = StarObject(**test_case['input'])
-    res = s.generate_result()['annotations']
-    del s
+    res = get_diagram(**test_case['input'])['annotations']
     res = json.loads(json.dumps(res))  # make sure all tuples converted to lists
     dict1 = {p['name']: p for p in [p for p in res if p['is_displayed']]}
     dict2 = {p['name']: p for p in test_case['expected']}
