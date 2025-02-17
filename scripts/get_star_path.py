@@ -8,7 +8,7 @@ import sys
 import os
 import base64
 
-# Add the parent directory to the Python path
+# Append the parent directory to the path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from core.star_path import get_diagram

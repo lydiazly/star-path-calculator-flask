@@ -14,7 +14,7 @@ from skyfield.data import hipparcos
 import os
 from config import constants
 
-__all__ = ["load_data"]
+__all__ = ["eph", "earth", "hip_df", "load_data"]
 
 
 # Global variables

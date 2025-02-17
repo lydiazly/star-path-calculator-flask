@@ -6,7 +6,7 @@ from datetime import datetime
 import sys
 import os
 
-# Add the parent directory to the Python path
+# Append the parent directory to the path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from core.seasons import get_coords
