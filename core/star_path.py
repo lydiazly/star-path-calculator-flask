@@ -364,6 +364,9 @@ class StarObject:
 
         ax2.axis('off')
 
+        # Forces all text to be converted into graphical paths without any distortion or special effects
+        [text.set_path_effects([path_effects.Normal()]) for text in ax2.texts]
+
 
     def _plot_rising_and_setting_points(self, fig, ax, t0, t1):
         """Plots the star's rising and setting points, whose latitudes are both at the refraction limit.
@@ -399,6 +402,9 @@ class StarObject:
         ax2.annotate('S', (x1, y1), textcoords="offset points", xytext=(10, 0),
                      ha='left', va='center', fontsize=label_fontsize, color='r')
         ax2.axis('off')
+
+        # Forces all text to be converted into graphical paths without any distortion or special effects
+        [text.set_path_effects([path_effects.Normal()]) for text in ax2.texts]
 
         return [alt0.degrees, alt1.degrees], [az0.degrees, az1.degrees], [t0, t1]
 
