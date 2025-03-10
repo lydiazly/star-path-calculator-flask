@@ -3,6 +3,7 @@
 *.bsp
 *.pkl
 tmp
+*.tmp.*
 *.bk
 s*_*.svg
 *.pem
@@ -137,6 +138,7 @@ celerybeat.pid
 # Environments
 .env
 .venv
+.venv-*
 env/
 venv/
 ENV/

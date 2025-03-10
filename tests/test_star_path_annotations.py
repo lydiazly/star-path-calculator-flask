@@ -3,7 +3,10 @@
 import os
 import json
 import pytest
+from packaging.version import Version
+import numpy as np
 from core.star_path import StarObject, get_diagram
+from .helpers import assert_dicts_equal
 
 
 def load_test_cases():
@@ -17,9 +20,9 @@ def test_annotations(test_case):
     """Tests the annotations of the generated diagram."""
     res = get_diagram(**test_case['input'])['annotations']
     res = json.loads(json.dumps(res))  # make sure all tuples converted to lists
-    dict1 = {p['name']: p for p in [p for p in res if p['is_displayed']]}
-    dict2 = {p['name']: p for p in test_case['expected']}
-    assert dict1 == dict2
+    d1 = {p['name']: p for p in [p for p in res if p['is_displayed']]}
+    d2 = {p['name']: p for p in test_case['expected']}
+    assert_dicts_equal(d1, d2, sig_digits=(8 if Version(np.__version__) < Version('2.0.0') else 16))
 
 
 test_date_coords_dict = {"year": -2000, "month": 3, "day": 1, "lat": 40.19, "lng": 116.41, "tz_id": "Asia/Shanghai"}

@@ -269,14 +269,11 @@ class StarObject:
         if event == 0 or event == 1:
             line, = ax.plot(theta, r, 'k-', lw=2)
         elif event == 2:
-            line, = ax.plot(theta, r, 'k--', lw=2)
-            line.set_dashes([2,2])
+            line, = ax.plot(theta, r, 'k--', lw=2, dashes=[2, 2])
         elif event == 3:
-            line, = ax.plot(theta, r, 'k--', lw=2, alpha=0.4)
-            line.set_dashes([2,2])
+            line, = ax.plot(theta, r, 'k--', lw=2, dashes=[2, 2], alpha=0.4)
         elif event == 4:
-            line, = ax.plot(theta, r, 'k--', lw=0.5)
-            line.set_dashes([1,4])
+            line, = ax.plot(theta, r, 'k--', lw=0.5, dashes=[1, 4])
 
 
     def _plot_meridian_transit_points(self, ax, t_transit: Time):
@@ -426,7 +423,11 @@ class StarObject:
 
 
     def _get_star_path_diagram(self):
-        """Plots the star path."""
+        """Plots the star path.
+        
+        **Known issues**: Matplotlib's default handling of polar plots generates redundant paths
+        at the center. However, there's no decent solution for now, so we just keep them.
+        """
         t_rising, y_rising = self._get_star_rising_time()
         t_setting, y_setting = self._get_star_setting_time(t_rising)
         ts, events = self._get_twilight_time(t_rising, t_setting)
@@ -478,7 +479,7 @@ class StarObject:
         # Add tick labels -----------------------------------------------------|
         r_ticks = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90]
         r_tick_labels = ['90°', '', '', '60°', '', '', '30°', '', '', '0°']
-        ax.set_yticks(r_ticks)
+        ax.set_yticks(r_ticks[1:])  # skip the r=0 tick to avoid a redundant path in SVG
         ax.set_yticklabels([])
 
         for i in range(len(r_ticks)):
