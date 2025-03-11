@@ -2,13 +2,13 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
 [![python](https://img.shields.io/badge/Python-3.10,_3.11-3776AB?logo=python&logoColor=white)](https://www.python.org)
-[![numpy](https://img.shields.io/badge/Numpy-2.2.2-013243?logo=numpy&logoColor=white)](https://numpy.org)
+[![numpy](https://img.shields.io/badge/Numpy-2.2.3-013243?logo=numpy&logoColor=white)](https://numpy.org)
 [![pandas](https://img.shields.io/badge/Pandas-2.2.3-150458?logo=Pandas&logoColor=white)](https://pandas.pydata.org)
-[![matplotlib](https://img.shields.io/badge/Matplotlib-3.10.0-12557C)](https://matplotlib.org)
-[![pytest](https://img.shields.io/badge/pytest-8.3.4-0A9EDC)](https://pytest.org/)
+[![matplotlib](https://img.shields.io/badge/Matplotlib-3.10.1-12557C)](https://matplotlib.org)
+[![pytest](https://img.shields.io/badge/pytest-8.3.5-0A9EDC)](https://pytest.org/)
 [![skyfield](https://img.shields.io/badge/Skyfield-1.49-BD9354)](https://rhodesmill.org/skyfield)
 [![juliandate](https://img.shields.io/badge/Juliandate-1.0.5-BD9354)](https://pypi.org/project/juliandate)
-[![tzfpy](https://img.shields.io/badge/tzfpy-0.16.2-blue)](https://github.com/ringsaturn/tzfpy)
+[![tzfpy](https://img.shields.io/badge/tzfpy-0.16.4-blue)](https://github.com/ringsaturn/tzfpy)
 [![great-circle-calculator](https://img.shields.io/badge/Great_Circle_Calculator-1.3.1-brightgreen)](https://github.com/seangrogan/great_circle_calculator)
 [![Flask](https://img.shields.io/badge/Flask-3.1.0-39A6BD?logo=flask&logoColor=white)](https://flask.palletsprojects.com)
 
