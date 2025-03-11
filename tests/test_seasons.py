@@ -46,14 +46,18 @@ test_cases = [
 
 @pytest.mark.parametrize("year, results_expected", test_cases)
 def test_coords(year, results_expected):
-    """Tests calculating the times and coordinates of equinoxes and solstices."""
+    """Tests calculating the times and coordinates of equinoxes and solstices.
+    Compares two floats with a tolerance based on significant digits.
+    """
     res = get_coords(year)
     assert_dicts_equal(res, results_expected, sig_digits=sig_digits)
 
 
 @pytest.mark.parametrize("year, results_expected", test_cases)
 def test_seasons(year, results_expected):
-    """Tests calculating the times of equinoxes and solstices."""
+    """Tests calculating the times of equinoxes and solstices.
+    Compares two floats with a tolerance based on significant digits.
+    """
     res = get_seasons(year)
     expected = {k: results_expected[k] for k in ['vernal_time', 'summer_time', 'autumnal_time', 'winter_time']}
     assert_dicts_equal(res, expected, sig_digits=sig_digits)

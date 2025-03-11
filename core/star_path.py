@@ -427,7 +427,7 @@ class StarObject:
         """Plots the star path.
         
         **Known issues**: Matplotlib's default handling of polar plots generates redundant paths
-        at the center. However, there's no decent solution for now, so we just keep them.
+        at the center in SVG. However, there's no decent solution for now, so we just keep them as is.
         """
         t_rising, y_rising = self._get_star_rising_time()
         t_setting, y_setting = self._get_star_setting_time(t_rising)

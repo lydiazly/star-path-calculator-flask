@@ -23,7 +23,9 @@ def load_test_cases():
 
 @pytest.mark.parametrize("test_case", load_test_cases())
 def test_annotations(test_case):
-    """Tests the annotations of the generated diagram."""
+    """Tests the annotations of the generated diagram.
+    Compares two floats with a tolerance based on significant digits.
+    """
     res = get_diagram(**test_case['input'])['annotations']
     res = json.loads(json.dumps(res))  # make sure all tuples converted to lists
     d1 = {p['name']: p for p in [p for p in res if p['is_displayed']]}
