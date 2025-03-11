@@ -17,6 +17,8 @@ if Version(skyfield.__version__) > Version('1.49'):
 
 def load_test_cases():
     """Loads test cases from a JSON file."""
+    print(f"\nLoading 'tests/{example_cases_filename}'")
+    print(f"numpy: {np.__version__}, skyfield: {skyfield.__version__}")
     with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), example_cases_filename), "r") as f:
         return json.load(f)
 
@@ -26,13 +28,15 @@ def test_annotations(test_case):
     """Tests the annotations of the generated diagram.
     Compares two floats with a tolerance based on significant digits.
     """
+    sig_digits = 16
+    if Version(np.__version__) < Version('2.0.0'):
+        sig_digits = 9 if Version(skyfield.__version__) > Version('1.49') else 8
+
     res = get_diagram(**test_case['input'])['annotations']
     res = json.loads(json.dumps(res))  # make sure all tuples converted to lists
     d1 = {p['name']: p for p in [p for p in res if p['is_displayed']]}
     d2 = {p['name']: p for p in test_case['expected']}
-    sig_digits = 16
-    if Version(np.__version__) < Version('2.0.0'):
-        sig_digits = 9 if Version(skyfield.__version__) > Version('1.49') else 8
+
     assert_dicts_equal(d1, d2, sig_digits=sig_digits)
 
 
