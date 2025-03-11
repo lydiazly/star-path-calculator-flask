@@ -1,8 +1,13 @@
 # -*- coding: utf-8 -*-
 # tests/test_seasons.py
 import pytest
+from packaging.version import Version
+import skyfield
 from core.seasons import get_coords, get_seasons
+from .helpers import assert_dicts_equal
 
+
+sig_digits = 3 if Version(skyfield.__version__) > Version('1.49') else 16
 
 test_cases = [
     (2000,
@@ -41,14 +46,21 @@ test_cases = [
 
 @pytest.mark.parametrize("year, results_expected", test_cases)
 def test_coords(year, results_expected):
-    """Tests calculating the times and coordinates of equinoxes and solstices."""
-    assert get_coords(year) == results_expected
+    """Tests calculating the times and coordinates of equinoxes and solstices.
+    Compares two floats with a tolerance based on significant digits.
+    """
+    res = get_coords(year)
+    assert_dicts_equal(res, results_expected, sig_digits=sig_digits)
 
 
 @pytest.mark.parametrize("year, results_expected", test_cases)
 def test_seasons(year, results_expected):
-    """Tests calculating the times of equinoxes and solstices."""
-    assert get_seasons(year) == {k: results_expected[k] for k in ['vernal_time', 'summer_time', 'autumnal_time', 'winter_time']}
+    """Tests calculating the times of equinoxes and solstices.
+    Compares two floats with a tolerance based on significant digits.
+    """
+    res = get_seasons(year)
+    expected = {k: results_expected[k] for k in ['vernal_time', 'summer_time', 'autumnal_time', 'winter_time']}
+    assert_dicts_equal(res, expected, sig_digits=sig_digits)
 
 
 error_cases = [-3000, 3000]

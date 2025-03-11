@@ -110,7 +110,8 @@ class StarObject:
         """Gets the altazimuth coordinates of a star at a specific moment.
 
         The horizon angles are not considered.
-        The atmospheric refraction is included by setting parameter `temperature_C` to 'standard' (10 degree Celsius).
+        The atmospheric refraction is included by setting parameter `temperature_C` to 'standard' (10°C).
+        By default, Skyfield uses the observer's elevation above sea level to estimate the atmospheric pressure.
         """
         loc = wgs84.latlon(longitude_degrees=self.lng, latitude_degrees=self.lat)
         observer = dl.earth + loc
@@ -426,7 +427,7 @@ class StarObject:
         """Plots the star path.
         
         **Known issues**: Matplotlib's default handling of polar plots generates redundant paths
-        at the center. However, there's no decent solution for now, so we just keep them.
+        at the center in SVG. However, there's no decent solution for now, so we just keep them as is.
         """
         t_rising, y_rising = self._get_star_rising_time()
         t_setting, y_setting = self._get_star_setting_time(t_rising)
