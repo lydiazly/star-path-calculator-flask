@@ -145,3 +145,13 @@ def format_timezone(offset_in_hours: float) -> str:
     """
     hms = decimal_to_hms(offset_in_hours)
     return f"{'-' if offset_in_hours < 0 else '+'}{hms['hours']:02d}:{hms['minutes']:02d}"
+
+
+def print_as_json(data, indent=2):
+    """Prints list dict as json format."""
+    import json
+    import re
+    def repl_func(match):
+        return " ".join(match.group().split())  # split on any \n \r \t \f \s and will discard empty strings and trim
+    s = json.dumps(data, indent=indent)
+    print(re.sub(r"(?<=\[)[^\[\]\{]+(?=\])", repl_func, s))

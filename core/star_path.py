@@ -110,7 +110,8 @@ class StarObject:
         """Gets the altazimuth coordinates of a star at a specific moment.
 
         The horizon angles are not considered.
-        The atmospheric refraction is included by setting parameter `temperature_C` to 'standard' (10 degree Celsius).
+        The atmospheric refraction is included by setting parameter `temperature_C` to 'standard' (10°C).
+        By default, Skyfield uses the observer's elevation above sea level to estimate the atmospheric pressure.
         """
         loc = wgs84.latlon(longitude_degrees=self.lng, latitude_degrees=self.lat)
         observer = dl.earth + loc

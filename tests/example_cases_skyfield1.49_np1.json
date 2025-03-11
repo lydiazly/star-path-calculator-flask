@@ -1,0 +1,338 @@
+[
+  {
+    "comment": "Beijing, name",
+    "input": {"year": -2000, "month": 3, "day": 1, "lat": 40.19, "lng": 116.41, "tz_id": "Asia/Shanghai", "name": "jupiter"},
+    "expected": [
+      {
+        "name": "R",
+        "is_displayed": true,
+        "alt": 2.2561019573874574e-05,
+        "az": 122.09805715202819,
+        "time_ut1": [-2000, 2, 29, 19, 40, 21],
+        "time_standard": [-2000, 3, 1, 3, 40, 21],
+        "time_local_mean": [-2000, 3, 1, 3, 26, 0],
+        "time_ut1_julian": [-2000, 3, 17, 19, 40, 21],
+        "time_standard_julian": [-2000, 3, 18, 3, 40, 21],
+        "time_local_mean_julian": [-2000, 3, 18, 3, 26, 0],
+        "time_zone": 8.0
+      },
+      {
+        "name": "D1",
+        "is_displayed": true,
+        "alt": 17.616135694391417,
+        "az": 146.47007245816832,
+        "time_ut1": [-2000, 2, 29, 21, 52, 26],
+        "time_standard": [-2000, 3, 1, 5, 52, 26],
+        "time_local_mean": [-2000, 3, 1, 5, 38, 5],
+        "time_ut1_julian": [-2000, 3, 17, 21, 52, 26],
+        "time_standard_julian": [-2000, 3, 18, 5, 52, 26],
+        "time_local_mean_julian": [-2000, 3, 18, 5, 38, 5],
+        "time_zone": 8.0
+      },
+      {
+        "name": "D2",
+        "is_displayed": true,
+        "alt": 20.625219939370577,
+        "az": 153.35658750391624,
+        "time_ut1": [-2000, 2, 29, 22, 23, 52],
+        "time_standard": [-2000, 3, 1, 6, 23, 52],
+        "time_local_mean": [-2000, 3, 1, 6, 9, 30],
+        "time_ut1_julian": [-2000, 3, 17, 22, 23, 52],
+        "time_standard_julian": [-2000, 3, 18, 6, 23, 52],
+        "time_local_mean_julian": [-2000, 3, 18, 6, 9, 30],
+        "time_zone": 8.0
+      },
+      {
+        "name": "D3",
+        "is_displayed": true,
+        "alt": 22.701032438757426,
+        "az": 159.66278803766068,
+        "time_ut1": [-2000, 2, 29, 22, 51, 7],
+        "time_standard": [-2000, 3, 1, 6, 51, 7],
+        "time_local_mean": [-2000, 3, 1, 6, 36, 45],
+        "time_ut1_julian": [-2000, 3, 17, 22, 51, 7],
+        "time_standard_julian": [-2000, 3, 18, 6, 51, 7],
+        "time_local_mean_julian": [-2000, 3, 18, 6, 36, 45],
+        "time_zone": 8.0
+      },
+      {
+        "name": "T",
+        "is_displayed": true,
+        "alt": 25.49223442746608,
+        "az": 180.0000148691937,
+        "time_ut1": [-2000, 3, 1, 0, 13, 23],
+        "time_standard": [-2000, 3, 1, 8, 13, 23],
+        "time_local_mean": [-2000, 3, 1, 7, 59, 1],
+        "time_ut1_julian": [-2000, 3, 18, 0, 13, 23],
+        "time_standard_julian": [-2000, 3, 18, 8, 13, 23],
+        "time_local_mean_julian": [-2000, 3, 18, 7, 59, 1],
+        "time_zone": 8.0
+      },
+      {
+        "name": "S",
+        "is_displayed": true,
+        "alt": 2.2561019760503065e-05,
+        "az": 237.9050894890589,
+        "time_ut1": [-2000, 3, 1, 4, 46, 25],
+        "time_standard": [-2000, 3, 1, 12, 46, 25],
+        "time_local_mean": [-2000, 3, 1, 12, 32, 3],
+        "time_ut1_julian": [-2000, 3, 18, 4, 46, 25],
+        "time_standard_julian": [-2000, 3, 18, 12, 46, 25],
+        "time_local_mean_julian": [-2000, 3, 18, 12, 32, 3],
+        "time_zone": 8.0
+      }
+    ]
+  },
+  {
+    "comment": "Beijing, hip",
+    "input": {"year": -2000, "month": 3, "day": 1, "lat": 40.19, "lng": 116.41, "tz_id": "Asia/Shanghai", "hip": 91262},
+    "expected": [
+      {
+        "name": "R",
+        "is_displayed": true,
+        "alt": 2.2561020139533206e-05,
+        "az": 28.9724277091306,
+        "time_ut1": [-2000, 3, 1, 12, 43, 21],
+        "time_standard": [-2000, 3, 1, 20, 43, 21],
+        "time_local_mean": [-2000, 3, 1, 20, 29, 0],
+        "time_ut1_julian": [-2000, 3, 18, 12, 43, 21],
+        "time_standard_julian": [-2000, 3, 18, 20, 43, 21],
+        "time_local_mean_julian": [-2000, 3, 18, 20, 29, 0],
+        "time_zone": 8.0
+      },
+      {
+        "name": "D1",
+        "is_displayed": true,
+        "alt": 87.7316745112188,
+        "az": 55.82007294918657,
+        "time_ut1": [-2000, 3, 1, 21, 50, 51],
+        "time_standard": [-2000, 3, 2, 5, 50, 51],
+        "time_local_mean": [-2000, 3, 2, 5, 36, 29],
+        "time_ut1_julian": [-2000, 3, 18, 21, 50, 51],
+        "time_standard_julian": [-2000, 3, 19, 5, 50, 51],
+        "time_local_mean_julian": [-2000, 3, 19, 5, 36, 29],
+        "time_zone": 8.0
+      },
+      {
+        "name": "T",
+        "is_displayed": true,
+        "alt": 88.75235026526482,
+        "az": 359.9987226246897,
+        "time_ut1": [-2000, 3, 1, 22, 0, 50],
+        "time_standard": [-2000, 3, 2, 6, 0, 50],
+        "time_local_mean": [-2000, 3, 2, 5, 46, 29],
+        "time_ut1_julian": [-2000, 3, 18, 22, 0, 50],
+        "time_standard_julian": [-2000, 3, 19, 6, 0, 50],
+        "time_local_mean_julian": [-2000, 3, 19, 5, 46, 29],
+        "time_zone": 8.0
+      },
+      {
+        "name": "D2",
+        "is_displayed": true,
+        "alt": 85.74982578906886,
+        "az": 288.8110618676915,
+        "time_ut1": [-2000, 3, 1, 22, 22, 16],
+        "time_standard": [-2000, 3, 2, 6, 22, 16],
+        "time_local_mean": [-2000, 3, 2, 6, 7, 54],
+        "time_ut1_julian": [-2000, 3, 18, 22, 22, 16],
+        "time_standard_julian": [-2000, 3, 19, 6, 22, 16],
+        "time_local_mean_julian": [-2000, 3, 19, 6, 7, 54],
+        "time_zone": 8.0
+      },
+      {
+        "name": "D3",
+        "is_displayed": true,
+        "alt": 80.69704311525172,
+        "az": 281.6659696310175,
+        "time_ut1": [-2000, 3, 1, 22, 49, 29],
+        "time_standard": [-2000, 3, 2, 6, 49, 29],
+        "time_local_mean": [-2000, 3, 2, 6, 35, 7],
+        "time_ut1_julian": [-2000, 3, 18, 22, 49, 29],
+        "time_standard_julian": [-2000, 3, 19, 6, 49, 29],
+        "time_local_mean_julian": [-2000, 3, 19, 6, 35, 7],
+        "time_zone": 8.0
+      },
+      {
+        "name": "S",
+        "is_displayed": true,
+        "alt": 2.256102015329997e-05,
+        "az": 331.02767744772035,
+        "time_ut1": [-2000, 3, 2, 7, 18, 19],
+        "time_standard": [-2000, 3, 2, 15, 18, 19],
+        "time_local_mean": [-2000, 3, 2, 15, 3, 57],
+        "time_ut1_julian": [-2000, 3, 19, 7, 18, 19],
+        "time_standard_julian": [-2000, 3, 19, 15, 18, 19],
+        "time_local_mean_julian": [-2000, 3, 19, 15, 3, 57],
+        "time_zone": 8.0
+      }
+    ]
+  },
+  {
+    "comment": "Beijing, radec",
+    "input": {"year": -2000, "month": 3, "day": 1, "lat": 40.19, "lng": 116.41, "tz_id": "Asia/Shanghai", "radec": [310.7, -5.1]},
+    "expected": [
+      {
+        "name": "R",
+        "is_displayed": true,
+        "alt": 2.256102015329997e-05,
+        "az": 102.92692917419058,
+        "time_ut1": [-2000, 2, 29, 17, 19, 41],
+        "time_standard": [-2000, 3, 1, 1, 19, 41],
+        "time_local_mean": [-2000, 3, 1, 1, 5, 19],
+        "time_ut1_julian": [-2000, 3, 17, 17, 19, 41],
+        "time_standard_julian": [-2000, 3, 18, 1, 19, 41],
+        "time_local_mean_julian": [-2000, 3, 18, 1, 5, 19],
+        "time_zone": 8.0
+      },
+      {
+        "name": "D1",
+        "is_displayed": true,
+        "alt": 38.0566888719142,
+        "az": 162.86369929369394,
+        "time_ut1": [-2000, 2, 29, 21, 52, 26],
+        "time_standard": [-2000, 3, 1, 5, 52, 26],
+        "time_local_mean": [-2000, 3, 1, 5, 38, 5],
+        "time_ut1_julian": [-2000, 3, 17, 21, 52, 26],
+        "time_standard_julian": [-2000, 3, 18, 5, 52, 26],
+        "time_local_mean_julian": [-2000, 3, 18, 5, 38, 5],
+        "time_zone": 8.0
+      },
+      {
+        "name": "D2",
+        "is_displayed": true,
+        "alt": 39.33300177390054,
+        "az": 172.6636807363957,
+        "time_ut1": [-2000, 2, 29, 22, 23, 52],
+        "time_standard": [-2000, 3, 1, 6, 23, 52],
+        "time_local_mean": [-2000, 3, 1, 6, 9, 30],
+        "time_ut1_julian": [-2000, 3, 17, 22, 23, 52],
+        "time_standard_julian": [-2000, 3, 18, 6, 23, 52],
+        "time_local_mean_julian": [-2000, 3, 18, 6, 9, 30],
+        "time_zone": 8.0
+      },
+      {
+        "name": "T",
+        "is_displayed": true,
+        "alt": 39.614610778943266,
+        "az": 179.99999577304033,
+        "time_ut1": [-2000, 2, 29, 22, 46, 51],
+        "time_standard": [-2000, 3, 1, 6, 46, 51],
+        "time_local_mean": [-2000, 3, 1, 6, 32, 29],
+        "time_ut1_julian": [-2000, 3, 17, 22, 46, 51],
+        "time_standard_julian": [-2000, 3, 18, 6, 46, 51],
+        "time_local_mean_julian": [-2000, 3, 18, 6, 32, 29],
+        "time_zone": 8.0
+      },
+      {
+        "name": "D3",
+        "is_displayed": true,
+        "alt": 39.60487445378739,
+        "az": 181.3661572413715,
+        "time_ut1": [-2000, 2, 29, 22, 51, 7],
+        "time_standard": [-2000, 3, 1, 6, 51, 7],
+        "time_local_mean": [-2000, 3, 1, 6, 36, 45],
+        "time_ut1_julian": [-2000, 3, 17, 22, 51, 7],
+        "time_standard_julian": [-2000, 3, 18, 6, 51, 7],
+        "time_local_mean_julian": [-2000, 3, 18, 6, 36, 45],
+        "time_zone": 8.0
+      },
+      {
+        "name": "S",
+        "is_displayed": true,
+        "alt": 2.256102014075445e-05,
+        "az": 257.0730325190655,
+        "time_ut1": [-2000, 3, 1, 4, 14, 1],
+        "time_standard": [-2000, 3, 1, 12, 14, 1],
+        "time_local_mean": [-2000, 3, 1, 11, 59, 39],
+        "time_ut1_julian": [-2000, 3, 18, 4, 14, 1],
+        "time_standard_julian": [-2000, 3, 18, 12, 14, 1],
+        "time_local_mean_julian": [-2000, 3, 18, 11, 59, 39],
+        "time_zone": 8.0
+      }
+    ]
+  },
+  {
+    "comment": "Linfen, Xuxiuyi",
+    "input": {"year": -1024, "month": 9, "day": 22, "lat": 36, "lng": 111, "tz_id": "Asia/Shanghai", "hip": 106278},
+    "expected": [
+      {
+        "name": "R",
+        "is_displayed": true,
+        "alt": 2.2561020141531607e-05,
+        "az": 107.54810963008306,
+        "time_ut1": [-1024, 9, 22, 5, 58, 30],
+        "time_standard": [-1024, 9, 22, 13, 58, 30],
+        "time_local_mean": [-1024, 9, 22, 13, 22, 30],
+        "time_ut1_julian": [-1024, 10, 2, 5, 58, 30],
+        "time_standard_julian": [-1024, 10, 2, 13, 58, 30],
+        "time_local_mean_julian": [-1024, 10, 2, 13, 22, 30],
+        "time_zone": 8.0
+      },
+      {
+        "name": "N1",
+        "is_displayed": true,
+        "alt": 38.549825492206026,
+        "az": 166.7113100220234,
+        "time_ut1": [-1024, 9, 22, 10, 34, 42],
+        "time_standard": [-1024, 9, 22, 18, 34, 42],
+        "time_local_mean": [-1024, 9, 22, 17, 58, 42],
+        "time_ut1_julian": [-1024, 10, 2, 10, 34, 42],
+        "time_standard_julian": [-1024, 10, 2, 18, 34, 42],
+        "time_local_mean_julian": [-1024, 10, 2, 17, 58, 42],
+        "time_zone": 8.0
+      },
+      {
+        "name": "N2",
+        "is_displayed": true,
+        "alt": 39.390837299847725,
+        "az": 174.61436053807347,
+        "time_ut1": [-1024, 9, 22, 11, 0, 15],
+        "time_standard": [-1024, 9, 22, 19, 0, 15],
+        "time_local_mean": [-1024, 9, 22, 18, 24, 15],
+        "time_ut1_julian": [-1024, 10, 2, 11, 0, 15],
+        "time_standard_julian": [-1024, 10, 2, 19, 0, 15],
+        "time_local_mean_julian": [-1024, 10, 2, 18, 24, 15],
+        "time_zone": 8.0
+      },
+      {
+        "name": "T",
+        "is_displayed": true,
+        "alt": 39.55414700070522,
+        "az": 179.9999985841979,
+        "time_ut1": [-1024, 9, 22, 11, 17, 24],
+        "time_standard": [-1024, 9, 22, 19, 17, 24],
+        "time_local_mean": [-1024, 9, 22, 18, 41, 24],
+        "time_ut1_julian": [-1024, 10, 2, 11, 17, 24],
+        "time_standard_julian": [-1024, 10, 2, 19, 17, 24],
+        "time_local_mean_julian": [-1024, 10, 2, 18, 41, 24],
+        "time_zone": 8.0
+      },
+      {
+        "name": "N3",
+        "is_displayed": true,
+        "alt": 39.464459002045565,
+        "az": 183.99289677426464,
+        "time_ut1": [-1024, 9, 22, 11, 30, 6],
+        "time_standard": [-1024, 9, 22, 19, 30, 6],
+        "time_local_mean": [-1024, 9, 22, 18, 54, 6],
+        "time_ut1_julian": [-1024, 10, 2, 11, 30, 6],
+        "time_standard_julian": [-1024, 10, 2, 19, 30, 6],
+        "time_local_mean_julian": [-1024, 10, 2, 18, 54, 6],
+        "time_zone": 8.0
+      },
+      {
+        "name": "S",
+        "is_displayed": true,
+        "alt": 2.2561020174283186e-05,
+        "az": 252.45185236100227,
+        "time_ut1": [-1024, 9, 22, 16, 36, 17],
+        "time_standard": [-1024, 9, 23, 0, 36, 17],
+        "time_local_mean": [-1024, 9, 23, 0, 0, 17],
+        "time_ut1_julian": [-1024, 10, 2, 16, 36, 17],
+        "time_standard_julian": [-1024, 10, 3, 0, 36, 17],
+        "time_local_mean_julian": [-1024, 10, 3, 0, 0, 17],
+        "time_zone": 8.0
+      }
+    ]
+  }
+]

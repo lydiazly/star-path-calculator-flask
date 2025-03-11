@@ -10,9 +10,9 @@ from core.star_path import get_diagram
 
 test_input = {"year": -2000, "month": 3, "day": 1, "lat": 40, "lng": 116, "tz_id": "Asia/Shanghai", "name": "jupiter"}
 
-reference_svg_filename = 'example-matplotlib-3.10.0.svg'
+reference_svg_filename = 'example_matplotlib3.10.0.svg'
 if Version(np.__version__) < Version('2.0.0'):
-    reference_svg_filename = 'example-matplotlib-3.5.2.svg'
+    reference_svg_filename = 'example_matplotlib3.5.2.svg'
 
 
 def normalize_svg_content(svg_content: str) -> str:

@@ -2,13 +2,13 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
 [![python](https://img.shields.io/badge/Python-3.10,_3.11-3776AB?logo=python&logoColor=white)](https://www.python.org)
-[![numpy](https://img.shields.io/badge/Numpy-2.2.2-013243?logo=numpy&logoColor=white)](https://numpy.org)
+[![numpy](https://img.shields.io/badge/Numpy-2.2.3-013243?logo=numpy&logoColor=white)](https://numpy.org)
 [![pandas](https://img.shields.io/badge/Pandas-2.2.3-150458?logo=Pandas&logoColor=white)](https://pandas.pydata.org)
-[![matplotlib](https://img.shields.io/badge/Matplotlib-3.10.0-12557C)](https://matplotlib.org)
-[![pytest](https://img.shields.io/badge/pytest-8.3.4-0A9EDC)](https://pytest.org/)
+[![matplotlib](https://img.shields.io/badge/Matplotlib-3.10.1-12557C)](https://matplotlib.org)
+[![pytest](https://img.shields.io/badge/pytest-8.3.5-0A9EDC)](https://pytest.org/)
 [![skyfield](https://img.shields.io/badge/Skyfield-1.49-BD9354)](https://rhodesmill.org/skyfield)
 [![juliandate](https://img.shields.io/badge/Juliandate-1.0.5-BD9354)](https://pypi.org/project/juliandate)
-[![tzfpy](https://img.shields.io/badge/tzfpy-0.16.2-blue)](https://github.com/ringsaturn/tzfpy)
+[![tzfpy](https://img.shields.io/badge/tzfpy-0.16.4-blue)](https://github.com/ringsaturn/tzfpy)
 [![great-circle-calculator](https://img.shields.io/badge/Great_Circle_Calculator-1.3.1-brightgreen)](https://github.com/seangrogan/great_circle_calculator)
 
 This repository contains the source code of our [Star Path Viewer](https://star-path-viewer.pages.dev/) website, along with Python scripts for executing the code.
@@ -270,6 +270,9 @@ examples:
 - R. Tousey and M. J. Koomen, "The Visibility of Stars and Planets During Twilight," *Journal of the Optical Society of America*, Vol. 43, pp. 177-183, 1953. [Online]. Available: <https://opg.optica.org/josa/viewmedia.cfm?uri=josa-43-3-177&seq=0&html=true>
 
 ## Changelog
+
+- 2025-03-09
+  - Removed the r=0 tick to avoid a redundant path in SVG.
 
 - 2024-12-16
   - Included atmospheric refraction in position calculation.

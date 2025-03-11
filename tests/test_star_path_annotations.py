@@ -5,13 +5,19 @@ import json
 import pytest
 from packaging.version import Version
 import numpy as np
+import skyfield
 from core.star_path import StarObject, get_diagram
 from .helpers import assert_dicts_equal
 
 
+example_cases_filename = 'example_cases_skyfield1.49.json'
+if Version(skyfield.__version__) > Version('1.49'):
+    example_cases_filename = 'example_cases_skyfield1.51.json'
+
+
 def load_test_cases():
     """Loads test cases from a JSON file."""
-    with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "example_cases.json"), "r") as f:
+    with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), example_cases_filename), "r") as f:
         return json.load(f)
 
 
@@ -22,7 +28,10 @@ def test_annotations(test_case):
     res = json.loads(json.dumps(res))  # make sure all tuples converted to lists
     d1 = {p['name']: p for p in [p for p in res if p['is_displayed']]}
     d2 = {p['name']: p for p in test_case['expected']}
-    assert_dicts_equal(d1, d2, sig_digits=(8 if Version(np.__version__) < Version('2.0.0') else 16))
+    sig_digits = 16
+    if Version(np.__version__) < Version('2.0.0'):
+        sig_digits = 9 if Version(skyfield.__version__) > Version('1.49') else 8
+    assert_dicts_equal(d1, d2, sig_digits=sig_digits)
 
 
 test_date_coords_dict = {"year": -2000, "month": 3, "day": 1, "lat": 40.19, "lng": 116.41, "tz_id": "Asia/Shanghai"}
