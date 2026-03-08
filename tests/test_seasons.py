@@ -7,7 +7,14 @@ from core.seasons import get_coords, get_seasons
 from .helpers import assert_dicts_equal
 
 
-sig_digits = 3 if Version(skyfield.__version__) > Version('1.49') else 16
+rel_tol = 1e-9  # default in math.isclose()
+if Version(skyfield.__version__) > Version('1.49'):
+    rel_tol = 6e-4
+
+print(f"\nskyfield: {skyfield.__version__}")
+print(f"Relative tolerance: {rel_tol:.0e}")
+print("Test cases: skyfield 1.49")
+
 
 test_cases = [
     (2000,
@@ -50,7 +57,7 @@ def test_coords(year, results_expected):
     Compares two floats with a tolerance based on significant digits.
     """
     res = get_coords(year)
-    assert_dicts_equal(res, results_expected, sig_digits=sig_digits)
+    assert_dicts_equal(res, results_expected, rel_tol=rel_tol)
 
 
 @pytest.mark.parametrize("year, results_expected", test_cases)
@@ -60,7 +67,7 @@ def test_seasons(year, results_expected):
     """
     res = get_seasons(year)
     expected = {k: results_expected[k] for k in ['vernal_time', 'summer_time', 'autumnal_time', 'winter_time']}
-    assert_dicts_equal(res, expected, sig_digits=sig_digits)
+    assert_dicts_equal(res, expected, rel_tol=rel_tol)
 
 
 error_cases = [-3000, 3000]

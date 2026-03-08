@@ -49,7 +49,7 @@ def dict_diff(d1, d2, path="", rel_tol=1e-9):
                     ):
                         print(f"\n-{full_path}: {repr(d1[i])}")
                         print(
-                            f"+{full_path}: {repr(d2[i])} (are close with rel_tol: {rel_tol})"
+                            f"+{full_path}: {repr(d2[i])} (are close with rel_tol: {rel_tol:.0e})"
                         )
                     else:
                         rel_err = abs(d1[i] - d2[i]) / (
@@ -57,7 +57,7 @@ def dict_diff(d1, d2, path="", rel_tol=1e-9):
                         )
                         differences.append(f"-{full_path}: {repr(d1[i])}")
                         differences.append(
-                            f"+{full_path}: {repr(d2[i])} (rel_err: {rel_err})"
+                            f"+{full_path}: {repr(d2[i])} (rel_err: {rel_err:e})"
                         )
                 # Recursively handle nested lists/tuples
                 elif isinstance(d1[i], list) or isinstance(d1[i], tuple):
@@ -119,7 +119,7 @@ def dict_diff(d1, d2, path="", rel_tol=1e-9):
                 if math.isclose(d1[k], d2[k], rel_tol=rel_tol):
                     print(f"\n-{full_path}: {repr(d1[k])}")
                     print(
-                        f"+{full_path}: {repr(d2[k])} (are close with rel_tol: {rel_tol})"
+                        f"+{full_path}: {repr(d2[k])} (are close with rel_tol: {rel_tol:.0e})"
                     )
                 else:
                     rel_err = abs(d1[k] - d2[k]) / (
@@ -127,7 +127,7 @@ def dict_diff(d1, d2, path="", rel_tol=1e-9):
                     )
                     differences.append(f"-{full_path}: {repr(d1[k])}")
                     differences.append(
-                        f"+{full_path}: {repr(d2[k])} (rel_err: {rel_err})"
+                        f"+{full_path}: {repr(d2[k])} (rel_err: {rel_err:e})"
                     )
             # Recursively handle nested lists/tuples
             elif isinstance(d1[k], list) or isinstance(d1[k], tuple):
