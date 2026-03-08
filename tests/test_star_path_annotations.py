@@ -4,7 +4,7 @@ import os
 import json
 import pytest
 from packaging.version import Version
-import numpy as np
+import numpy
 import skyfield
 from core.star_path import StarObject, get_diagram
 from .helpers import assert_dicts_equal
@@ -16,17 +16,19 @@ example_cases_filename = 'example_cases_skyfield1.49.json'
 #     example_cases_filename = 'example_cases_skyfield1.51.json'
 
 rel_tol = 1e-9  # default in math.isclose()
-if Version(np.__version__) < Version('2.0.0'):
+if Version(numpy.__version__) < Version('2.0.0'):
     rel_tol = (
         5e-9 if Version(skyfield.__version__) <= Version('1.49') else 5e-8
     )
-print(f"\nRelative tolerance: {rel_tol}")
+
+print("\n=== Annotations ===")
+print(f"numpy: {numpy.__version__}, skyfield: {skyfield.__version__}")
+print(f"Relative tolerance: {rel_tol:.0e}")
 
 
 def load_test_cases():
     """Loads test cases from a JSON file."""
     print(f"Loading 'tests/{example_cases_filename}'")
-    print(f"numpy: {np.__version__}, skyfield: {skyfield.__version__}")
     full_filename = os.path.join(
         os.path.dirname(os.path.abspath(__file__)), example_cases_filename
     )
