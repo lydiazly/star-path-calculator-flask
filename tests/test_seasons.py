@@ -2,6 +2,7 @@
 # tests/test_seasons.py
 import pytest
 from packaging.version import Version
+import numpy
 import skyfield
 from core.seasons import get_coords, get_seasons
 from .helpers import assert_dicts_equal
@@ -11,7 +12,8 @@ rel_tol = 1e-9  # default in math.isclose()
 if Version(skyfield.__version__) > Version('1.49'):
     rel_tol = 6e-4
 
-print(f"\nskyfield: {skyfield.__version__}")
+print("\n=== Seasons ===")
+print(f"numpy: {numpy.__version__}, skyfield: {skyfield.__version__}")
 print(f"Relative tolerance: {rel_tol:.0e}")
 print("Test cases: skyfield 1.49")
 

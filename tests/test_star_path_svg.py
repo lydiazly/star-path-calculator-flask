@@ -5,13 +5,17 @@ import base64
 import os
 import re
 from packaging.version import Version
-import numpy as np
+import matplotlib
+import numpy
 from core.star_path import get_diagram
 
 
 reference_svg_filename = 'example_matplotlib3.10.0.svg'
-if Version(np.__version__) < Version('2.0.0'):
+if Version(numpy.__version__) < Version('2.0.0'):
     reference_svg_filename = 'example_matplotlib3.5.2.svg'
+
+print("\n=== SVG ===")
+print(f"numpy: {numpy.__version__}, matplotlib: {matplotlib.__version__}")
 
 
 def normalize_svg_content(svg_content: str) -> str:
@@ -31,8 +35,7 @@ def normalize_svg_content(svg_content: str) -> str:
 
 def load_normalized_reference_svg():
     """Loads the reference SVG."""
-    print(f"\nLoading 'tests/{reference_svg_filename}'")
-    print(f"numpy: {np.__version__}")
+    print(f"Loading 'tests/{reference_svg_filename}'")
     with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), reference_svg_filename), encoding='utf-8') as f:
         reference_svg = f.read()
     return normalize_svg_content(reference_svg)
