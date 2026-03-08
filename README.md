@@ -10,7 +10,7 @@
 [![juliandate](https://img.shields.io/badge/Juliandate-1.0.5-BD9354)](https://pypi.org/project/juliandate)
 [![tzfpy](https://img.shields.io/badge/tzfpy-0.16.4-blue)](https://github.com/ringsaturn/tzfpy)
 [![great-circle-calculator](https://img.shields.io/badge/Great_Circle_Calculator-1.3.1-brightgreen)](https://github.com/seangrogan/great_circle_calculator)
-[![Flask](https://img.shields.io/badge/Flask-3.1.0-39A6BD?logo=flask&logoColor=white)](https://flask.palletsprojects.com)
+[![Flask](https://img.shields.io/badge/Flask-3.1.3-39A6BD?logo=flask&logoColor=white)](https://flask.palletsprojects.com)
 
 The Flask server of our [Star Path Viewer](https://star-path-viewer.pages.dev/) website.
 
