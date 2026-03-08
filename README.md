@@ -4,7 +4,7 @@
 [![python](https://img.shields.io/badge/Python-3.10,_3.11-3776AB?logo=python&logoColor=white)](https://www.python.org)
 [![numpy](https://img.shields.io/badge/Numpy-2.2.3-013243?logo=numpy&logoColor=white)](https://numpy.org)
 [![pandas](https://img.shields.io/badge/Pandas-2.2.3-150458?logo=Pandas&logoColor=white)](https://pandas.pydata.org)
-[![matplotlib](https://img.shields.io/badge/Matplotlib-3.10.1-12557C)](https://matplotlib.org)
+[![matplotlib](https://img.shields.io/badge/Matplotlib-3.10.8-12557C)](https://matplotlib.org)
 [![pytest](https://img.shields.io/badge/pytest-8.3.5-0A9EDC)](https://pytest.org/)
 [![skyfield](https://img.shields.io/badge/Skyfield-1.49-BD9354)](https://rhodesmill.org/skyfield)
 [![juliandate](https://img.shields.io/badge/Juliandate-1.0.5-BD9354)](https://pypi.org/project/juliandate)
