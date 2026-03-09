@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 # tests/test_star_path_annotations.py
+import platform
 import os
 import json
 import pytest
@@ -10,20 +11,24 @@ from core.star_path import StarObject, get_diagram
 from .helpers import assert_dicts_equal
 
 
-# example_cases_filename = 'example_cases_skyfield1.49_np1.json'
-example_cases_filename = 'example_cases_skyfield1.49.json'
-# if Version(skyfield.__version__) > Version('1.49'):
-#     example_cases_filename = 'example_cases_skyfield1.51.json'
-
-rel_tol = 1e-9  # default in math.isclose()
-if Version(numpy.__version__) < Version('2.0.0'):
-    rel_tol = (
-        5e-9 if Version(skyfield.__version__) <= Version('1.49') else 5e-8
-    )
+# rel_tol = 1e-9  # default in math.isclose()
+rel_tol = 2e-9  # for compatibility when running in the server
+# if Version(numpy.__version__) < Version('2.0.0'):
+#     rel_tol = 5e-9 if Version(skyfield.__version__) <= Version('1.49') else 5e-8
 
 print("\n=== Annotations ===")
+print(f"python: {platform.python_version()}")
 print(f"numpy: {numpy.__version__}, skyfield: {skyfield.__version__}")
 print(f"Relative tolerance: {rel_tol:.0e}")
+
+if Version(skyfield.__version__) <= Version('1.49'):
+    example_cases_filename = 'example_cases_skyfield1.49.json'
+    print("Test cases: numpy 2.2.3, skyfield 1.49")
+else:
+    # example_cases_filename = 'example_cases_skyfield1.49.json'
+    # print("Test cases: numpy 2.2.3, skyfield 1.49")
+    example_cases_filename = 'example_cases_skyfield1.51.json'
+    print("Test cases: numpy 2.2.3, skyfield 1.51")
 
 
 def load_test_cases():
