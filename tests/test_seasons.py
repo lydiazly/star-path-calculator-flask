@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 # tests/test_seasons.py
+import platform
 import pytest
 from packaging.version import Version
 import numpy
@@ -13,9 +14,10 @@ if Version(skyfield.__version__) > Version('1.49'):
     rel_tol = 6e-4
 
 print("\n=== Seasons ===")
+print(f"python: {platform.python_version()}")
 print(f"numpy: {numpy.__version__}, skyfield: {skyfield.__version__}")
 print(f"Relative tolerance: {rel_tol:.0e}")
-print("Test cases: skyfield 1.49")
+print("Test cases: numpy 2.2.3, skyfield 1.49")
 
 
 test_cases = [
@@ -56,7 +58,7 @@ test_cases = [
 @pytest.mark.parametrize("year, results_expected", test_cases)
 def test_coords(year, results_expected):
     """Tests calculating the times and coordinates of equinoxes and solstices.
-    Compares two floats with a tolerance based on significant digits.
+    Compares two floats with a relative tolerance `rel_tol`.
     """
     res = get_coords(year)
     assert_dicts_equal(res, results_expected, rel_tol=rel_tol)
@@ -65,7 +67,7 @@ def test_coords(year, results_expected):
 @pytest.mark.parametrize("year, results_expected", test_cases)
 def test_seasons(year, results_expected):
     """Tests calculating the times of equinoxes and solstices.
-    Compares two floats with a tolerance based on significant digits.
+    Compares two floats with a relative tolerance `rel_tol`.
     """
     res = get_seasons(year)
     expected = {k: results_expected[k] for k in ['vernal_time', 'summer_time', 'autumnal_time', 'winter_time']}
