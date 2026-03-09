@@ -1,0 +1,14 @@
+# Ignore all files by default
+*
+
+# Allow specific files and directories
+!requirements*.txt
+!config/*
+!docker/*.sh
+!core/*.py
+!scripts/*.py
+!tests/*.py
+!tests/*.json
+!tests/*.svg
+!tests/*.txt
+!utils/*.py

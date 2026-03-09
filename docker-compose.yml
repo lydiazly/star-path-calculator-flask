@@ -1,0 +1,28 @@
+name: starpathcalculator
+
+services:
+  run:
+    image: starpathcalculator:run
+    pull_policy: build
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+      target: runtime
+    container_name: starpathcalculator
+    volumes:
+      - ./data:/app/data:ro
+    stdin_open: true  # Keep STDIN open (-i)
+    tty: true  # Allocate a pseudo-TTY (-t)
+
+  test-update:
+    image: starpathcalculator:test-update
+    pull_policy: build
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+      target: test-update
+    container_name: starpathcalculator
+    volumes:
+      - ./data:/app/data:ro
+    stdin_open: true  # Keep STDIN open (-i)
+    tty: true  # Allocate a pseudo-TTY (-t)
