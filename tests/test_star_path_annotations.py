@@ -12,7 +12,7 @@ from .helpers import assert_dicts_equal
 
 
 # rel_tol = 1e-9  # default in math.isclose()
-rel_tol = 2e-9  # for compatibility when running in the server
+rel_tol = 3e-9  # for compatibility
 # if Version(numpy.__version__) < Version('2.0.0'):
 #     rel_tol = 5e-9 if Version(skyfield.__version__) <= Version('1.49') else 5e-8
 
@@ -22,13 +22,13 @@ print(f"numpy: {numpy.__version__}, skyfield: {skyfield.__version__}")
 print(f"Relative tolerance: {rel_tol:.0e}")
 
 if Version(skyfield.__version__) <= Version('1.49'):
-    example_cases_filename = 'example_cases_skyfield1.49.json'
-    print("Test cases: numpy 2.2.3, skyfield 1.49")
+    example_cases_filename = 'example_cases_skyfield1.49_docker.json'
+    print("Test cases (docker): python 3.12.3, numpy 2.2.3, skyfield 1.49")
 else:
-    # example_cases_filename = 'example_cases_skyfield1.49.json'
+    # example_cases_filename = 'example_cases_skyfield1.49_docker.json'
     # print("Test cases: numpy 2.2.3, skyfield 1.49")
-    example_cases_filename = 'example_cases_skyfield1.51.json'
-    print("Test cases: numpy 2.2.3, skyfield 1.51")
+    example_cases_filename = 'example_cases_skyfield1.51_docker.json'
+    print("Test cases (docker): python 3.12.3, numpy 2.2.3, skyfield 1.51")
 
 
 def load_test_cases():

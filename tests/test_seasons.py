@@ -17,11 +17,12 @@ print("\n=== Seasons ===")
 print(f"python: {platform.python_version()}")
 print(f"numpy: {numpy.__version__}, skyfield: {skyfield.__version__}")
 print(f"Relative tolerance: {rel_tol:.0e}")
-print("Test cases: numpy 2.2.3, skyfield 1.49")
+print("Test cases (docker): python 3.12.3, numpy 2.2.3, skyfield 1.49")
 
-
+# Docker results (same as local tests)
 test_cases = [
-    (2000,
+    (
+        2000,
         {
             'vernal_time': (2000, 3, 20, 7, 35, 14.617520176605467),
             'vernal_ra': 0.006200246498259485,
@@ -34,10 +35,11 @@ test_cases = [
             'autumnal_dec': 2.316134394620446e-05,
             'winter_time': (2000, 12, 21, 13, 37, 25.529813447887136),
             'winter_ra': 269.99658688939695,
-            'winter_dec': -23.438993788457097
-        }
+            'winter_dec': -23.438993788457097,
+        },
     ),
-    (2024,
+    (
+        2024,
         {
             'vernal_time': (2024, 3, 20, 3, 6, 24.12583535347403),
             'vernal_ra': 359.6960554164222,
@@ -50,8 +52,8 @@ test_cases = [
             'autumnal_dec': 0.13528414596716848,
             'winter_time': (2024, 12, 21, 9, 20, 34.20657737924921),
             'winter_ra': 269.62621859461376,
-            'winter_dec': -23.435556239713698
-        }
+            'winter_dec': -23.435556239713698,
+        },
     ),
 ]
 
@@ -67,6 +69,7 @@ def test_coords(year, results_expected):
 @pytest.mark.parametrize("year, results_expected", test_cases)
 def test_seasons(year, results_expected):
     """Tests calculating the times of equinoxes and solstices.
+    Times should be the same as the results of `get_coords(year)`.
     Compares two floats with a relative tolerance `rel_tol`.
     """
     res = get_seasons(year)

@@ -15,12 +15,12 @@ print("\n=== SVG ===")
 print(f"python: {platform.python_version()}")
 print(f"numpy: {numpy.__version__}, matplotlib: {matplotlib.__version__}")
 
-if Version(numpy.__version__) >= Version('2.0.0'):
-    reference_svg_filename = 'example_matplotlib3.10.0.svg'
-    print("Test cases: numpy 2.2.3, matplotlib 3.10.0, skyfield 1.49")
-else:
+if Version(numpy.__version__) < Version('2.0.0'):
     reference_svg_filename = 'example_matplotlib3.5.2.svg'
-    print("Test cases: numpy 2.2.3, matplotlib 3.5.2, skyfield 1.49")
+    print("Test cases: python 3.10, numpy 2.2.3, matplotlib 3.5.2, skyfield 1.49")
+else:
+    reference_svg_filename = 'example_matplotlib3.10.0.svg'
+    print("Test cases: python 3.10, numpy 2.2.3, matplotlib 3.10.0, skyfield 1.49")
 
 
 def normalize_svg_content(svg_content: str) -> str:
