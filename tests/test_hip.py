@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 # tests/test_hip.py
-import pytest
 import numpy as np
-import os
+from pathlib import Path
+import pytest
 import core.data_loader as dl
 from utils.star_utils import hip_to_name
 
@@ -12,11 +12,11 @@ from utils.star_utils import hip_to_name
     "hip_valid, radec_expected",
     [
         (87937, "269.454, 4.668"),
-        ( 8102, "26.021, -15.940"),
+        (8102, "26.021, -15.940"),
         (32349, "101.289, -16.713"),
         (71683, "219.920, -60.835"),
         (70890, "217.449, -62.681"),
-    ]
+    ],
 )
 def test_hip_valid(hip_valid, radec_expected):
     """Tests valid HIP entries."""
@@ -44,7 +44,11 @@ def parse_hip_from_file(filename):
 
 
 # Read HIP numbers from the file
-hip_invalid, hip_missing = parse_hip_from_file(os.path.join(os.path.dirname(os.path.abspath(__file__)), "hip_invalid.txt"))
+cases_filename = "cases/cases_hip_invalid.txt"
+hip_invalid, hip_missing = parse_hip_from_file(
+    Path(__file__).parent.parent / cases_filename
+)
+
 
 @pytest.mark.parametrize("hip_invalid", hip_invalid)
 def test_hip_invalid(hip_invalid):
@@ -69,7 +73,7 @@ def test_hip_no_entry(hip_missing):
         (102098, 'alf_Cyg/50_Cyg/Deneb'),
         (0, ''),
         (123, ''),
-    ]
+    ],
 )
 def test_hip_to_name(hip, name_expected):
     """Tests finding the name of a given HIP."""
