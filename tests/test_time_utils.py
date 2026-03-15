@@ -2,7 +2,14 @@
 # tests/test_time_utils.py
 import pytest
 from skyfield.api import load
-from utils.time_utils import find_timezone, get_standard_offset_by_id, ut1_to_standard_time, ut1_to_local_mean_time, gregorian_to_julian, julian_to_gregorian
+from utils.time_utils import (
+    find_timezone,
+    get_standard_offset_by_id,
+    ut1_to_standard_time,
+    ut1_to_local_mean_time,
+    gregorian_to_julian,
+    julian_to_gregorian,
+)
 
 
 tisca = load.timescale()
@@ -17,7 +24,7 @@ tisca = load.timescale()
         (53.3, -110.0, 'America/Edmonton'),  # Lloydminster, Alberta
         (91, 0, ''),  # Invalid
         (0, 181, ''),  # Invalid
-    ]
+    ],
 )
 def test_timezone(lat, lng, tz_expected):
     """Tests the time zone identifier finder."""
@@ -30,11 +37,12 @@ def test_timezone(lat, lng, tz_expected):
         ('America/Vancouver', '-8.0'),
         ('Asia/Shanghai',      '8.0'),
         ('Asia/Urumqi',        '6.0'),
-    ]
+    ],
 )
 def test_standard_offset(tz_id, offset_in_hours_expected):
     """Tests getting the UT1 offset in hours."""
     assert f'{get_standard_offset_by_id(tz_id)/60:.1f}' == offset_in_hours_expected
+
 
 test_times = [
     ((2000, 1, 1, 12, 0, 0), -8,   -120,   (2000, 1, 1, 4, 0, 0)),
