@@ -1,7 +1,13 @@
 # -*- coding: utf-8 -*-
 # config/constants.py
 
-__all__ = ["EPH_DATA_FILE", "HIP_DATA_FILE", "HIP_NAME_FILE", "EPH_DATE_MIN", "EPH_DATE_MAX"]
+__all__ = [
+    "EPH_DATA_FILE",
+    "HIP_DATA_FILE",
+    "HIP_NAME_FILE",
+    "EPH_DATE_MIN",
+    "EPH_DATE_MAX",
+]
 
 
 # Ephemeris data (https://ssd.jpl.nasa.gov/planets/eph_export.html)

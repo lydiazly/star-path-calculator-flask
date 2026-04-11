@@ -1,11 +1,11 @@
 # Star Path Calculator
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
-[![python](https://img.shields.io/badge/Python-3.10,_3.11-3776AB?logo=python&logoColor=white)](https://www.python.org)
-[![numpy](https://img.shields.io/badge/Numpy-2.2.3-013243?logo=numpy&logoColor=white)](https://numpy.org)
-[![pandas](https://img.shields.io/badge/Pandas-2.2.3-150458?logo=Pandas&logoColor=white)](https://pandas.pydata.org)
+[![python](https://img.shields.io/badge/Python-3.11-3776AB?logo=python&logoColor=white)](https://www.python.org)
+[![numpy](https://img.shields.io/badge/Numpy-2.4.4-013243?logo=numpy&logoColor=white)](https://numpy.org)
+[![pandas](https://img.shields.io/badge/Pandas-3.0.2-150458?logo=Pandas&logoColor=white)](https://pandas.pydata.org)
 [![matplotlib](https://img.shields.io/badge/Matplotlib-3.10.8-12557C)](https://matplotlib.org)
-[![skyfield](https://img.shields.io/badge/Skyfield-1.49-BD9354)](https://rhodesmill.org/skyfield)
+[![skyfield](https://img.shields.io/badge/Skyfield-1.54-BD9354)](https://rhodesmill.org/skyfield)
 [![juliandate](https://img.shields.io/badge/Juliandate-1.0.5-BD9354)](https://pypi.org/project/juliandate)
 [![tzfpy](https://img.shields.io/badge/tzfpy-0.16.4-blue)](https://github.com/ringsaturn/tzfpy)
 [![great-circle-calculator](https://img.shields.io/badge/Great_Circle_Calculator-1.3.1-brightgreen)](https://github.com/seangrogan/great_circle_calculator)
@@ -48,9 +48,11 @@ We are aiming to develop a user-friendly app to facilitate the research in histo
 - :calendar: Accepts the **[Gregorian](https://en.wikipedia.org/wiki/Gregorian_calendar)** or **[Julian](https://en.wikipedia.org/wiki/Julian_calendar)** calendar date input.
 - :star: Supports star or planet input by **name**, **Hipparcos Catalogue number**, or [ICRS coordinates](https://en.wikipedia.org/wiki/International_Celestial_Reference_System_and_its_realizations) **(RA, Dec)**.
 - :night_with_stars: Displays star paths with distinct line styles for daytime, twilight stages, and nighttime.
-- :clock1: Provides **[standard time](https://en.wikipedia.org/wiki/Standard_time)**, **[local mean time (LMT)](https://en.wikipedia.org/wiki/Local_mean_time)**, and **[UT1 time](https://en.wikipedia.org/wiki/Universal_Time)** in the results for the user's reference. (*The offsets are from UT1 and no Daylight Saving Time (DST) adjustments in this project.*)
+- :clock1: Provides **[Standard Time](https://en.wikipedia.org/wiki/Standard_time)**, **[Local Mean Time (LMT)](https://en.wikipedia.org/wiki/Local_mean_time)**, and **[UT1](https://en.wikipedia.org/wiki/Universal_Time)** in the results for the user's reference.
 
-> See the [Guides](https://github.com/stardial-astro/star-path-viewer/wiki/1.-Guides) of our online application.
+  ***Note:** The offset represents the Standard Time in the current time zone of a specific location, indicating that Daylight Saving Time (DST) is not in effect.*
+
+> See the [Guides](https://github.com/stardial-astro/star-path-viewer/wiki/1.-Guides) of our web app for more details.
 
 ## Installation
 
@@ -90,16 +92,16 @@ python3 ./scripts/get_equinoxes_solstices.py -2000
 ```text
 Dates, times, and ICRS coordinates (J2000) of the equinoxes and solstices in 2001 BCE:
 
-[Vernal Equinox]   -2000-03-21 04:40:19.602 (UT1)
+[Vernal Equinox]   -2000-03-21T04:40:19.602 (UT1)
                    ra = 52.962, dec = 19.517
 
-[Summer Solstice]  -2000-06-23 11:32:34.141 (UT1)
+[Summer Solstice]  -2000-06-23T11:32:34.141 (UT1)
                    ra = 147.791, dec = 13.371
 
-[Autumnal Equinox] -2000-09-22 05:50:58.094 (UT1)
+[Autumnal Equinox] -2000-09-22T05:50:58.094 (UT1)
                    ra = 232.955, dec = -19.515
 
-[Winter Solstice]  -2000-12-19 15:18:26.852 (UT1)
+[Winter Solstice]  -2000-12-19T15:18:26.852 (UT1)
                    ra = 327.784, dec = -13.373
 ```
 
@@ -153,57 +155,57 @@ python3 ./scripts/get_star_path.py -2000 3 1 --lat 40 --lng 116 -o "jupiter"
 R:
   alt = 0.000
   az  = 122.000
-  time_standard   (Gregorian) = -2000-03-01 03:41:22 UT1+08:00
-  time_local_mean (Gregorian) = -2000-03-01 03:25:22
-  time_ut1        (Gregorian) = -2000-02-29 19:41:22
-  time_standard   (Julian)    = -2000-03-18 03:41:22 UT1+08:00
-  time_local_mean (Julian)    = -2000-03-18 03:25:22
-  time_ut1        (Julian)    = -2000-03-17 19:41:22
+  time_local_mean (Gregorian) = -2000-03-01T03:25:22
+  time_ut1        (Gregorian) = -2000-02-29T19:41:22
+  time_standard   (Gregorian) = -2000-03-01T03:41:22+08:00
+  time_local_mean (Julian)    = -2000-03-18T03:25:22
+  time_ut1        (Julian)    = -2000-03-17T19:41:22
+  time_standard   (Julian)    = -2000-03-18T03:41:22+08:00
 D1:
   alt = 17.774
   az  = 146.437
-  time_standard   (Gregorian) = -2000-03-01 05:54:05 UT1+08:00
-  time_local_mean (Gregorian) = -2000-03-01 05:38:05
-  time_ut1        (Gregorian) = -2000-02-29 21:54:05
-  time_standard   (Julian)    = -2000-03-18 05:54:05 UT1+08:00
-  time_local_mean (Julian)    = -2000-03-18 05:38:05
-  time_ut1        (Julian)    = -2000-03-17 21:54:05
+  time_local_mean (Gregorian) = -2000-03-01T05:38:05
+  time_ut1        (Gregorian) = -2000-02-29T21:54:05
+  time_standard   (Gregorian) = -2000-03-01T05:54:05+08:00
+  time_local_mean (Julian)    = -2000-03-18T05:38:05
+  time_ut1        (Julian)    = -2000-03-17T21:54:05
+  time_standard   (Julian)    = -2000-03-18T05:54:05+08:00
 D2:
   alt = 20.787
   az  = 153.305
-  time_standard   (Gregorian) = -2000-03-01 06:25:25 UT1+08:00
-  time_local_mean (Gregorian) = -2000-03-01 06:09:25
-  time_ut1        (Gregorian) = -2000-02-29 22:25:25
-  time_standard   (Julian)    = -2000-03-18 06:25:25 UT1+08:00
-  time_local_mean (Julian)    = -2000-03-18 06:09:25
-  time_ut1        (Julian)    = -2000-03-17 22:25:25
+  time_local_mean (Gregorian) = -2000-03-01T06:09:25
+  time_ut1        (Gregorian) = -2000-02-29T22:25:25
+  time_standard   (Gregorian) = -2000-03-01T06:25:25+08:00
+  time_local_mean (Julian)    = -2000-03-18T06:09:25
+  time_ut1        (Julian)    = -2000-03-17T22:25:25
+  time_standard   (Julian)    = -2000-03-18T06:25:25+08:00
 D3:
   alt = 22.868
   az  = 159.596
-  time_standard   (Gregorian) = -2000-03-01 06:52:35 UT1+08:00
-  time_local_mean (Gregorian) = -2000-03-01 06:36:35
-  time_ut1        (Gregorian) = -2000-02-29 22:52:35
-  time_standard   (Julian)    = -2000-03-18 06:52:35 UT1+08:00
-  time_local_mean (Julian)    = -2000-03-18 06:36:35
-  time_ut1        (Julian)    = -2000-03-17 22:52:35
+  time_local_mean (Gregorian) = -2000-03-01T06:36:35
+  time_ut1        (Gregorian) = -2000-02-29T22:52:35
+  time_standard   (Gregorian) = -2000-03-01T06:52:35+08:00
+  time_local_mean (Julian)    = -2000-03-18T06:36:35
+  time_ut1        (Julian)    = -2000-03-17T22:52:35
+  time_standard   (Julian)    = -2000-03-18T06:52:35+08:00
 T:
   alt = 25.682
   az  = 180.000
-  time_standard   (Gregorian) = -2000-03-01 08:15:01 UT1+08:00
-  time_local_mean (Gregorian) = -2000-03-01 07:59:01
-  time_ut1        (Gregorian) = -2000-03-01 00:15:01
-  time_standard   (Julian)    = -2000-03-18 08:15:01 UT1+08:00
-  time_local_mean (Julian)    = -2000-03-18 07:59:01
-  time_ut1        (Julian)    = -2000-03-18 00:15:01
+  time_local_mean (Gregorian) = -2000-03-01T07:59:01
+  time_ut1        (Gregorian) = -2000-03-01T00:15:01
+  time_standard   (Gregorian) = -2000-03-01T08:15:01+08:00
+  time_local_mean (Julian)    = -2000-03-18T07:59:01
+  time_ut1        (Julian)    = -2000-03-18T00:15:01
+  time_standard   (Julian)    = -2000-03-18T08:15:01+08:00
 S:
   alt = 0.000
   az  = 238.003
-  time_standard   (Gregorian) = -2000-03-01 12:48:40 UT1+08:00
-  time_local_mean (Gregorian) = -2000-03-01 12:32:40
-  time_ut1        (Gregorian) = -2000-03-01 04:48:40
-  time_standard   (Julian)    = -2000-03-18 12:48:40 UT1+08:00
-  time_local_mean (Julian)    = -2000-03-18 12:32:40
-  time_ut1        (Julian)    = -2000-03-18 04:48:40
+  time_local_mean (Gregorian) = -2000-03-01T12:32:40
+  time_ut1        (Gregorian) = -2000-03-01T04:48:40
+  time_standard   (Gregorian) = -2000-03-01T12:48:40+08:00
+  time_local_mean (Julian)    = -2000-03-18T12:32:40
+  time_ut1        (Julian)    = -2000-03-18T04:48:40
+  time_standard   (Julian)    = -2000-03-18T12:48:40+08:00
 ```
 
 </details>

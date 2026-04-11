@@ -10,7 +10,6 @@ import skyfield
 from core.seasons import get_coords, get_seasons
 from .helpers import assert_dicts_equal
 
-
 # Docker results (same as local tests)
 cases_filename = 'cases/cases_seasons_skyfield1.49_docker.json'
 

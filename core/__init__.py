@@ -12,6 +12,7 @@ Classes:
 Functions:
     load_data: Loads the ephemeris data and the Hipparcos Catalogue.
 """
+
 from .data_loader import load_data
 
 load_data()
