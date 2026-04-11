@@ -51,8 +51,8 @@ def main():
                         help="do not export the SVG image (default: export SVG)")
     args = parser.parse_args()
 
-    if sys.version_info < (3, 9):
-        print("This program requires Python 3.9 or newer. Please upgrade your Python version.", file=sys.stderr)
+    if sys.version_info < (3, 11):
+        print("This program requires Python 3.11 or newer. Please upgrade your Python version.", file=sys.stderr)
         sys.exit(1)
 
     print_hip_name = args.name
@@ -116,8 +116,8 @@ def main():
 
     # Plot star path ---------------------------------------------------------|
     try:
-        from utils.time_utils import find_timezone
-        tz_id = find_timezone(lat=lat, lng=lng)
+        from utils.time_utils import get_tzid_by_tzfpy
+        tz_id = get_tzid_by_tzfpy(lat=lat, lng=lng)
         # tz_id = "America/Vancouver"
 
         validate_datetime(year, month, day)
@@ -135,18 +135,20 @@ def main():
         with open(filename, 'w', encoding='utf-8') as file:
             file.write(svg_data)
 
+    delim = 'T'
+    tz_str = format_timezone(results["annotations"][0]["time_zone"])
     print("\n[Point Details]")
     for item in results["annotations"]:
         if item['is_displayed']:
             print(f'{item["name"]}:')
             print(f'  alt = {item["alt"]:.3f}')
             print(f'  az  = {item["az"]:.3f}')
-            print(f'  time_standard   (Gregorian) = {" ".join(format_datetime_iso(*item["time_standard"]))} UT1{format_timezone(item["time_zone"])}')
-            print(f'  time_local_mean (Gregorian) = {" ".join(format_datetime_iso(*item["time_local_mean"]))}')
-            print(f'  time_ut1        (Gregorian) = {" ".join(format_datetime_iso(*item["time_ut1"]))}')
-            print(f'  time_standard   (Julian)    = {" ".join(format_datetime_iso(*item["time_standard_julian"]))} UT1{format_timezone(item["time_zone"])}')
-            print(f'  time_local_mean (Julian)    = {" ".join(format_datetime_iso(*item["time_local_mean_julian"]))}')
-            print(f'  time_ut1        (Julian)    = {" ".join(format_datetime_iso(*item["time_ut1_julian"]))}')
+            print(f'  time_local_mean (Gregorian) = {delim.join(format_datetime_iso(*item["time_local_mean"]))}')
+            print(f'  time_ut1        (Gregorian) = {delim.join(format_datetime_iso(*item["time_ut1"]))}')
+            print(f'  time_standard   (Gregorian) = {delim.join(format_datetime_iso(*item["time_standard"]))}{tz_str}')
+            print(f'  time_local_mean (Julian)    = {delim.join(format_datetime_iso(*item["time_local_mean_julian"]))}')
+            print(f'  time_ut1        (Julian)    = {delim.join(format_datetime_iso(*item["time_ut1_julian"]))}')
+            print(f'  time_standard   (Julian)    = {delim.join(format_datetime_iso(*item["time_standard_julian"]))}{tz_str}')
 
     if args.svg:
         print(f"\nSVG has been saved to '{filename}'")

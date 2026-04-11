@@ -31,8 +31,8 @@ def main():
                         help="int, 0 is 1 BCE (default: this year)")
     args = parser.parse_args()
 
-    if sys.version_info < (3, 9):
-        print("This program requires Python 3.9 or newer. Please upgrade your Python version.", file=sys.stderr)
+    if sys.version_info < (3, 11):
+        print("This program requires Python 3.11 or newer. Please upgrade your Python version.", file=sys.stderr)
         sys.exit(1)
 
     # Set date ----------------------------------------------------------------|
@@ -54,14 +54,15 @@ def main():
 
     year_str = format_datetime(*datetime_list, year_only=True)
 
+    delim = 'T'
     print(f"Dates, times, and ICRS coordinates (J2000) of the equinoxes and solstices in {year_str}:")
-    print(f'\n[Vernal Equinox]   {" ".join(format_datetime_iso(*results["vernal_time"]))} (UT1)')
+    print(f'\n[Vernal Equinox]   {delim.join(format_datetime_iso(*results["vernal_time"]))} (UT1)')
     print(f'                   ra = {results["vernal_ra"]:.3f}, dec = {results["vernal_dec"]:.3f}')
-    print(f'\n[Summer Solstice]  {" ".join(format_datetime_iso(*results["summer_time"]))} (UT1)')
+    print(f'\n[Summer Solstice]  {delim.join(format_datetime_iso(*results["summer_time"]))} (UT1)')
     print(f'                   ra = {results["summer_ra"]:.3f}, dec = {results["summer_dec"]:.3f}')
-    print(f'\n[Autumnal Equinox] {" ".join(format_datetime_iso(*results["autumnal_time"]))} (UT1)')
+    print(f'\n[Autumnal Equinox] {delim.join(format_datetime_iso(*results["autumnal_time"]))} (UT1)')
     print(f'                   ra = {results["autumnal_ra"]:.3f}, dec = {results["autumnal_dec"]:.3f}')
-    print(f'\n[Winter Solstice]  {" ".join(format_datetime_iso(*results["winter_time"]))} (UT1)')
+    print(f'\n[Winter Solstice]  {delim.join(format_datetime_iso(*results["winter_time"]))} (UT1)')
     print(f'                   ra = {results["winter_ra"]:.3f}, dec = {results["winter_dec"]:.3f}')
 
 

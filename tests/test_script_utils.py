@@ -57,6 +57,7 @@ def test_format_datetime_iso(datetime_tuple, datetime_str_expected):
 
 range_error_message = r"^Out of the ephemeris date range: -3000-01-29/\+3000-05-06$"
 
+
 @pytest.mark.parametrize(
     "invalid_datetime, message_expected",
     [
@@ -106,11 +107,13 @@ def test_decimal_to_hms(decimal_hours, hms_expected):
 @pytest.mark.parametrize(
     "offset_in_hours, tz_str",
     [
+        (0, "Z"),  # UTC
+        (5.5, "+05:30"),  # India
+        (5.75, "+05:45"),  # Nepal
         (-8, "-08:00"),
         (8, "+08:00"),
-        (0, "+00:00"),
     ],
 )
 def test_format_timezone(offset_in_hours, tz_str):
-    """Tests formatting the UT1 offset in hours."""
+    """Tests formatting the Standard Time offset."""
     assert format_timezone(offset_in_hours) == tz_str

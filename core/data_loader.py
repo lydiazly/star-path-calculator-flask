@@ -9,6 +9,7 @@ Example usage:
     >>> earth.target_name
     '399 EARTH'
 """
+
 from skyfield.api import load, load_file
 from skyfield.data import hipparcos
 import os
@@ -22,7 +23,9 @@ eph = None
 earth = None
 hip_df = None
 
-data_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'data')
+data_dir = os.path.join(
+    os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'data'
+)
 
 
 def load_data():

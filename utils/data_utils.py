@@ -1,14 +1,18 @@
 # -*- coding: utf-8 -*-
 # utils/data_utils.py
 """Functions used only for preparing the data."""
+
 import pandas as pd
+
 # import pickle
 import os
 
 __all__ = []
 
 
-data_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'data')
+data_dir = os.path.join(
+    os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'data'
+)
 
 
 def convert_id(id_value) -> str:
@@ -23,6 +27,7 @@ def convert_id(id_value) -> str:
       V640 --> V640
     """
     import json
+
     with open(os.path.join(data_dir, 'greek_map.json'), 'r') as file:
         greek_map = json.load(file)
 
@@ -57,13 +62,18 @@ def join_pinyin_syllables(syllable_list: list) -> str:
         # Add an apostrophe if the next syllable begins with a vowel
         if syllable_list[i][0] in vowels:
             result += "'"
-        result += syllable_list[i].title() if syllable_list[i-1][0] == '(' else syllable_list[i]
+        result += (
+            syllable_list[i].title()
+            if syllable_list[i - 1][0] == '('
+            else syllable_list[i]
+        )
     return result
 
 
 def process_pinyin(text: str) -> str:
     """Helper function to process pinyin."""
     from pypinyin import pinyin, load_phrases_dict, Style
+
     # from pypinyin_dict.phrase_pinyin_data import large_pinyin
     from pypinyin_dict.phrase_pinyin_data import zdic_cibs
     import itertools
@@ -75,9 +85,15 @@ def process_pinyin(text: str) -> str:
     zdic_cibs.load()
     load_phrases_dict(pinyin_overwrite)
 
-    pinyin_list = list(itertools.product(*pinyin(text, style=Style.NORMAL, heteronym=True, v_to_u=True)))
+    pinyin_list = list(
+        itertools.product(
+            *pinyin(text, style=Style.NORMAL, heteronym=True, v_to_u=True)
+        )
+    )
     # pinyin_str = ','.join([join_pinyin_syllables(w) for w in pinyin_list]).replace('ü', 'u')
-    pinyin_str = ','.join([join_pinyin_syllables(w) for w in pinyin_list])  # Retains 'ü'
+    pinyin_str = ','.join(
+        [join_pinyin_syllables(w) for w in pinyin_list]
+    )  # Retains 'ü'
     # pinyin_with_tone_list = list(itertools.product(*pinyin(text, heteronym=True, v_to_u=True)))
     # pinyin_with_tone_str = ','.join([' '.join([c.title() for c in w]) for w in pinyin_with_tone_list])
     return pinyin_str
@@ -108,12 +124,15 @@ def load_name_zh() -> pd.DataFrame:
     df['Id_new'] = df['Id'].apply(convert_id)
     df['Bayer Designation'] = df['Id_new'] + "_" + df['Const']
     df['Name_zh_hk'] = df['Name_zh_hk'].str.replace(r'\s*,\s*', '/', regex=True)
-    df = df[df['Name_zh_hk'].notna() & (df['Name_zh_hk'] != '')]  # Remove rows where 'Name_zh_hk' is empty or null
+    df = df[
+        df['Name_zh_hk'].notna() & (df['Name_zh_hk'] != '')
+    ]  # Remove rows where 'Name_zh_hk' is empty or null
     df_name_zh = df[['Bayer Designation', 'Name_zh_hk']]
     df_name_zh = df_name_zh.drop_duplicates()
 
     # Add Simplified Chinese column
     import opencc
+
     converter = opencc.OpenCC('hk2s.json')  # Traditional (HK) to simplified
     df_name_zh['Name_zh'] = df_name_zh['Name_zh_hk'].apply(converter.convert)
 
@@ -137,7 +156,9 @@ def load_hip_ident() -> pd.DataFrame:
 
     # Read proper names and Bayer Designations --------------------------------|
     df_bayer = pd.read_pickle(os.path.join(data_dir, 'ident_bayer.pkl'))
-    df_bayer_add = pd.read_csv(os.path.join(data_dir, 'ident_bayer_add.csv'))  # additional table
+    df_bayer_add = pd.read_csv(
+        os.path.join(data_dir, 'ident_bayer_add.csv')
+    )  # additional table
     df_proper = pd.read_pickle(os.path.join(data_dir, 'ident_proper.pkl'))
     # df_to_csv(df_bayer, 'ident_bayer.csv')
     # df_to_csv(df_proper, 'ident_proper.csv')
@@ -150,7 +171,9 @@ def load_hip_ident() -> pd.DataFrame:
     df_name_zh_columns = df_name_zh_matched.columns.tolist()
 
     # Correct Bayer Designations (first match) --------------------------------|
-    df_name_zh_corrections = pd.read_csv(os.path.join(data_dir, 'bayer-zh-corrections.csv'))
+    df_name_zh_corrections = pd.read_csv(
+        os.path.join(data_dir, 'bayer-zh-corrections.csv')
+    )
     df_name_zh_corrections.set_index('Name_zh_hk', inplace=True)
     df_name_zh_matched.set_index('Name_zh_hk', inplace=True)
     df_name_zh_matched.update(df_name_zh_corrections)
@@ -161,7 +184,9 @@ def load_hip_ident() -> pd.DataFrame:
     for idx, bayer_id in enumerate(df_name_zh_matched['Bayer Designation']):
         matches = df_bayer[df_bayer['Bayer Designation'] == bayer_id]
         if len(matches) > 0:
-            df_name_zh_matched.at[idx, 'HIP'] = matches.iloc[0]['HIP']  # Take the first match
+            df_name_zh_matched.at[idx, 'HIP'] = matches.iloc[0][
+                'HIP'
+            ]  # Take the first match
             if len(matches) > 1:
                 df_name_zh_matched.at[idx, 'Mark'] = 'MULT'  # Multiple matches found
         else:
@@ -175,21 +200,41 @@ def load_hip_ident() -> pd.DataFrame:
 
     # Group by HIP ------------------------------------------------------------|
     # Aggregate Bayer Designation and Proper Name with '/'
-    df_bayer_agg = df_bayer.groupby('HIP')['Bayer Designation'].apply(lambda x: '/'.join(x)).reset_index()
-    df_proper_agg = df_proper.groupby('HIP')['Proper Name'].apply(lambda x: '/'.join(x)).reset_index()
+    df_bayer_agg = (
+        df_bayer.groupby('HIP')['Bayer Designation']
+        .apply(lambda x: '/'.join(x))
+        .reset_index()
+    )
+    df_proper_agg = (
+        df_proper.groupby('HIP')['Proper Name']
+        .apply(lambda x: '/'.join(x))
+        .reset_index()
+    )
 
     # Merge the DataFrames on the HIP column ----------------------------------|
     df_merged = pd.merge(df_bayer_agg, df_proper_agg, on='HIP', how='outer')
     # df_merged = pd.merge(df_merged, df_name_zh_matched[['HIP', 'Name_zh_hk', 'Name_zh', 'Pinyin']], on='HIP', how='left')
     df_name_zh_filtered = df_name_zh_matched[df_name_zh_matched['HIP'].notnull()]
-    df_merged = pd.merge(df_merged, df_name_zh_filtered[['HIP', 'Bayer Designation', 'Name_zh_hk', 'Name_zh', 'Pinyin']],
-                         on='HIP', how='outer', suffixes=('', '_new'))
+    df_merged = pd.merge(
+        df_merged,
+        df_name_zh_filtered[
+            ['HIP', 'Bayer Designation', 'Name_zh_hk', 'Name_zh', 'Pinyin']
+        ],
+        on='HIP',
+        how='outer',
+        suffixes=('', '_new'),
+    )
 
     # Only update the 'Bayer Designation' if it's missing in df_merged
     df_merged['Bayer Designation'] = np.where(
-        (df_merged['HIP'].isin(df_name_zh_filtered['HIP'])) &
-        (~df_merged['HIP'].isin(df_merged.dropna(subset=['Bayer Designation'])['HIP'])),
-        df_merged['Bayer Designation_new'], df_merged['Bayer Designation']
+        (df_merged['HIP'].isin(df_name_zh_filtered['HIP']))
+        & (
+            ~df_merged['HIP'].isin(
+                df_merged.dropna(subset=['Bayer Designation'])['HIP']
+            )
+        ),
+        df_merged['Bayer Designation_new'],
+        df_merged['Bayer Designation'],
     )
 
     # Drop the temporary 'Bayer Designation_new' column
@@ -218,6 +263,7 @@ def load_hip_ident() -> pd.DataFrame:
 
 def df_to_json(df: pd.DataFrame, filename='hip_ident.json'):
     import json
+
     data_dict = df.to_dict(orient='records')
     with open(os.path.join(data_dir, filename), 'w') as json_file:
         json.dump(data_dict, json_file, indent=4)
@@ -236,7 +282,7 @@ def csv_to_json(input_filename='hip_ident_zh.csv'):
 
 
 def hip_validation(hip_min=None, hip_max=None):
-    """ Validates HIP in the data source.
+    """Validates HIP in the data source.
 
     HIP range: [1, 120416]
     first/last HIP: 1/118322
@@ -262,22 +308,32 @@ def hip_validation(hip_min=None, hip_max=None):
     count_ra_nan = 0
     count_dec_nan = 0
     count_missing = 0
-    for i in range(hip_min, hip_max+1):
+    for i in range(hip_min, hip_max + 1):
         if i in idx:
             count_in += 1
             s = dl.hip_df.loc[i]
-            if any([np.isnan(s['magnitude']), np.isnan(s['ra_degrees']), np.isnan(s['dec_degrees'])]):
+            if any(
+                [
+                    np.isnan(s['magnitude']),
+                    np.isnan(s['ra_degrees']),
+                    np.isnan(s['dec_degrees']),
+                ]
+            ):
                 if np.isnan(s['magnitude']):
                     count_mag_nan += 1
                 if np.isnan(s['ra_degrees']):
                     count_ra_nan += 1
                 if np.isnan(s['dec_degrees']):
                     count_dec_nan += 1
-                print(f"- hip={i}: mag={s['magnitude']}, radec=({s['ra_degrees']}, {s['dec_degrees']})")
+                print(
+                    f"- hip={i}: mag={s['magnitude']}, radec=({s['ra_degrees']}, {s['dec_degrees']})"
+                )
             else:
                 count_valid += 1
                 if i < hip_first or i > hip_last:
-                    print(f"+ hip={i}: mag={s['magnitude']}, radec=({s['ra_degrees']}, {s['dec_degrees']})")
+                    print(
+                        f"+ hip={i}: mag={s['magnitude']}, radec=({s['ra_degrees']}, {s['dec_degrees']})"
+                    )
         elif i >= hip_first and i <= hip_last:
             count_missing += 1
             print(f"* hip={i}: no entry")
@@ -295,7 +351,9 @@ def docx_to_pkl():
     try:
         from docx import Document
     except ModuleNotFoundError:
-        raise ModuleNotFoundError("Module docx not found. Install by:\npython -m pip install python-docx")
+        raise ModuleNotFoundError(
+            "Module docx not found. Install by:\npython -m pip install python-docx"
+        )
 
     col_name = "Proper Name"
     doc_name = "ident6.docx"

@@ -47,16 +47,18 @@ def dict_diff(d1, d2, path="", rel_tol=1e-9):
                     rel_err = abs(d1[i] - d2[i]) / (max(abs(d1[i]), abs(d2[i])))
                     if math.isclose(d1[i], d2[i], rel_tol=rel_tol):
                         print(f"\n-{full_path}: {repr(d1[i])}")
-                        print(f"+{full_path}: {repr(d2[i])} (are close but have rel_err: {rel_err:e})")
+                        print(
+                            f"+{full_path}: {repr(d2[i])} (are close but have rel_err: {rel_err:e})"
+                        )
                     else:
                         differences.append(f"-{full_path}: {repr(d1[i])}")
-                        differences.append(f"+{full_path}: {repr(d2[i])} (rel_err: {rel_err:e})")
+                        differences.append(
+                            f"+{full_path}: {repr(d2[i])} (rel_err: {rel_err:e})"
+                        )
                 # Recursively handle nested lists/tuples
                 elif isinstance(d1[i], list) or isinstance(d1[i], tuple):
                     # If d2 is not a list/tuple, mark and check next
-                    if not (
-                        isinstance(d2[i], list) or isinstance(d2[i], tuple)
-                    ):
+                    if not (isinstance(d2[i], list) or isinstance(d2[i], tuple)):
                         differences.append(f"-{full_path}: {repr(d1[i])}")
                         differences.append(f"+{full_path}: {repr(d2[i])}")
                         continue
@@ -111,10 +113,14 @@ def dict_diff(d1, d2, path="", rel_tol=1e-9):
                 rel_err = abs(d1[k] - d2[k]) / (max(abs(d1[k]), abs(d2[k])))
                 if math.isclose(d1[k], d2[k], rel_tol=rel_tol):
                     print(f"\n-{full_path}: {repr(d1[k])}")
-                    print(f"+{full_path}: {repr(d2[k])} (are close but have rel_err: {rel_err:e})")
+                    print(
+                        f"+{full_path}: {repr(d2[k])} (are close but have rel_err: {rel_err:e})"
+                    )
                 else:
                     differences.append(f"-{full_path}: {repr(d1[k])}")
-                    differences.append(f"+{full_path}: {repr(d2[k])} (rel_err: {rel_err:e})")
+                    differences.append(
+                        f"+{full_path}: {repr(d2[k])} (rel_err: {rel_err:e})"
+                    )
             # Recursively handle nested lists/tuples
             elif isinstance(d1[k], list) or isinstance(d1[k], tuple):
                 # If d2 is not a list/tuple, mark and check next
