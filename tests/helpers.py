@@ -4,28 +4,59 @@ import math
 import pytest
 
 
-def assert_dicts_equal(d1: dict, d2: dict, rel_tol=1e-9):
-    """Asserts that two dictionaries are equal with tolerance for floats.
+def is_floats_close(a, b, rel_tol, abs_tol, abs_tol_thred) -> tuple[bool, float]:
+    """Compares two floats using `math.isclose(a, b, rel_tol, abs_tol)`:
+    - If `abs(a - b) <= max(rel_tol * max(abs(a), abs(b)), abs_tol_default)`
+      where `abs_tol_default` is 0, then `a` and `b` are considered "close" to each other.
+    - If `max(abs(a), abs(b)) <= abs_tol_thred`, use the given `abs_tol` value in `math.isclose`.
+
+    Returns `(is_close, rel_err, abs_err, is_small)`.
+    """
+    _max = max(abs(a), abs(b))
+    is_small = _max <= abs_tol_thred
+    _abs_tol = abs_tol if is_small else 0
+    abs_err = abs(a - b)
+    rel_err = abs_err / _max
+    is_close = math.isclose(a, b, rel_tol=rel_tol, abs_tol=_abs_tol)
+    return (is_close, rel_err, abs_err, is_small)
+
+
+def assert_iterable_equal(
+    d1: dict | list,
+    d2: dict | list,
+    include_keys: list[str] | None = None,
+    rel_tol=1e-9,
+    abs_tol=1e-7,
+    abs_tol_thred=1e-6,
+):
+    """Asserts that two dictionaries/lists are equal with tolerance for floats.
     Floats are compared based on their string representation with
     the specified number of significant digits.
+    - `abs_tol` is only used when a absolute value is no greater than `abs_tol_thred`.
+    - If `include_keys` is not `None`, only compare these keys.
     """
-    differences = dict_diff(d1, d2, rel_tol=rel_tol)
+    differences = iterable_diff(
+        d1,
+        d2,
+        include_keys=include_keys,
+        rel_tol=rel_tol,
+        abs_tol=abs_tol,
+        abs_tol_thred=abs_tol_thred,
+    )
     if differences:
         formatted_diff = ["", "--- dict1 (actual)", "+++ dict2 (expected)", ""]
         formatted_diff.extend(differences)
         pytest.fail("\n".join(formatted_diff))
 
 
-def dict_diff(d1, d2, path="", rel_tol=1e-9):
-    """Recursively finds differences between two nested lists/tuples/dicts.
-    Compares two floats using `math.isclose(a, b, rel_tol)` with a
-    relative tolerance `rel_tol` that:
-    if `abs(a - b) < rel_tol * max(abs(a), abs(b))`,
-    then `a` and `b` are considered "close" to each other.
-    """
+def iterable_diff(
+    d1, d2, path="", include_keys=None, rel_tol=1e-9, abs_tol=1e-7, abs_tol_thred=1e-6
+):
+    """Recursively finds differences between two nested lists/tuples/dicts."""
     differences = []
 
-    # Id d1 is a list/tuple
+    # Lists -----------------------------------------------------------|
+    # If d1 is a list/tuple
     if isinstance(d1, list) or isinstance(d1, tuple):
         # If d2 is not a list/tuple, mark and return
         if not (isinstance(d2, list) or isinstance(d2, tuple)):
@@ -44,17 +75,20 @@ def dict_diff(d1, d2, path="", rel_tol=1e-9):
                         differences.append(f"-{full_path}: {repr(d1[i])}")
                         differences.append(f"+{full_path}: {repr(d2[i])}")
                         continue
-                    rel_err = abs(d1[i] - d2[i]) / (max(abs(d1[i]), abs(d2[i])))
-                    if math.isclose(d1[i], d2[i], rel_tol=rel_tol):
+                    # If both are floats, compare
+                    is_close, rel_err, abs_err, is_small = is_floats_close(
+                        d1[i], d2[i], rel_tol, abs_tol, abs_tol_thred
+                    )
+                    if is_small:
+                        err_msg = f"abs_err: {abs_err:e}"
+                    else:
+                        err_msg = f"rel_err: {rel_err:e}"
+                    if is_close:
                         print(f"\n-{full_path}: {repr(d1[i])}")
-                        print(
-                            f"+{full_path}: {repr(d2[i])} (are close but have rel_err: {rel_err:e})"
-                        )
+                        print(f"+{full_path}: {repr(d2[i])} (close but {err_msg})")
                     else:
                         differences.append(f"-{full_path}: {repr(d1[i])}")
-                        differences.append(
-                            f"+{full_path}: {repr(d2[i])} (rel_err: {rel_err:e})"
-                        )
+                        differences.append(f"+{full_path}: {repr(d2[i])} ({err_msg})")
                 # Recursively handle nested lists/tuples
                 elif isinstance(d1[i], list) or isinstance(d1[i], tuple):
                     # If d2 is not a list/tuple, mark and check next
@@ -62,7 +96,15 @@ def dict_diff(d1, d2, path="", rel_tol=1e-9):
                         differences.append(f"-{full_path}: {repr(d1[i])}")
                         differences.append(f"+{full_path}: {repr(d2[i])}")
                         continue
-                    nested_diff = dict_diff(d1[i], d2[i], full_path, rel_tol)
+                    nested_diff = iterable_diff(
+                        d1[i],
+                        d2[i],
+                        full_path,
+                        include_keys,
+                        rel_tol,
+                        abs_tol,
+                        abs_tol_thred,
+                    )
                     differences.extend(nested_diff)
                 # Recursively handle nested dicts
                 elif isinstance(d1[i], dict):
@@ -71,7 +113,15 @@ def dict_diff(d1, d2, path="", rel_tol=1e-9):
                         differences.append(f"-{full_path}: {repr(d1[i])}")
                         differences.append(f"+{full_path}: {repr(d2[i])}")
                         continue
-                    nested_diff = dict_diff(d1[i], d2[i], full_path, rel_tol)
+                    nested_diff = iterable_diff(
+                        d1[i],
+                        d2[i],
+                        full_path,
+                        include_keys,
+                        rel_tol,
+                        abs_tol,
+                        abs_tol_thred,
+                    )
                     differences.extend(nested_diff)
                 # Other types
                 else:
@@ -81,6 +131,7 @@ def dict_diff(d1, d2, path="", rel_tol=1e-9):
             #     print(f"\n*{full_path}: {repr(d1[i])} (identical)")
         return differences
 
+    # Dicts -----------------------------------------------------------|
     # If d1 or d2 is not a dict
     if not (isinstance(d1, dict) and isinstance(d2, dict)):
         # If different, mark and return
@@ -101,6 +152,8 @@ def dict_diff(d1, d2, path="", rel_tol=1e-9):
 
     # Keys in both, check each value
     for k in sorted(set(d1) & set(d2)):
+        if include_keys is not None and len(include_keys) > 0 and k not in include_keys:
+            continue
         full_path = f"{path}.{k}" if path else k
         if d1[k] != d2[k]:
             # Compare floats with relative tolerance
@@ -110,17 +163,20 @@ def dict_diff(d1, d2, path="", rel_tol=1e-9):
                     differences.append(f"-{full_path}: {repr(d1[k])}")
                     differences.append(f"+{full_path}: {repr(d2[k])}")
                     continue
-                rel_err = abs(d1[k] - d2[k]) / (max(abs(d1[k]), abs(d2[k])))
-                if math.isclose(d1[k], d2[k], rel_tol=rel_tol):
+                # If both are floats, compare
+                is_close, rel_err, abs_err, is_small = is_floats_close(
+                    d1[k], d2[k], rel_tol, abs_tol, abs_tol_thred
+                )
+                if is_small:
+                    err_msg = f"abs_err: {abs_err:e}"
+                else:
+                    err_msg = f"rel_err: {rel_err:e}"
+                if is_close:
                     print(f"\n-{full_path}: {repr(d1[k])}")
-                    print(
-                        f"+{full_path}: {repr(d2[k])} (are close but have rel_err: {rel_err:e})"
-                    )
+                    print(f"+{full_path}: {repr(d2[k])} (close but {err_msg})")
                 else:
                     differences.append(f"-{full_path}: {repr(d1[k])}")
-                    differences.append(
-                        f"+{full_path}: {repr(d2[k])} (rel_err: {rel_err:e})"
-                    )
+                    differences.append(f"+{full_path}: {repr(d2[k])} ({err_msg})")
             # Recursively handle nested lists/tuples
             elif isinstance(d1[k], list) or isinstance(d1[k], tuple):
                 # If d2 is not a list/tuple, mark and check next
@@ -128,7 +184,9 @@ def dict_diff(d1, d2, path="", rel_tol=1e-9):
                     differences.append(f"-{full_path}: {repr(d1[k])}")
                     differences.append(f"+{full_path}: {repr(d2[k])}")
                     continue
-                nested_diff = dict_diff(d1[k], d2[k], full_path, rel_tol)
+                nested_diff = iterable_diff(
+                    d1[k], d2[k], full_path, include_keys, rel_tol, abs_tol, abs_tol_thred
+                )
                 differences.extend(nested_diff)
             # Recursively handle nested dicts
             elif isinstance(d1[k], dict):
@@ -137,7 +195,9 @@ def dict_diff(d1, d2, path="", rel_tol=1e-9):
                     differences.append(f"-{full_path}: {repr(d1[k])}")
                     differences.append(f"+{full_path}: {repr(d2[k])}")
                     continue
-                nested_diff = dict_diff(d1[k], d2[k], full_path, rel_tol)
+                nested_diff = iterable_diff(
+                    d1[k], d2[k], full_path, include_keys, rel_tol, abs_tol, abs_tol_thred
+                )
                 differences.extend(nested_diff)
             # Other types
             else:

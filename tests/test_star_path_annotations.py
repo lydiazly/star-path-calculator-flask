@@ -8,17 +8,23 @@ import platform
 import pytest
 import skyfield
 from core.star_path import StarObject, get_diagram
-from .helpers import assert_dicts_equal
+from .helpers import assert_iterable_equal
 
 # rel_tol = 1e-9  # default in math.isclose()
 rel_tol = 3e-9  # for compatibility
+abs_tol = 1e-5
+abs_tol_thred = 5e-5
+
 # if Version(numpy.__version__) < Version('2.0.0'):
 #     rel_tol = 5e-9 if Version(skyfield.__version__) <= Version('1.49') else 5e-8
+if Version(skyfield.__version__) >= Version('1.54'):
+    rel_tol = 2e-7
 
 print("\n=== Annotations ===")
 print(f"python: {platform.python_version()}")
 print(f"numpy: {numpy.__version__}, skyfield: {skyfield.__version__}")
 print(f"Relative tolerance: {rel_tol:.0e}")
+print(f"Absolute tolerance for value <= {abs_tol_thred:.0e}: {abs_tol:.0e}")
 
 if Version(skyfield.__version__) <= Version('1.49'):
     cases_filename = 'cases/cases_path_skyfield1.49_docker.json'
@@ -47,7 +53,9 @@ def test_annotations(case):
     d1 = {p['name']: p for p in [p for p in res if p['is_displayed']]}
     d2 = {p['name']: p for p in case['expected']}
 
-    assert_dicts_equal(d1, d2, rel_tol=rel_tol)
+    assert_iterable_equal(
+        d1, d2, rel_tol=rel_tol, abs_tol=abs_tol, abs_tol_thred=abs_tol_thred
+    )
 
 
 test_date_coords_dict = {

@@ -8,6 +8,7 @@ from pathlib import Path
 import platform
 import pytest
 import re
+import skyfield
 from core.star_path import get_diagram
 
 print("\n=== SVG ===")
@@ -17,9 +18,12 @@ print(f"numpy: {numpy.__version__}, matplotlib: {matplotlib.__version__}")
 if Version(numpy.__version__) < Version('2.0.0'):
     reference_svg_filename = 'cases/diagram_matplotlib3.5.2.svg'
     print("Test cases: python 3.10, numpy 2.2.3, matplotlib 3.5.2, skyfield 1.49")
-else:
+elif Version(skyfield.__version__) < Version('1.54'):
     reference_svg_filename = 'cases/diagram_matplotlib3.10.0.svg'
     print("Test cases: python 3.10, numpy 2.2.3, matplotlib 3.10.0, skyfield 1.49")
+else:
+    reference_svg_filename = 'cases/diagram_matplotlib3.10.8_skyfield1.54.svg'
+    print("Test cases: python 3.12, numpy 2.4.4, matplotlib 3.10.8, skyfield 1.54")
 
 
 def normalize_svg_content(svg_content: str) -> str:
