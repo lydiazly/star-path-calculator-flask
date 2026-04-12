@@ -176,7 +176,7 @@ def decimal_to_hms(decimal_hours: float) -> dict:
 
 
 def format_timezone(offset_in_hours: float) -> str:
-    """Formats a Standard Time offset in decimal hours into a ISO 8601 format string 'Z|±hh:mm'.
+    """Formats a Standard Time offset in decimal hours into an ISO 8601 format string 'Z|±hh:mm'.
     Calls `decimal_to_hms` to convert the decimal hours to an HMS dict.
 
     Args:
