@@ -8,12 +8,17 @@ Refer to the global variables `eph` and `earth` by:
 >>> earth = dl.earth
 """
 
-from skyfield.api import load
+import numpy as np
+from numpy.typing import NDArray
 from skyfield.almanac import find_discrete, seasons
+from skyfield.api import load
+from skyfield.timelib import Time
+
 import core.data_loader as dl
 
 __all__ = ["get_coords", "get_seasons"]
 
+tisca = load.timescale()
 
 # Ensure ephemeris data is loaded
 if dl.eph is None or dl.earth is None:
@@ -23,21 +28,36 @@ if dl.eph is None or dl.earth is None:
 
 def get_coords(year: int) -> dict:
     """Calculates the times and coordinates of equinoxes and solstices for the given year.
+    - The derived positions are adjusted for light-time delay.
+        Reference: https://rhodesmill.org/skyfield/api-position.html#skyfield.positionlib.Barycentric.observe
 
     Args:
-        year (int): The year in Gregorian calendar.
+        year (int): The year in Gregorian calendar. 0 is 1 BCE.
 
     Returns:
-        dict: A dictionary containing the times and ICRS coordinates of equinoxes and solstices.
-        The derived positions are adjusted for light-time delay
-        (https://rhodesmill.org/skyfield/api-position.html#skyfield.positionlib.Barycentric.observe).
+        dict: A dictionary containing the times and ICRS coordinates of equinoxes and solstices:
+            {
+                'vernal_ra': float,
+                'vernal_dec': float,
+                'summer_ra': float,
+                'summer_dec': float,
+                'autumnal_ra': float,
+                'autumnal_dec': float,
+                'winter_ra': float,
+                'winter_dec': float,
+                'vernal_time': tuple[int, int, int, int, int, float],
+                'summer_time': tuple[int, int, int, int, int, float],
+                'autumnal_time': tuple[int, int, int, int, int, float],
+                'winter_time': tuple[int, int, int, int, int, float],
+            }
     """
-    tisca = load.timescale()
-    t0 = tisca.ut1(year, 1, 1, 0, 0, 0)
-    t1 = tisca.ut1(year + 1, 1, 1, 0, 0, 0)
+    t0: Time = tisca.ut1(year, 1, 1, 0, 0, 0)
+    t1: Time = tisca.ut1(year + 1, 1, 1, 0, 0, 0)
 
     # Find the times of the seasons
-    ts, ys = find_discrete(t0, t1, seasons(dl.eph))
+    ts: Time
+    events: NDArray[np.int64]
+    ts, events = find_discrete(t0, t1, seasons(dl.eph))
 
     # Calculate the ICRS coordinates of the sun at those times
     sun = dl.eph['sun']
@@ -74,17 +94,24 @@ def get_seasons(year: int) -> dict:
     """Calculates the times of equinoxes and solstices for the given year.
 
     Args:
-        year (int): The year in Gregorian calendar.
+        year (int): The year in Gregorian calendar. 0 is 1 BCE.
 
     Returns:
-        dict: A dictionary containing the times of equinoxes and solstices.
+        dict: A dictionary containing the times of equinoxes and solstices:
+            {
+                'vernal_time': tuple[int, int, int, int, int, float],
+                'summer_time': tuple[int, int, int, int, int, float],
+                'autumnal_time': tuple[int, int, int, int, int, float],
+                'winter_time': tuple[int, int, int, int, int, float],
+            }
     """
-    tisca = load.timescale()
-    t0 = tisca.ut1(year, 1, 1, 0, 0, 0)
-    t1 = tisca.ut1(year + 1, 1, 1, 0, 0, 0)
+    t0: Time = tisca.ut1(year, 1, 1, 0, 0, 0)
+    t1: Time = tisca.ut1(year + 1, 1, 1, 0, 0, 0)
 
     # Find the times of the seasons
-    ts, ys = find_discrete(t0, t1, seasons(dl.eph))
+    ts: Time
+    events: NDArray[np.int64]
+    ts, events = find_discrete(t0, t1, seasons(dl.eph))
     _vernal_time, _summer_time, _autumnal_time, _winter_time = [
         ti.ut1_calendar() for ti in ts
     ]

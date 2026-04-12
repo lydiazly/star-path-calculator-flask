@@ -13,22 +13,22 @@ import matplotlib
 
 matplotlib.use('Agg')  # Use the Agg backend for non-interactive plotting
 
-# from typing import List, Tuple
-import numpy as np
-import matplotlib.pyplot as plt
+import base64
+from datetime import datetime
+import io
 from matplotlib.figure import Figure
 import matplotlib.patheffects as path_effects
 from matplotlib.projections.polar import PolarAxes
+import matplotlib.pyplot as plt
 from matplotlib.text import Text
+import numpy as np
 from numpy.typing import NDArray
-from datetime import datetime
+import re
 from skyfield import almanac
 from skyfield.api import Star, wgs84, load
 from skyfield.timelib import Time
 from skyfield.units import Angle
-import io
-import base64
-import re
+
 import core.data_loader as dl
 from utils.time_utils import (
     get_standard_offset_by_id,
@@ -80,7 +80,7 @@ class StarObject:
         tz_name (str): The current time zone name of this location.
             If the offset is non-standard, returns 'LMT'.
         star: The star object.
-        loc: A GeographicPosition for the given latitude and longitude.
+        loc: The GeographicPosition object for the given latitude and longitude.
         observer: The observer object on the Earth's surface.
     """
 
@@ -740,7 +740,7 @@ class StarObject:
         self, points: list[tuple[str, np.float64, np.float64, Time]]
     ) -> list[dict]:
         """Returns styled information of points."""
-        # Sort the points by the UT1 time
+        # Sort the points by the UT1
         sorted_points = sorted(points, key=lambda p: p[3].ut1)
 
         annotations: list[dict] = []

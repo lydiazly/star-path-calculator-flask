@@ -2,10 +2,10 @@
 # utils/data_utils.py
 """Functions used only for preparing the data."""
 
-import pandas as pd
-
-# import pickle
 import os
+import pandas as pd
+# import pickle
+
 
 __all__ = []
 
@@ -154,7 +154,7 @@ def load_hip_ident() -> pd.DataFrame:
     """
     import numpy as np
 
-    # Read proper names and Bayer Designations --------------------------------|
+    # Read proper names and Bayer Designations ------------------------|
     df_bayer = pd.read_pickle(os.path.join(data_dir, 'ident_bayer.pkl'))
     df_bayer_add = pd.read_csv(
         os.path.join(data_dir, 'ident_bayer_add.csv')
@@ -163,14 +163,14 @@ def load_hip_ident() -> pd.DataFrame:
     # df_to_csv(df_bayer, 'ident_bayer.csv')
     # df_to_csv(df_proper, 'ident_proper.csv')
 
-    # Read Chinese names ------------------------------------------------------|
+    # Read Chinese names ----------------------------------------------|
     # df_name_zh_matched = load_name_zh()  # also save to 'bayer-zh.csv'
     df_name_zh_matched = pd.read_csv(os.path.join(data_dir, 'bayer-zh.csv'))
     df_name_zh_matched['HIP'] = ''
     df_name_zh_matched['Mark'] = ''
     df_name_zh_columns = df_name_zh_matched.columns.tolist()
 
-    # Correct Bayer Designations (first match) --------------------------------|
+    # Correct Bayer Designations (first match) ------------------------|
     df_name_zh_corrections = pd.read_csv(
         os.path.join(data_dir, 'bayer-zh-corrections.csv')
     )
@@ -198,7 +198,7 @@ def load_hip_ident() -> pd.DataFrame:
     # Save the intermediate table containing Chinese names and Bayer Designations
     df_to_csv(df_name_zh_matched, 'bayer-zh-hip.csv')
 
-    # Group by HIP ------------------------------------------------------------|
+    # Group by HIP ----------------------------------------------------|
     # Aggregate Bayer Designation and Proper Name with '/'
     df_bayer_agg = (
         df_bayer.groupby('HIP')['Bayer Designation']
@@ -211,7 +211,7 @@ def load_hip_ident() -> pd.DataFrame:
         .reset_index()
     )
 
-    # Merge the DataFrames on the HIP column ----------------------------------|
+    # Merge the DataFrames on the HIP column --------------------------|
     df_merged = pd.merge(df_bayer_agg, df_proper_agg, on='HIP', how='outer')
     # df_merged = pd.merge(df_merged, df_name_zh_matched[['HIP', 'Name_zh_hk', 'Name_zh', 'Pinyin']], on='HIP', how='left')
     df_name_zh_filtered = df_name_zh_matched[df_name_zh_matched['HIP'].notnull()]
@@ -247,15 +247,15 @@ def load_hip_ident() -> pd.DataFrame:
     df_merged['Name_zh'] = df_merged['Name_zh'].fillna('')
     df_merged['Pinyin'] = df_merged['Pinyin'].fillna('')
 
-    # Combine names into a single 'name' column -------------------------------|
+    # Combine names into a single 'name' column -----------------------|
     df_merged['name'] = df_merged['Bayer Designation'] + '/' + df_merged['Proper Name']
     df_merged['name'] = df_merged['name'].str.strip('/').str.replace('//', '/')
 
-    # Select only the required columns and rename them ------------------------|
+    # Select only the required columns and rename them ----------------|
     df_merged = df_merged[['HIP', 'name', 'Name_zh', 'Name_zh_hk', 'Pinyin']]
     df_merged.columns = ['hip', 'name', 'name_zh', 'name_zh_hk', 'pinyin']
 
-    # Output ------------------------------------------------------------------|
+    # Output ----------------------------------------------------------|
     df_to_csv(df_merged, 'hip_ident_zh.csv')
 
     return df_merged
