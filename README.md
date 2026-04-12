@@ -1,12 +1,11 @@
 # Star Path Calculator - Flask
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
-[![python](https://img.shields.io/badge/Python-3.10,_3.11-3776AB?logo=python&logoColor=white)](https://www.python.org)
-[![numpy](https://img.shields.io/badge/Numpy-2.2.3-013243?logo=numpy&logoColor=white)](https://numpy.org)
-[![pandas](https://img.shields.io/badge/Pandas-2.2.3-150458?logo=Pandas&logoColor=white)](https://pandas.pydata.org)
+[![python](https://img.shields.io/badge/Python-3.11-3776AB?logo=python&logoColor=white)](https://www.python.org)
+[![numpy](https://img.shields.io/badge/Numpy-2.4.4-013243?logo=numpy&logoColor=white)](https://numpy.org)
+[![pandas](https://img.shields.io/badge/Pandas-3.0.2-150458?logo=Pandas&logoColor=white)](https://pandas.pydata.org)
 [![matplotlib](https://img.shields.io/badge/Matplotlib-3.10.8-12557C)](https://matplotlib.org)
-[![pytest](https://img.shields.io/badge/pytest-8.3.5-0A9EDC)](https://pytest.org/)
-[![skyfield](https://img.shields.io/badge/Skyfield-1.49-BD9354)](https://rhodesmill.org/skyfield)
+[![skyfield](https://img.shields.io/badge/Skyfield-1.54-BD9354)](https://rhodesmill.org/skyfield)
 [![juliandate](https://img.shields.io/badge/Juliandate-1.0.5-BD9354)](https://pypi.org/project/juliandate)
 [![tzfpy](https://img.shields.io/badge/tzfpy-0.16.4-blue)](https://github.com/ringsaturn/tzfpy)
 [![great-circle-calculator](https://img.shields.io/badge/Great_Circle_Calculator-1.3.1-brightgreen)](https://github.com/seangrogan/great_circle_calculator)
@@ -35,10 +34,10 @@ The Flask server of our [Star Path Viewer](https://star-path-viewer.pages.dev/) 
 
 Parameters:
 
-- `year`: (*required*) a year from -2999 to 2999. 0 equals 1 BCE.
-- `tz`: (*required*) a time zone identifier, e.g., `tz=Asia%2FShanghai`.
-- `lat`: the latitude in decimal degrees.
-- `lng`: the longitude in decimal degrees.
+- `year`: (*required*) a year from -2999 to 2999. 0 is 1 BCE.
+- `tz`: (*required*) IANA time zone ID, e.g., `tz=Asia%2FShanghai`.
+- `lat`: latitude in decimal degrees.
+- `lng`: longitude in decimal degrees.
 
 If `tz` is not provided, `lat` and `lng` must be specified. If `tz`, `lat`, and `lng` are given together, only the value of `tz` will be used.
 
@@ -67,6 +66,7 @@ Example:
     "winter_time": [-1000, 12, 20, 17, 23, 41.1424760520458]
   },
   "tz": "Etc/GMT",
+  "tzname": "GMT",
   "year": -1000
 }
 ```
@@ -99,6 +99,7 @@ Example:
 {
   "results": [-1000, 3, 21, 10, 8, 34.8072123527527],
   "tz": "Etc/GMT",
+  "tzname": "GMT",
   "year": -1000
 }
 ```
@@ -114,11 +115,12 @@ Parameters:
 - `day`: (*required*) day of the month.
 - `lat`: (*required*) same as above.
 - `lng`: (*required*) same as above.
-- `name` | `hip` | `ra`, `dec`: (*required*) planet name (case insensitive), Hipparcos Catalogue number, or a RA/Dec pair.
-- `tz`: the time zone identifier of this location.
-- `cal`: calendar flag.
-  - `cal=` or not provided: the Gregorian calendar.
-  - `cal=j`: the Julian calendar.
+- `name` | `hip` | `ra`, `dec`: (*required*) either a planet name (case insensitive), Hipparcos Catalogue number, or a RA/Dec pair.
+- `tz`: the time zone ID of this location.
+- `tzname`: the time zone name of this location.
+- `cal`: the calendar flag.
+  - `cal=` or not provided: Gregorian calendar.
+  - `cal=j`: Julian calendar.
 
 If `tz` is not provided, it will be derived from the `lat` and `lng`.
 Specifying `tz` can enhance speed. However, if `tz` doesn't match the `lat` and `lng`, the result will be incorrect. To optimize performance, we do not verify this match.
