@@ -28,9 +28,11 @@ The Flask server of our [Star Path Viewer](https://star-path-viewer.pages.dev/) 
 
 ## Endpoints
 
+Base URL: <https://teststarpathcalculator.pythonanywhere.com> (*new*)
+
 ### 1. Get dates, times, and and RA/Dec coordinates of equinoxes and solstices by specifying a year and location
 
-`https://starpathcalculator.pythonanywhere.com/seasons`
+`/seasons`
 
 Parameters:
 
@@ -47,7 +49,7 @@ Returns:
 
 Example:
 
-`https://starpathcalculator.pythonanywhere.com/seasons?tz=Etc%2FGMT&year=-1000`
+`/seasons?tz=Etc%2FGMT&year=-1000`
 
 ```json
 {
@@ -73,7 +75,7 @@ Example:
 
 ### 2. Get only the date of one of the equinoxes and solstices
 
-`https://starpathcalculator.pythonanywhere.com/equinox`
+`/equinox`
 
 Parameters:
 
@@ -93,7 +95,7 @@ Returns:
 
 Example:
 
-`https://starpathcalculator.pythonanywhere.com/equinox?tz=Etc%2FGMT&year=-1000&flag=ve`
+`/equinox?tz=Etc%2FGMT&year=-1000&flag=ve`
 
 ```json
 {
@@ -106,7 +108,7 @@ Example:
 
 ### 3. Plot the star path and calculates the rising/setting times and twilight stages
 
-`https://starpathcalculator.pythonanywhere.com/diagram`
+`/diagram`
 
 Parameters:
 
