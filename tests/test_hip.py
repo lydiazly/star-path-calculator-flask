@@ -28,7 +28,9 @@ def parse_hip_from_file(filename):
     """Parses the file containing invalid HIP numbers.
 
     To generate the file, in the root dir:
-    $ python -c "from utils.data_utils import hip_validation; hip_validation()" > tests/hip_invalid.txt
+    ```
+    python -c "from utils.data_utils import hip_validation; hip_validation()" > cases/cases_hip_invalid.txt
+    ```
     """
     hip_missing, hip_invalid = [], []
     with open(filename, "r") as file:
