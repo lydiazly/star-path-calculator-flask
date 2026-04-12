@@ -8,7 +8,7 @@ import platform
 import pytest
 import skyfield
 from core.seasons import get_coords, get_seasons
-from .helpers import assert_dicts_equal
+from .helpers import assert_iterable_equal
 
 # Docker results (same as local tests)
 cases_filename = 'cases/cases_seasons_skyfield1.49_docker.json'
@@ -35,7 +35,7 @@ def test_coords(case):
     Compares two floats with a relative tolerance `rel_tol`.
     """
     res = get_coords(case['input'])
-    assert_dicts_equal(res, case['expected'], rel_tol=rel_tol)
+    assert_iterable_equal(res, case['expected'], rel_tol=rel_tol)
 
 
 @pytest.mark.parametrize("case", CASES, ids=[c['id'] for c in CASES])
@@ -49,7 +49,7 @@ def test_seasons(case):
         k: case['expected'][k]
         for k in ['vernal_time', 'summer_time', 'autumnal_time', 'winter_time']
     }
-    assert_dicts_equal(res, expected, rel_tol=rel_tol)
+    assert_iterable_equal(res, expected, rel_tol=rel_tol)
 
 
 error_cases = [-3000, 3000]

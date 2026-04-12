@@ -44,12 +44,14 @@ from great_circle_calculator.great_circle_calculator import (
 __all__ = ["get_diagram"]
 
 
-tisca = load.timescale()
+STAR_NEVER_RISES_MSG = "WARNING: This star never rises at this location on this date."
 
 # Manually set the atmospheric refractive angle at the horizon to 34.452 arcminutes
 horizon_degrees = -0.5666 - 0.0076
 
 label_fontsize = 10
+
+tisca = load.timescale()
 
 # Ensure ephemeris data is loaded
 if dl.eph is None or dl.earth is None:
@@ -78,6 +80,8 @@ class StarObject:
         tz_name (str): The current time zone name of this location.
             If the offset is non-standard, returns 'LMT'.
         star: The star object.
+        loc: A GeographicPosition for the given latitude and longitude.
+        observer: The observer object on the Earth's surface.
     """
 
     def __init__(
@@ -105,10 +109,18 @@ class StarObject:
         self.offset_in_minutes: float
         self.tz_name: str
         self.offset_in_minutes, self.tz_name = get_standard_offset_by_id(tz_id)
+
         self.star = self._initialize_star()
+        self.loc = wgs84.latlon(longitude_degrees=lng, latitude_degrees=lat)
+        self.observer = dl.earth + self.loc
+
         self._t0: Time = tisca.ut1(year, month, day, 0, 0 - self.offset_in_minutes, 0)
         """The starting time for calculating rising/setting times, assumed to be
         at 0:00:00 in Standard Time.
+        """
+        self._t1: Time = tisca.ut1_jd(self._t0.ut1 + 3)
+        """The ending time for calculating rising/setting times, assumed to be
+        3 days later.
         """
 
     def _initialize_star(self):
@@ -182,12 +194,13 @@ class StarObject:
         The atmospheric refraction is included by setting parameter `temperature_C` to 'standard' (10°C).
         By default, Skyfield uses the observer's elevation above sea level to estimate the atmospheric pressure.
         """
-        loc = wgs84.latlon(longitude_degrees=self.lng, latitude_degrees=self.lat)
-        observer = dl.earth + loc
         alt: Angle
         az: Angle
         alt, az, dist = (
-            observer.at(t).observe(self.star).apparent().altaz(temperature_C='standard')
+            self.observer.at(t)
+            .observe(self.star)
+            .apparent()
+            .altaz(temperature_C='standard')
         )
 
         return alt, az
@@ -196,9 +209,7 @@ class StarObject:
         self, t0: Time, t1: Time
     ) -> tuple[list[Time], list[np.int64]]:
         """Gets twilight transition times."""
-        loc = wgs84.latlon(longitude_degrees=self.lng, latitude_degrees=self.lat)
-
-        f = almanac.dark_twilight_day(dl.eph, loc)
+        f = almanac.dark_twilight_day(dl.eph, self.loc)
         # f returns these values:
         # 0 — Dark of night
         # 1 — Astronomical twilight (less than 18 degrees below the horizon)
@@ -243,35 +254,45 @@ class StarObject:
             return ts1, events
 
     def _get_star_rising_time(self) -> tuple[Time, np.bool_]:
-        """Gets the star's rising time. The star path is calculated from this moment."""
-        t0: Time = self._t0
-        # t1 = tisca.ut1(self.year, self.month, self.day + 3, 0, 0 - self.offset_in_minutes, 0)
-        t1: Time = tisca.ut1_jd(t0.ut1 + 3)
-
-        loc = wgs84.latlon(longitude_degrees=self.lng, latitude_degrees=self.lat)
-        observer = dl.earth + loc
-
+        """Gets the target's rising time. The path is calculated from this moment.
+        Returns:
+            tuple: A tuple containing:
+                t_rising (Time): The first rising time of this target.
+                y_rising (np.bool_): `True` if the target really crosses the horizon,
+                    and `False` if the target merely transits without actually touching the horizon.
+        """
         t_risings: Time
         y_risings: NDArray[np.bool_]
         t_risings, y_risings = almanac.find_risings(
-            observer, self.star, t0, t1, horizon_degrees=horizon_degrees
+            self.observer,
+            self.star,
+            self._t0,
+            self._t1,
+            horizon_degrees=horizon_degrees,
         )
 
         return t_risings[0], y_risings[0]
 
     def _get_star_setting_time(self, t_rising: Time) -> tuple[Time, np.bool_]:
-        """Gets the star's setting time. The star path's calculation ends at this moment."""
-        t0: Time = self._t0
-        t1: Time = tisca.ut1_jd(t0.ut1 + 3)
+        """Gets the target's setting time. The path's calculation ends at this moment.
 
-        loc = wgs84.latlon(longitude_degrees=self.lng, latitude_degrees=self.lat)
-        observer = dl.earth + loc
-
+        Returns:
+            tuple: A tuple containing:
+                t_setting (Time): The setting time of this target.
+                y_setting (np.bool_): `True` if the target really crosses the horizon,
+                    and `False` if the target merely transits without actually touching the horizon.
+        """
         t_settings: Time
         y_settings: NDArray[np.bool_]
         t_settings, y_settings = almanac.find_settings(
-            observer, self.star, t0, t1, horizon_degrees=horizon_degrees
+            self.observer,
+            self.star,
+            self._t0,
+            self._t1,
+            horizon_degrees=horizon_degrees,
         )
+        # Find the time next to the rising time
+        ti: Time
         for i, ti in zip(range(len(t_settings)), t_settings):
             if ti.ut1 - t_rising.ut1 > 1e-6:
                 break
@@ -283,10 +304,7 @@ class StarObject:
         t0: Time = t_rising
         t1: Time = tisca.ut1_jd(t0.ut1 + 2)
 
-        loc = wgs84.latlon(longitude_degrees=self.lng, latitude_degrees=self.lat)
-        observer = dl.earth + loc
-
-        t_transits: Time = almanac.find_transits(observer, self.star, t0, t1)
+        t_transits: Time = almanac.find_transits(self.observer, self.star, t0, t1)
 
         return t_transits[0]
 
@@ -593,6 +611,11 @@ class StarObject:
         """
         t_rising, y_rising = self._get_star_rising_time()
         t_setting, y_setting = self._get_star_setting_time(t_rising)
+
+        # If the first point is below the horizon, it indicates that this star doesn't rise
+        if not y_rising and self._get_star_altaz(t_rising)[0].degrees < 0:
+            raise ValueError(STAR_NEVER_RISES_MSG)
+
         ts, events = self._get_twilight_time(t_rising, t_setting)
         t_transit = self._get_star_meridian_transit_time(t_rising)
 
@@ -617,11 +640,6 @@ class StarObject:
             rts_names = ['R', 'T', 'S']
             rts_alts, rts_azs, rts_times = self._plot_rising_and_setting_points(
                 fig, ax, t_rising, t_setting
-            )
-        # Does not rise
-        elif not y_rising and self._get_star_altaz(t_rising)[0].degrees < 0:
-            raise ValueError(
-                'WARNING: This star never rises at this location on this date.'
             )
         # Circles
         else:
