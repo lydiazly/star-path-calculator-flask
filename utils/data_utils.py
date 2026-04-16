@@ -2,20 +2,17 @@
 # utils/data_utils.py
 """Functions used only for preparing the data."""
 
-import os
 import pandas as pd
+from pathlib import Path
 # import pickle
+
+from core.data_loader import DATA_DIR
 
 
 __all__ = []
 
 
-data_dir = os.path.join(
-    os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'data'
-)
-
-
-def convert_id(id_value) -> str:
+def convert_id(id_value: str) -> str:
     """Converts Bayer Designation IDs for consistency.
 
     Examples:
@@ -28,8 +25,8 @@ def convert_id(id_value) -> str:
     """
     import json
 
-    with open(os.path.join(data_dir, 'greek_map.json'), 'r') as file:
-        greek_map = json.load(file)
+    with open(DATA_DIR / 'greek_map.json', 'r') as f:
+        greek_map = json.load(f)
 
     if id_value.isdigit():
         return id_value
@@ -37,7 +34,8 @@ def convert_id(id_value) -> str:
     result = []
     num_str = ""
     for char in id_value:
-        # Convert lowercase Latin letters to Greek abbreviation (no 'f', 'j', and 'v' found in the source file)
+        # Convert lowercase Latin letters to Greek abbreviation
+        # (no 'f', 'j', and 'v' found in the source file)
         if char.islower():
             result.append(greek_map.get(char, char))
         # Collect digits
@@ -79,8 +77,8 @@ def process_pinyin(text: str) -> str:
     import itertools
     import json
 
-    with open(os.path.join(data_dir, 'pinyin_overwrite.json'), 'r') as file:
-        pinyin_overwrite = json.load(file)
+    with open(DATA_DIR / 'pinyin_overwrite.json', 'r') as f:
+        pinyin_overwrite = json.load(f)
 
     zdic_cibs.load()
     load_phrases_dict(pinyin_overwrite)
@@ -115,11 +113,11 @@ def get_pinyin(text: str) -> str:
 
 def load_name_zh() -> pd.DataFrame:
     """Reads the table containing Traditional Chinese names then add Simplified Chinese and pinyin columns."""
-    # df = pd.read_csv(os.path.join(data_dir, 'star-name-zh.csv'))
+    # df = pd.read_csv(DATA_DIR / 'star-name-zh.csv')
     # df.sort_values(by=['Const', 'Id', 'Name_en'], inplace=True)
     # df.reset_index(drop=True, inplace=True)
     # df_to_csv(df, 'star-name-zh_sorted.csv')
-    df = pd.read_csv(os.path.join(data_dir, 'star-name-zh_sorted.csv'))
+    df = pd.read_csv(DATA_DIR / 'star-name-zh_sorted.csv')
 
     df['Id_new'] = df['Id'].apply(convert_id)
     df['Bayer Designation'] = df['Id_new'] + "_" + df['Const']
@@ -155,25 +153,21 @@ def load_hip_ident() -> pd.DataFrame:
     import numpy as np
 
     # Read proper names and Bayer Designations ------------------------|
-    df_bayer = pd.read_pickle(os.path.join(data_dir, 'ident_bayer.pkl'))
-    df_bayer_add = pd.read_csv(
-        os.path.join(data_dir, 'ident_bayer_add.csv')
-    )  # additional table
-    df_proper = pd.read_pickle(os.path.join(data_dir, 'ident_proper.pkl'))
+    df_bayer: pd.DataFrame = pd.read_pickle(DATA_DIR / 'ident_bayer.pkl')
+    df_bayer_add = pd.read_csv(DATA_DIR / 'ident_bayer_add.csv')  # additional table
+    df_proper: pd.DataFrame = pd.read_pickle(DATA_DIR / 'ident_proper.pkl')
     # df_to_csv(df_bayer, 'ident_bayer.csv')
     # df_to_csv(df_proper, 'ident_proper.csv')
 
     # Read Chinese names ----------------------------------------------|
     # df_name_zh_matched = load_name_zh()  # also save to 'bayer-zh.csv'
-    df_name_zh_matched = pd.read_csv(os.path.join(data_dir, 'bayer-zh.csv'))
+    df_name_zh_matched = pd.read_csv(DATA_DIR / 'bayer-zh.csv')
     df_name_zh_matched['HIP'] = ''
     df_name_zh_matched['Mark'] = ''
     df_name_zh_columns = df_name_zh_matched.columns.tolist()
 
     # Correct Bayer Designations (first match) ------------------------|
-    df_name_zh_corrections = pd.read_csv(
-        os.path.join(data_dir, 'bayer-zh-corrections.csv')
-    )
+    df_name_zh_corrections = pd.read_csv(DATA_DIR / 'bayer-zh-corrections.csv')
     df_name_zh_corrections.set_index('Name_zh_hk', inplace=True)
     df_name_zh_matched.set_index('Name_zh_hk', inplace=True)
     df_name_zh_matched.update(df_name_zh_corrections)
@@ -261,24 +255,24 @@ def load_hip_ident() -> pd.DataFrame:
     return df_merged
 
 
-def df_to_json(df: pd.DataFrame, filename='hip_ident.json'):
+def df_to_json(df: pd.DataFrame, filename: str = 'hip_ident.json'):
     import json
 
     data_dict = df.to_dict(orient='records')
-    with open(os.path.join(data_dir, filename), 'w') as json_file:
+    with open(DATA_DIR / filename, 'w') as json_file:
         json.dump(data_dict, json_file, indent=4)
         json_file.write("\n")
 
 
-def df_to_csv(df: pd.DataFrame, filename='hip_ident.csv'):
-    df.to_csv(os.path.join(data_dir, filename), index=False)
+def df_to_csv(df: pd.DataFrame, filename: str = 'hip_ident.csv'):
+    df.to_csv(DATA_DIR / filename, index=False)
 
 
-def csv_to_json(input_filename='hip_ident_zh.csv'):
-    basename = os.path.splitext(input_filename)[0]
-    df = pd.read_csv(os.path.join(data_dir, f'{basename}.csv'))
+def csv_to_json(filename: str = 'hip_ident_zh'):
+    input_file = Path(filename).with_suffix('.csv')
+    df = pd.read_csv(DATA_DIR / input_file)
     df = df.fillna('')
-    df_to_json(df, f'{basename}.json')
+    df_to_json(df, input_file.with_suffix('.json'))
 
 
 def hip_validation(hip_min=None, hip_max=None):
@@ -363,7 +357,7 @@ def docx_to_pkl():
     # doc_name = "ident4.docx"
     # out_name = "ident_bayer.pkl"
 
-    doc = Document(os.path.join(data_dir, doc_name))
+    doc = Document(DATA_DIR / doc_name)
     full_text = []
     for para in doc.paragraphs:
         full_text.append(para.text)
@@ -374,4 +368,4 @@ def docx_to_pkl():
         a, b = full_text[i].split('|')
         df.loc[i] = [a.strip(), int(b.strip())]
 
-    df.to_pickle(os.path.join(data_dir, out_name))
+    df.to_pickle(DATA_DIR / out_name)

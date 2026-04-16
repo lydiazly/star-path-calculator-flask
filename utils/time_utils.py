@@ -3,10 +3,11 @@
 """Functions to handle time conversions."""
 
 # from typing import Tuple
-from skyfield.api import load
 from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 import juliandate
+
+from core.data_loader import timescale
 
 __all__ = [
     "get_tzid_by_tzfpy",
@@ -18,7 +19,6 @@ __all__ = [
 ]
 
 
-tisca = load.timescale()
 naive_dt = datetime(2000, 1, 1)
 
 
@@ -107,7 +107,7 @@ def get_standard_offset_by_id(tz_id: str) -> tuple[float, str]:
 def ut1_to_standard_time(t: tuple, offset_in_minutes: float) -> tuple:
     """Converts UT1 to Standard Time."""
     temp_t = (t[0], t[1], t[2], t[3], t[4] + offset_in_minutes, t[5])
-    temp_t_standard = tisca.ut1(*temp_t).ut1_calendar()
+    temp_t_standard = timescale.ut1(*temp_t).ut1_calendar()
     return temp_t_standard
 
 
@@ -115,7 +115,7 @@ def ut1_to_local_mean_time(t: tuple, lng: float) -> tuple:
     """Converts UT1 to Local Mean Time (LMT)."""
     offset_in_hours = lng / 15
     temp_t = (t[0], t[1], t[2], t[3] + offset_in_hours, t[4], t[5])
-    temp_t_local_mean = tisca.ut1(*temp_t).ut1_calendar()
+    temp_t_local_mean = timescale.ut1(*temp_t).ut1_calendar()
     return temp_t_local_mean
 
 
