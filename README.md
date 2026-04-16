@@ -25,7 +25,9 @@ This repository contains the source code of our [Star Path Viewer](https://star-
 - [Overview](#overview)
 - [Features](#features)
 - [Installation](#installation)
-- [Script Usage](#script-usage)
+  - [Install the module from GitHub](#install-the-module-from-github)
+  - [Set up `STAR_PATH_DATA_DIR`](#set-up-star_path_data_dir)
+- [Scripts](#scripts)
   - [1. Get times and coordinates of the equinoxes and solstices in a given year](#1-get-times-and-coordinates-of-the-equinoxes-and-solstices-in-a-given-year)
   - [2. Plot a star's path on a given date at a given location](#2-plot-a-stars-path-on-a-given-date-at-a-given-location)
 - [Resources](#resources)
@@ -56,6 +58,23 @@ We are aiming to develop a user-friendly app to facilitate the research in histo
 
 ## Installation
 
+### Install the module from GitHub
+
+- **Using `uv` (*recommended*)**
+
+```sh
+uv pip install git+https://github.com/claude-hao/star-path-calculator.git
+# Installs: star-path-calculator
+```
+
+To uninstall:
+
+```sh
+uv pip uninstall star-path-calculator
+```
+
+- **Using `pip`**
+
 Clone this repository:
 
 ```sh
@@ -68,13 +87,13 @@ Install requirements:
 python3 -m pip install -r requirements.txt
 ```
 
-or
+### Set up `STAR_PATH_DATA_DIR`
 
-```sh
-python3 -m pip install pandas matplotlib skyfield juliandate tzfpy pytest
-```
+Set up the environment variable `STAR_PATH_DATA_DIR` (e.g., define in `.env`) before running scripts.
+The ephemeris data and the Hipparcos Catalogue will be downloaded to and read from this location.
+Defaults to a subfolder `data/` in the current working directory.
 
-## Script Usage
+## Scripts
 
 ### 1. Get times and coordinates of the equinoxes and solstices in a given year
 
@@ -83,6 +102,10 @@ python3 -m pip install pandas matplotlib skyfield juliandate tzfpy pytest
 Example:
 
 ```bash
+# Using uv
+uv run get-equinoxes-solstices -2000
+
+# Or
 python3 ./scripts/get_equinoxes_solstices.py -2000
 ```
 
@@ -140,6 +163,10 @@ examples:
 Example:
 
 ```bash
+# Using uv
+uv run get-star-path  -2000 3 1 --lat 40 --lng 116 -o "jupiter"
+
+# Or
 python3 ./scripts/get_star_path.py -2000 3 1 --lat 40 --lng 116 -o "jupiter"
 ```
 
@@ -271,6 +298,9 @@ examples:
 - R. Tousey and M. J. Koomen, "The Visibility of Stars and Planets During Twilight," *Journal of the Optical Society of America*, Vol. 43, pp. 177-183, 1953. [Online]. Available: <https://opg.optica.org/josa/viewmedia.cfm?uri=josa-43-3-177&seq=0&html=true>
 
 ## Changelog
+
+- 2026-04-14
+  - Migrated to uv.
 
 - 2025-03-09
   - Removed the r=0 tick to avoid a redundant path in SVG.

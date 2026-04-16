@@ -4,22 +4,22 @@
 __all__ = [
     "EPH_DATA_FILE",
     "HIP_DATA_FILE",
-    "HIP_NAME_FILE",
+    "HIP_IDENT_FILE",
     "EPH_DATE_MIN",
     "EPH_DATE_MAX",
 ]
 
 
 # Ephemeris data (https://ssd.jpl.nasa.gov/planets/eph_export.html)
-EPH_DATA_FILE = 'de406.bsp'  # JED 0625360.5 (-3000 FEB 23) to 2816912.50 (+3000 MAY 06)
-# EPH_DATA_FILE = 'de422.bsp'  # JED 625648.5, (-3000 DEC 07) to JED 2816816.5, (3000 JAN 30)
-# EPH_DATA_FILE = 'de440.bsp'  # JED 2287184.5, (1549 DEC 31) to JED 2688976.5, (2650 JAN 25)
+EPH_DATA_FILE = "de406.bsp"  # JED 0625360.5 (-3000 FEB 23) to 2816912.50 (+3000 MAY 06)
+# EPH_DATA_FILE = "de422.bsp"  # JED 625648.5, (-3000 DEC 07) to JED 2816816.5, (3000 JAN 30)
+# EPH_DATA_FILE = "de440.bsp"  # JED 2287184.5, (1549 DEC 31) to JED 2688976.5, (2650 JAN 25)
 
 # The Hipparcos and Tycho catalogues (https://cdsarc.cds.unistra.fr/ftp/cats/I/239)
-HIP_DATA_FILE = 'hip_main.dat'  # 25-Jun-1997
+HIP_DATA_FILE = "hip_main.dat"  # 25-Jun-1997
 
 # Proper names and Bayer designations (https://cdsarc.cds.unistra.fr/ftp/I/239/version_cd/tables)
-HIP_NAME_FILE = 'hip_ident.csv'  # merged
+HIP_IDENT_FILE = "hip_ident.csv"  # merged
 
 # Ephemeris date range
 EPH_DATE_MIN = [-3000, 1, 29]  # 29 January 3001 BCE (Gregorian)

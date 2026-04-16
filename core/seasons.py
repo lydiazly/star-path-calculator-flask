@@ -11,14 +11,13 @@ Refer to the global variables `eph` and `earth` by:
 import numpy as np
 from numpy.typing import NDArray
 from skyfield.almanac import find_discrete, seasons
-from skyfield.api import load
 from skyfield.timelib import Time
 
 import core.data_loader as dl
 
 __all__ = ["get_coords", "get_seasons"]
 
-tisca = load.timescale()
+timescale = dl.timescale
 
 # Ensure ephemeris data is loaded
 if dl.eph is None or dl.earth is None:
@@ -26,7 +25,7 @@ if dl.eph is None or dl.earth is None:
     # print("Warning: Ephemeris data was not loaded. `core.data_loader.load_data()` is called.")
 
 
-def get_coords(year: int) -> dict:
+def get_coords(year: int) -> dict[str, float | tuple[int | float, ...]]:
     """Calculates the times and coordinates of equinoxes and solstices for the given year.
     - The derived positions are adjusted for light-time delay.
         Reference: https://rhodesmill.org/skyfield/api-position.html#skyfield.positionlib.Barycentric.observe
@@ -45,14 +44,14 @@ def get_coords(year: int) -> dict:
                 'autumnal_dec': float,
                 'winter_ra': float,
                 'winter_dec': float,
-                'vernal_time': tuple[int, int, int, int, int, float],
-                'summer_time': tuple[int, int, int, int, int, float],
-                'autumnal_time': tuple[int, int, int, int, int, float],
-                'winter_time': tuple[int, int, int, int, int, float],
+                'vernal_time': tuple[int | float, ...],
+                'summer_time': tuple[int | float, ...],
+                'autumnal_time': tuple[int | float, ...],
+                'winter_time': tuple[int | float, ...],
             }
     """
-    t0: Time = tisca.ut1(year, 1, 1, 0, 0, 0)
-    t1: Time = tisca.ut1(year + 1, 1, 1, 0, 0, 0)
+    t0: Time = timescale.ut1(year, 1, 1, 0, 0, 0)
+    t1: Time = timescale.ut1(year + 1, 1, 1, 0, 0, 0)
 
     # Find the times of the seasons
     ts: Time
@@ -60,11 +59,11 @@ def get_coords(year: int) -> dict:
     ts, events = find_discrete(t0, t1, seasons(dl.eph))
 
     # Calculate the ICRS coordinates of the sun at those times
-    sun = dl.eph['sun']
+    sun = dl.eph['sun']  # type: ignore[index]
 
     coord_icrs = []
     for ti in ts:
-        astrometric = dl.earth.at(ti).observe(sun)
+        astrometric = dl.earth.at(ti).observe(sun)  # type: ignore[attr-defined]
         ra_icrs, dec_icrs, _ = astrometric.radec()
         coord_icrs.append([ra_icrs._degrees, dec_icrs._degrees])
 
@@ -72,7 +71,7 @@ def get_coords(year: int) -> dict:
         ti.ut1_calendar() for ti in ts
     ]
 
-    results = {
+    results: dict[str, float | tuple[int | float, ...]] = {
         'vernal_ra': float(coord_icrs[0][0]),
         'vernal_dec': float(coord_icrs[0][1]),
         'summer_ra': float(coord_icrs[1][0]),
@@ -90,7 +89,7 @@ def get_coords(year: int) -> dict:
     return results
 
 
-def get_seasons(year: int) -> dict:
+def get_seasons(year: int) -> dict[str, tuple[int | float, ...]]:
     """Calculates the times of equinoxes and solstices for the given year.
 
     Args:
@@ -99,14 +98,14 @@ def get_seasons(year: int) -> dict:
     Returns:
         dict: A dictionary containing the times of equinoxes and solstices:
             {
-                'vernal_time': tuple[int, int, int, int, int, float],
-                'summer_time': tuple[int, int, int, int, int, float],
-                'autumnal_time': tuple[int, int, int, int, int, float],
-                'winter_time': tuple[int, int, int, int, int, float],
+                'vernal_time': tuple[int | float, ...],
+                'summer_time': tuple[int | float, ...],
+                'autumnal_time': tuple[int | float, ...],
+                'winter_time': tuple[int | float, ...],
             }
     """
-    t0: Time = tisca.ut1(year, 1, 1, 0, 0, 0)
-    t1: Time = tisca.ut1(year + 1, 1, 1, 0, 0, 0)
+    t0: Time = timescale.ut1(year, 1, 1, 0, 0, 0)
+    t1: Time = timescale.ut1(year + 1, 1, 1, 0, 0, 0)
 
     # Find the times of the seasons
     ts: Time
@@ -116,7 +115,7 @@ def get_seasons(year: int) -> dict:
         ti.ut1_calendar() for ti in ts
     ]
 
-    results = {
+    results: dict[str, tuple[int | float, ...]] = {
         'vernal_time': (*map(int, _vernal_time[:5]), float(_vernal_time[-1])),
         'summer_time': (*map(int, _summer_time[:5]), float(_summer_time[-1])),
         'autumnal_time': (*map(int, _autumnal_time[:5]), float(_autumnal_time[-1])),
@@ -126,7 +125,7 @@ def get_seasons(year: int) -> dict:
     return results
 
 
-def plot_ve_ra(year_start, year_end, step=1):
+def plot_ve_ra(year_start: int, year_end: int, step: int = 1) -> None:
     """Plots the right ascensions of vernal equinoxes from `year_start` to `year_end`."""
     import numpy as np
     import matplotlib.pyplot as plt

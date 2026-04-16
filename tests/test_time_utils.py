@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # tests/test_time_utils.py
 import pytest
-from skyfield.api import load
+from core.data_loader import timescale
 from utils.time_utils import (
     get_tzid_by_tzfpy,
     get_standard_offset_by_id,
@@ -10,8 +10,6 @@ from utils.time_utils import (
     gregorian_to_julian,
     julian_to_gregorian,
 )
-
-tisca = load.timescale()
 
 
 @pytest.mark.parametrize(
@@ -68,7 +66,7 @@ def test_ut1_to_standard_time(t_ut1, offset_in_hours, _, t_standard_expected):
     """Tests UT1 to standard time conversion."""
     t = ut1_to_standard_time(t_ut1, offset_in_hours * 60)
     assert (
-        tuple(map(int, tisca.ut1(*t[:5], round(t[5]) + 0.1).ut1_calendar()))
+        tuple(map(int, timescale.ut1(*t[:5], round(t[5]) + 0.1).ut1_calendar()))
         == t_standard_expected
     )
 
@@ -78,7 +76,7 @@ def test_ut1_to_local_mean_time(t_ut1, _, lng, t_standard_expected):
     """Tests UT1 to LMT conversion."""
     t = ut1_to_local_mean_time(t_ut1, lng)
     assert (
-        tuple(map(int, tisca.ut1(*t[:5], round(t[5]) + 0.1).ut1_calendar()))
+        tuple(map(int, timescale.ut1(*t[:5], round(t[5]) + 0.1).ut1_calendar()))
         == t_standard_expected
     )
 

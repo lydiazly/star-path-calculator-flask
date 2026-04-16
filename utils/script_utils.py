@@ -4,7 +4,6 @@
 
 # from typing import List
 import calendar
-import os
 from config import EPH_DATE_MIN, EPH_DATE_MAX
 
 __all__ = [
@@ -15,11 +14,6 @@ __all__ = [
     "decimal_to_hms",
     "format_timezone",
 ]
-
-
-data_dir = os.path.join(
-    os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'data'
-)
 
 
 def format_datetime(

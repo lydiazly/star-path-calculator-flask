@@ -8,7 +8,7 @@ import platform
 import pytest
 import skyfield
 from core.star_path import StarObject, get_diagram
-from .helpers import assert_iterable_equal
+from helpers import assert_iterable_equal
 
 # rel_tol = 1e-9  # default in math.isclose()
 rel_tol = 3e-9  # for compatibility

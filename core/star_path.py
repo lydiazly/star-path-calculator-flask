@@ -25,9 +25,10 @@ import numpy as np
 from numpy.typing import NDArray
 import re
 from skyfield import almanac
-from skyfield.api import Star, wgs84, load
+from skyfield.api import Star, wgs84
 from skyfield.timelib import Time
 from skyfield.units import Angle
+from typing import TypeAlias
 
 import core.data_loader as dl
 from utils.time_utils import (
@@ -51,12 +52,15 @@ horizon_degrees = -0.5666 - 0.0076
 
 label_fontsize = 10
 
-tisca = load.timescale()
+timescale = dl.timescale
 
 # Ensure ephemeris data is loaded
 if dl.eph is None or dl.earth is None:
     dl.load_data()
     # print("Warning: Ephemeris data was not loaded. `core.data_loader.load_data()` is called.")
+
+# Type alias
+Annotations: TypeAlias = list[dict[str, str | bool | float | tuple[int, ...]]]
 
 
 # ---------------------------------------------------------------------|
@@ -110,29 +114,31 @@ class StarObject:
         self.tz_name: str
         self.offset_in_minutes, self.tz_name = get_standard_offset_by_id(tz_id)
 
-        self.star = self._initialize_star()
+        self.star = self._initialize_star()  # type: ignore[no-untyped-call]
         self.loc = wgs84.latlon(longitude_degrees=lng, latitude_degrees=lat)
         self.observer = dl.earth + self.loc
 
-        self._t0: Time = tisca.ut1(year, month, day, 0, 0 - self.offset_in_minutes, 0)
+        self._t0: Time = timescale.ut1(
+            year, month, day, 0, 0 - self.offset_in_minutes, 0
+        )
         """The starting time for calculating rising/setting times, assumed to be
         at 0:00:00 in Standard Time.
         """
-        self._t1: Time = tisca.ut1_jd(self._t0.ut1 + 3)
+        self._t1: Time = timescale.ut1_jd(self._t0.ut1 + 3)
         """The ending time for calculating rising/setting times, assumed to be
         3 days later.
         """
 
-    def _initialize_star(self):
+    def _initialize_star(self):  # type: ignore[no-untyped-def]
         s = None
         if self.name is not None:
             self.name = self.name.lower()
             if self.name in ['mercury', 'venus', 'mars']:
                 # skyfield.vectorlib.VectorSum
-                s = dl.eph[self.name]
+                s = dl.eph[self.name]  # type: ignore[index]
             elif self.name in ['jupiter', 'saturn', 'uranus', 'neptune', 'pluto']:
                 # skyfield.jpllib.ChebyshevPosition
-                s = dl.eph[self.name + ' barycenter']
+                s = dl.eph[self.name + ' barycenter']  # type: ignore[index]
             else:
                 raise ValueError(f"Invalid planet name: {self.name}")
         elif self.hip >= 0:
@@ -141,7 +147,7 @@ class StarObject:
                     "The Hipparcos Catalogue number must be in the range [1, 118322]."
                 )
             try:
-                _s = dl.hip_df.loc[self.hip]
+                _s = dl.hip_df.loc[self.hip]  # type: ignore[attr-defined]
                 if np.isnan(_s['ra_degrees']):
                     raise ValueError(
                         "WARNING: No RA/Dec data available for this star in the Hipparcos Catalogue."
@@ -163,7 +169,7 @@ class StarObject:
 
         return s
 
-    def generate_result(self) -> dict:
+    def generate_result(self) -> dict[str, str | float | Annotations]:
         """Generates the diagram and annotations.
 
         Returns:
@@ -171,7 +177,7 @@ class StarObject:
                 {
                     'diagram_id': str,
                     'svg_data': str,
-                    'annotations': list[tuple],
+                    'annotations': Annotations,
                     'offset': float,
                     'tz_name': str,
                 }
@@ -220,8 +226,8 @@ class StarObject:
         events: NDArray[np.int64] | list[np.int64]
         ts, events = almanac.find_discrete(t0, t1, f)
 
+        ts1: list[Time] = []
         if len(ts) == 0:
-            ts1: list[Time] = []
             ts1.append(t0)
             ts1.append(t1)
             events = list(events)
@@ -230,7 +236,6 @@ class StarObject:
             return ts1, events
 
         else:
-            ts1: list[Time] = []
             t_cals = ts.ut1_calendar()
             for i in range(len(ts)):
                 t_cal = (
@@ -241,7 +246,7 @@ class StarObject:
                     t_cals[4][i],
                     t_cals[5][i],
                 )
-                ts1.append(tisca.ut1(*t_cal))
+                ts1.append(timescale.ut1(*t_cal))
 
             # Add t0 before the beginning of the list
             # Add t1 behind the ending of the list
@@ -302,13 +307,15 @@ class StarObject:
     def _get_star_meridian_transit_time(self, t_rising: Time) -> Time:
         """Gets the star's meridian transit time."""
         t0: Time = t_rising
-        t1: Time = tisca.ut1_jd(t0.ut1 + 2)
+        t1: Time = timescale.ut1_jd(t0.ut1 + 2)
 
         t_transits: Time = almanac.find_transits(self.observer, self.star, t0, t1)
 
         return t_transits[0]
 
-    def _get_twilight_transition_points(self, ts: list[Time], events: list[np.int64]):
+    def _get_twilight_transition_points(
+        self, ts: list[Time], events: list[np.int64]
+    ) -> tuple[list[str], list[np.float64], list[np.float64], list[Time]]:
         """Gets transition points between different twilight conditions."""
         names: list[str] = []
         altitudes: list[np.float64] = []
@@ -353,7 +360,7 @@ class StarObject:
 
     def _plot_in_style(
         self, ax: PolarAxes, event: np.int64, t_jd0: np.float64, t_jd1: np.float64
-    ):
+    ) -> None:
         """Plots the star path in different styles for different twilight stages.
 
         Input times are in units of Julian days.
@@ -364,7 +371,7 @@ class StarObject:
         altitudes: NDArray[np.float64] = np.zeros(shape=(0), dtype=float)
         azimuths: NDArray[np.float64] = np.zeros(shape=(0), dtype=float)
         for ti in t_jds:
-            alt, az = self._get_star_altaz(tisca.ut1_jd(ti))
+            alt, az = self._get_star_altaz(timescale.ut1_jd(ti))
             altitudes = np.append(altitudes, [alt.degrees])
             azimuths = np.append(azimuths, [az.degrees])
 
@@ -472,20 +479,24 @@ class StarObject:
 
             label_coord.append(_label_coord)
 
-        ax2 = fig.add_axes([0, 0, 1, 1], facecolor=(1, 1, 1, 0))
+        ax2 = fig.add_axes((0.0, 0.0, 1.0, 1.0), facecolor=(1, 1, 1, 0))
         ax2.set_xlim(0, 1)
         ax2.set_ylim(0, 1)
 
         for i in range(len(label_coord)):
             _r = 90 - label_coord[i][1]
             _theta = np.radians(label_coord[i][0])
-            label_coord_bg = ax.transData.transform((_theta, _r))
+            label_coord_bg: NDArray[np.float64] | list[float] = ax.transData.transform(
+                (_theta, _r)
+            )
             label_coord_bg = [
                 label_coord_bg[0] / fig.bbox.width,
                 label_coord_bg[1] / fig.bbox.height,
             ]
 
-            ttp_coord_bg = ax.transData.transform((thetas[i], rs[i]))
+            ttp_coord_bg: NDArray[np.float64] | list[float] = ax.transData.transform(
+                (thetas[i], rs[i])
+            )
             ttp_coord_bg = [
                 ttp_coord_bg[0] / fig.bbox.width,
                 ttp_coord_bg[1] / fig.bbox.height,
@@ -507,7 +518,8 @@ class StarObject:
         ax2.axis('off')
 
         # Forces all text to be converted into graphical paths without any distortion or special effects
-        [text.set_path_effects([path_effects.Normal()]) for text in ax2.texts]
+        for text in ax2.texts:
+            text.set_path_effects([path_effects.Normal()])
 
     def _plot_rising_and_setting_points(
         self, fig: Figure, ax: PolarAxes, t0: Time, t1: Time
@@ -534,7 +546,7 @@ class StarObject:
         x1 = pcoord1[0] / fig.bbox.width
         y1 = pcoord1[1] / fig.bbox.height
 
-        ax2 = fig.add_axes([0, 0, 1, 1], facecolor=(1, 1, 1, 0))
+        ax2 = fig.add_axes((0.0, 0.0, 1.0, 1.0), facecolor=(1, 1, 1, 0))
         ax2.set_xlim(0, 1)
         ax2.set_ylim(0, 1)
 
@@ -563,7 +575,8 @@ class StarObject:
         ax2.axis('off')
 
         # Forces all text to be converted into graphical paths without any distortion or special effects
-        [text.set_path_effects([path_effects.Normal()]) for text in ax2.texts]
+        for text in ax2.texts:
+            text.set_path_effects([path_effects.Normal()])
 
         return ([alt0.degrees, alt1.degrees], [az0.degrees, az1.degrees], [t0, t1])
 
@@ -585,7 +598,7 @@ class StarObject:
             )
         elif self.lat < 0:
             r = 90 + self.lat
-            theta: np.float64 = np.radians(180)
+            theta = np.radians(180)
             ax.plot(theta, r, 'b+', ms=8)
             ax.annotate(
                 'SCP',
@@ -627,12 +640,20 @@ class StarObject:
 
         fig: Figure
         ax: PolarAxes
-        fig, ax = plt.subplots(figsize=(10, 10), subplot_kw={'projection': 'polar'})
-        ax.set_position([0.1, 0.1, 0.8, 0.8])
+        fig, ax = plt.subplots(figsize=(10, 10), subplot_kw={'projection': 'polar'})  # type: ignore
+        ax.set_position((0.1, 0.1, 0.8, 0.8))
         ax.set_ylim(0, 90)
         ax.set_theta_offset(np.pi / 2)
 
         # Plot RTS & twilight transition points -----------------------|
+        ttp_names: list[str]
+        ttp_alts: list[np.float64]
+        ttp_azs: list[np.float64]
+        ttp_times: list[Time]
+        rts_names: list[str]
+        rts_alts: list[np.float64]
+        rts_azs: list[np.float64]
+        rts_times: list[Time]
         ttp_names, ttp_alts, ttp_azs, ttp_times = [], [], [], []
         rts_names, rts_alts, rts_azs, rts_times = [], [], [], []
         # Rises and sets
@@ -738,23 +759,23 @@ class StarObject:
 
     def _get_annotations(
         self, points: list[tuple[str, np.float64, np.float64, Time]]
-    ) -> list[dict]:
+    ) -> Annotations:
         """Returns styled information of points."""
         # Sort the points by the UT1
         sorted_points = sorted(points, key=lambda p: p[3].ut1)
 
-        annotations: list[dict] = []
+        annotations: Annotations = []
         for name, alt, az, t in sorted_points:
             _time_ut1 = t.ut1_calendar()
             _time_standard = ut1_to_standard_time(_time_ut1, self.offset_in_minutes)
             _time_local_mean = ut1_to_local_mean_time(_time_ut1, self.lng)
-            _time_ut1 = tisca.ut1(
+            _time_ut1 = timescale.ut1(
                 *_time_ut1[:5], round(_time_ut1[5]) + 0.1
             ).ut1_calendar()
-            _time_standard = tisca.ut1(
+            _time_standard = timescale.ut1(
                 *_time_standard[:5], round(_time_standard[5]) + 0.1
             ).ut1_calendar()
-            _time_local_mean = tisca.ut1(
+            _time_local_mean = timescale.ut1(
                 *_time_local_mean[:5], round(_time_local_mean[5]) + 0.1
             ).ut1_calendar()
             _time_ut1_julian = juliandate.to_julian(
@@ -799,7 +820,7 @@ def get_diagram(
     name: str | None = None,
     hip: int = -1,
     radec: tuple[float, float] | None = None,
-) -> dict:
+) -> dict[str, str | float | Annotations]:
     """Entry point of getting the star path diagram.
 
     Returns:
@@ -807,7 +828,7 @@ def get_diagram(
             {
                 'diagram_id': str,
                 'svg_data': str,
-                'annotations': list[tuple],
+                'annotations': Annotations,
                 'offset': float,
                 'tz_name': str,
             }

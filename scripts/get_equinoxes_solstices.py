@@ -7,7 +7,7 @@ import sys
 import os
 
 # Append the parent directory to the path
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+# sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from core.seasons import get_coords
 from utils.script_utils import format_datetime, format_datetime_iso, validate_year, EPH_DATE_MIN, EPH_DATE_MAX

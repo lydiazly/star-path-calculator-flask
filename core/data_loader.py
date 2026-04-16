@@ -11,13 +11,31 @@ Example usage:
 """
 
 import os
-from skyfield.api import load, load_file
+from pathlib import Path
+from skyfield.api import Loader
 from skyfield.data import hipparcos
 
-from config import constants
+from config import EPH_DATA_FILE, HIP_DATA_FILE
 
-__all__ = ["eph", "earth", "hip_df", "load_data"]
+__all__ = ["DATA_DIR", "load", "timescale", "eph", "earth", "hip_df", "load_data"]
 
+# Load variables from .env into os.environ
+try:
+    from dotenv import load_dotenv
+
+    load_dotenv()
+except Exception:
+    pass
+
+# Read from env or in a subfolder 'data/' in the working directory
+DATA_DIR: Path = Path(os.getenv('STAR_PATH_DATA_DIR', Path.cwd() / "data"))
+DATA_DIR.mkdir(parents=True, exist_ok=True)
+# print(f"[Data Location] {DATA_DIR}")
+
+# Set the loader with the data location
+load = Loader(str(DATA_DIR))
+
+timescale = load.timescale()
 
 # Global variables
 eph = None
@@ -27,42 +45,25 @@ earth = None
 hip_df = None
 """The Hipparcos Catalogue dataframe."""
 
-data_dir = os.path.join(
-    os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'data'
-)
-
 
 def load_data() -> None:
     """Loads the ephemeris data and the Hipparcos Catalogue."""
     global eph, earth, hip_df
 
-    os.makedirs(data_dir, exist_ok=True)
-
     # Load the ephemeris data -----------------------------------------|
-    data_full_path = os.path.join(data_dir, constants.EPH_DATA_FILE)
     try:
-        if not os.path.isfile(data_full_path):
-            original_dir = os.getcwd()
-            os.chdir(data_dir)
-            eph = load(constants.EPH_DATA_FILE)
-            os.chdir(original_dir)
-        else:
-            eph = load_file(data_full_path)
+        # Load from or download to DATA_DIR
+        eph = load(EPH_DATA_FILE)
         earth = eph['earth']
     except Exception as e:
         raise Exception(f"Failed to load ephemeris data: {str(e)}")
 
     # Load the Hipparcos Catalogue dataframe --------------------------|
-    data_full_path = os.path.join(data_dir, constants.HIP_DATA_FILE)
+    hip_full_path: Path = DATA_DIR / HIP_DATA_FILE
     try:
-        if not os.path.isfile(data_full_path):
-            original_dir = os.getcwd()
-            os.chdir(data_dir)
-            _f = load.open(hipparcos.URL, filename=constants.HIP_DATA_FILE)
-            os.chdir(original_dir)
-        else:
-            _f = load.open(data_full_path)
-        hip_df = hipparcos.load_dataframe(_f)
-        _f.close()
+        url_or_path = HIP_DATA_FILE if hip_full_path.is_file() else hipparcos.URL
+        # Load from or download to DATA_DIR
+        with load.open(url_or_path) as f:
+            hip_df = hipparcos.load_dataframe(f)
     except Exception as e:
         raise Exception(f"Failed to load Hipparcos Catalogue: {str(e)}")

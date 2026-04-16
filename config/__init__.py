@@ -1,2 +1,2 @@
 # config/__init__.py
-from .constants import *  # noqa
+from config.constants import *  # noqa
