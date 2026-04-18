@@ -164,7 +164,7 @@ Example:
 
 ```bash
 # Using uv
-uv run get-star-path  -2000 3 1 --lat 40 --lng 116 -o "jupiter"
+uv run get-star-path -2000 3 1 --lat 40 --lng 116 -o "jupiter"
 
 # Or
 python3 ./scripts/get_star_path.py -2000 3 1 --lat 40 --lng 116 -o "jupiter"
@@ -175,6 +175,7 @@ python3 ./scripts/get_star_path.py -2000 3 1 --lat 40 --lng 116 -o "jupiter"
 
 ```text
 [Date (Gregorian)] 1 Mar 2001 BCE
+[Date (Julian)]    18 Mar 2001 BCE
 [Location]         lat/lng = 40.000/116.000
 [Celestial Object] Jupiter
 
@@ -298,6 +299,9 @@ examples:
 - R. Tousey and M. J. Koomen, "The Visibility of Stars and Planets During Twilight," *Journal of the Optical Society of America*, Vol. 43, pp. 177-183, 1953. [Online]. Available: <https://opg.optica.org/josa/viewmedia.cfm?uri=josa-43-3-177&seq=0&html=true>
 
 ## Changelog
+
+- 2026-04-17
+  - Added Gregorian/Julian calendar to Chinese calendar conversion.
 
 - 2026-04-14
   - Migrated to uv.

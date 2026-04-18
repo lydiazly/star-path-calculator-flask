@@ -35,14 +35,14 @@ def main():
         print("This program requires Python 3.11 or newer. Please upgrade your Python version.", file=sys.stderr)
         sys.exit(1)
 
-    # Set date ----------------------------------------------------------------|
+    # Set date --------------------------------------------------------|
     now = datetime.now()
     if args.year is None:
         year, month, day = list(now.timetuple())[0:3]
     else:
         year  = args.year
 
-    # Get Seasons -------------------------------------------------------------|
+    # Get Seasons -----------------------------------------------------|
     datetime_list = [year,]
     try:
         # validate_datetime(*datetime_list)

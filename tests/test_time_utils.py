@@ -9,6 +9,7 @@ from utils.time_utils import (
     ut1_to_local_mean_time,
     gregorian_to_julian,
     julian_to_gregorian,
+    get_cc_date,
 )
 
 
@@ -82,20 +83,48 @@ def test_ut1_to_local_mean_time(t_ut1, _, lng, t_standard_expected):
 
 
 # https://en.wikipedia.org/wiki/Conversion_between_Julian_and_Gregorian_calendars
+# https://ytliu0.github.io/ChineseCalendar/index_simp.html
 test_dates = [
-    ((-500, 2, 28), (-500, 3, 5)),
-    ((1582, 10, 15), (1582, 10, 5)),
-    ((2100, 3, 14), (2100, 2, 29)),
+    ((-722, 12, 23), (-722, 12, 31), None, None),
+    (
+        (-722, 12, 24),
+        (-721, 1, 1),
+        '鲁惠公四十六年 (戊午) 十二月十六 (丙寅日)',
+        '魯惠公四十六年 (戊午) 十二月十六 (丙寅日)',
+    ),
+    (
+        (445, 2, 26),
+        (445, 2, 25),
+        '宋文帝元嘉二十二年 (乙酉) 二月初三 (己卯月·癸亥日)',
+        '宋文帝元嘉二十二年 (乙酉) 二月初三 (己卯月·癸亥日)',
+    ),
+    (
+        (1582, 10, 15),
+        (1582, 10, 5),
+        '明神宗万历十年 (壬午) 九月十九 (庚戌月·甲戌日)',
+        '明神宗萬曆十年 (壬午) 九月十九 (庚戌月·甲戌日)',
+    ),
+    (
+        (1582, 10, 14),
+        (1582, 10, 4),
+        '明神宗万历十年 (壬午) 九月十八 (庚戌月·癸酉日)',
+        '明神宗萬曆十年 (壬午) 九月十八 (庚戌月·癸酉日)',
+    ),
+    (
+        (2100, 3, 14),
+        (2100, 2, 29),
+        '庚申年二月初四 (己卯月·乙卯日)',
+        '庚申年二月初四 (己卯月·乙卯日)',
+    ),
+    ((2201, 1, 1), (2200, 12, 17), None, None),
 ]
 
 
-@pytest.mark.parametrize("date_g, date_j", test_dates)
-def test_gregorian_to_julian(date_g, date_j):
-    """Tests Gregorian to Julian conversion."""
-    assert gregorian_to_julian(date_g)[:3] == date_j
-
-
-@pytest.mark.parametrize("date_g, date_j", test_dates)
-def test_julian_to_gregorian(date_j, date_g):
-    """Tests Julian to Gregorian conversion."""
-    assert julian_to_gregorian(date_j)[:3] == date_g
+@pytest.mark.parametrize("date_g, date_j, date_hans, date_hant", test_dates)
+def test_get_cc_date(date_g, date_j, date_hans, date_hant):
+    """Tests the conversion among Gregorian, Julian, and Chinese calendars."""
+    assert gregorian_to_julian((*date_g, 12))[:3] == date_j
+    assert julian_to_gregorian((*date_j, 12))[:3] == date_g
+    res = get_cc_date(date_g, date_j)
+    assert (None if res[0] is None else res[0]['formatted']) == date_hans
+    assert (None if res[1] is None else res[1]['formatted']) == date_hant
