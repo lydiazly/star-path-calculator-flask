@@ -180,7 +180,7 @@ def parse_cc_date(d: dict[str, str]) -> str:
 
 def get_cc_date(
     d_g: tuple[int, int, int], d_j: tuple[int, int, int]
-) -> tuple[dict, dict] | None:
+) -> tuple[dict | None, dict | None]:
     """Converts a Gregorian/Julian calendar date into a Chinese calendar date.
     Use the date in Julian calendar before `1582-10-15`, otherwise use the date in Gregorian calendar.
 
