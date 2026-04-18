@@ -119,7 +119,6 @@ Parameters:
 - `lng`: (*required*) same as above.
 - `name` | `hip` | `ra`, `dec`: (*required*) either a planet name (case insensitive), Hipparcos Catalogue number, or a RA/Dec pair.
 - `tz`: the time zone ID of this location.
-- `tzname`: the time zone name of this location.
 - `cal`: the calendar flag.
   - `cal=` or not provided: Gregorian calendar.
   - `cal=j`: Julian calendar.
@@ -133,3 +132,6 @@ Returns:
 - `offset`: time zone offset in decimal hours.
 - `svgData`: the Base64-encoded SVG data of the output figure.
 - `annotations`: a list of details about the points on the figure, including dates in both the Gregorian and Julian calendars.
+- `tz`: the time zone ID of this location.
+- `tzname`: the time zone name of this location.
+- `date_cc`: the Chinese calendar date object.
