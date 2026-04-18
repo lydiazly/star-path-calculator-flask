@@ -151,14 +151,16 @@ def parse_cc_date(d: dict[str, str]) -> str:
     except Exception:
         raise ValueError(f"Incomplete data returned: {d}")
     # 宋文帝元嘉二十二年 (乙酉) 二月初三 (己卯月·癸亥日)
-    date_gz = '·'.join(
-        [*([f"{month_gz}月"] if month_gz else []), *([f"{day_gz}日"] if day_gz else [])]
-    )
-    formatted = (
-        (f"{reign} ({year_gz}) " if reign is not None else f"{year_gz}年")
-        + f"{date}"
-        + (f" ({date_gz})" if date_gz else '')
-    )
+    # date_gz = '·'.join(
+    #     [*([f"{month_gz}月"] if month_gz else []), *([f"{day_gz}日"] if day_gz else [])]
+    # )
+    # formatted = (
+    #     (f"{reign} ({year_gz}) " if reign is not None else f"{year_gz}年")
+    #     + f"{date}"
+    #     + (f" ({date_gz})" if date_gz else '')
+    # )
+    # 乙酉年二月初三
+    formatted = f"{year_gz}年{date}"
     return {
         'reign': reign,  # 宋文帝元嘉二十二年
         'date': date,  # 二月初三
