@@ -58,7 +58,7 @@ def main():
 
     print_hip_name = args.name
 
-    # Set date ----------------------------------------------------------------|
+    # Set date --------------------------------------------------------|
     now = datetime.now()
     if args.year is None:
         year, month, day = list(now.timetuple())[0:3]
@@ -128,7 +128,7 @@ def main():
 
     print(f"[Date (Gregorian)] {format_datetime(year, month, day)[0]}")
     print(f"[Date (Julian)]    {format_datetime(year_j, month_j, day_j)[0]}")
-    # Convert to Chinese calendar if in UTC+8 ---------------------|
+    # Convert to Chinese calendar if in UTC+8 -------------------------|
     if f"{results['offset'] / 60:.2f}" == '8.00':
         date_hans, date_hant = get_cc_date((year, month, day), (year_j, month_j, day_j))
         if date_hans is not None:

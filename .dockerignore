@@ -2,13 +2,13 @@
 *
 
 # Allow specific files and directories
+!pyproject.toml
+!uv.lock
 !requirements*.txt
-!config/*
 !docker/*.sh
-!core/*.py
-!scripts/*.py
-!tests/*.py
-!tests/*.json
-!tests/*.svg
-!tests/*.txt
-!utils/*.py
+!config/*
+!core/*
+!utils/*
+!scripts/*
+!tests/*
+!cases/*
