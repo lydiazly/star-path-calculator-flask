@@ -30,6 +30,7 @@ This repository contains the source code of our [Star Path Viewer](https://star-
 - [Scripts](#scripts)
   - [1. Get times and coordinates of the equinoxes and solstices in a given year](#1-get-times-and-coordinates-of-the-equinoxes-and-solstices-in-a-given-year)
   - [2. Plot a star's path on a given date at a given location](#2-plot-a-stars-path-on-a-given-date-at-a-given-location)
+- [Testing](#testing)
 - [Resources](#resources)
 - [References](#references)
 - [Changelog](#changelog)
@@ -101,11 +102,11 @@ Defaults to a subfolder `data/` in the current working directory.
 
 Example:
 
-```bash
+```sh
 # Using uv
 uv run get-equinoxes-solstices -2000
 
-# Or
+# or
 python3 ./scripts/get_equinoxes_solstices.py -2000
 ```
 
@@ -162,11 +163,11 @@ examples:
 
 Example:
 
-```bash
+```sh
 # Using uv
 uv run get-star-path -2000 3 1 --lat 40 --lng 116 -o "jupiter"
 
-# Or
+# or
 python3 ./scripts/get_star_path.py -2000 3 1 --lat 40 --lng 116 -o "jupiter"
 ```
 
@@ -279,6 +280,24 @@ examples:
 ```
 
 </details>
+
+## Testing
+
+Clone the repository:
+
+```sh
+git clone https://github.com/claude-hao/star-path-calculator.git
+cd star-path-calculator
+```
+
+Use `uv run` or `uvx` to run `pytest`:
+
+```sh
+uv sync
+uv run pytest
+# or
+uvx tox -e py312
+```
 
 ## Resources
 
