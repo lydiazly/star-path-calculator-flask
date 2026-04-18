@@ -1,0 +1,57 @@
+# syntax=docker/dockerfile:1
+
+# builder: Install dependencies within a virtual environment.
+# base: Prepare for runtime: copy python venv
+# runtime: Open python prompt
+
+ARG UBUNTU_VERSION=24.04
+
+# Build (temporary)
+FROM ubuntu:${UBUNTU_VERSION} AS builder
+
+ARG DEBIAN_FRONTEND=noninteractive
+
+ENV PIP_ROOT_USER_ACTION=ignore
+
+# Update & install python3.12:
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    python3 python3-pip python3-venv \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+COPY requirements.txt .
+
+# Use a virtual environment
+RUN python3 -m venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
+
+# Install Python dependencies and chromium headless shell as root
+RUN <<EOF
+python3 -m pip install --no-cache-dir --upgrade pip
+python3 -m pip install --no-cache-dir -r requirements.txt
+EOF
+
+
+# Prepare for runtime
+FROM ubuntu:${UBUNTU_VERSION} AS base
+
+# Update & install essential packages & python3.12
+#   ca-certificates: for HTTPS requests (pip installs)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ca-certificates \
+    python3 python3-pip \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY --from=builder /opt/venv /opt/venv
+
+ENV PATH="/opt/venv/bin:$PATH"
+
+WORKDIR /app
+
+COPY . .
+
+# Production runtime
+FROM base AS runtime
+
+CMD ["python3"]
