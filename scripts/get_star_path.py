@@ -85,27 +85,18 @@ def main():
     else:
         year_j, month_j, day_j, *_ = gregorian_to_julian((year, month, day, 12))  # 12:00:00
 
-    # Convert to Chinese calendar -------------------------------------|
-    date_hans, date_hant = get_cc_date((year, month, day), (year_j, month_j, day_j))
-
-    print(f"[Date (Gregorian)] {format_datetime(year, month, day)[0]}")
-    print(f"[Date (Julian)]    {format_datetime(year_j, month_j, day_j)[0]}")
-    if date_hans is not None:
-        print(f"[Date (Chinese)]   {date_hans['formatted']}")
-
     # Set location ----------------------------------------------------|
     lat = args.lat
     lng = args.lng
-    print(f"[Location]         lat/lng = {lat:.3f}/{lng:.3f}")
 
     # Set the celestial object ----------------------------------------|
     name, hip, radec = [None, -1, None]
-    print("[Celestial Object]", end=" ")
+    star_str = ''
     if ',' in args.obj:
         # (ra, dec)
         try:
             radec = tuple(map(float, args.obj.split(',')))
-            print(f"RA/Dec: {radec[0]:.3f}/{radec[1]:.3f}")
+            star_str = f"RA/Dec: {radec[0]:.3f}/{radec[1]:.3f}"
         except ValueError:
             print(f"Invalid 'ra,dec' format: '{args.obj}'", file=sys.stderr)
             sys.exit(1)
@@ -116,12 +107,12 @@ def main():
             from utils.star_utils import hip_to_name
             hip_name = hip_to_name(hip)
             if hip_name:
-                print(f"Star Name: {hip_name},", end=" ")
-        print(f"Hipparcos Catalogue Number: {hip}")
+                star_str = f"Name: {hip_name}, "
+        star_str += f"Hipparcos Catalogue Number: {hip}"
     else:
         # Planet name
         name = args.obj.lower()
-        print(f"{name.capitalize()}")
+        star_str = f"{name.capitalize()}"
 
     # Plot star path --------------------------------------------------|
     try:
@@ -134,6 +125,16 @@ def main():
     except Exception as e:
         print(str(e), file=sys.stderr)
         sys.exit(1)
+
+    print(f"[Date (Gregorian)] {format_datetime(year, month, day)[0]}")
+    print(f"[Date (Julian)]    {format_datetime(year_j, month_j, day_j)[0]}")
+    # Convert to Chinese calendar if in UTC+8 ---------------------|
+    if f"{results['offset'] / 60:.2f}" == '8.00':
+        date_hans, date_hant = get_cc_date((year, month, day), (year_j, month_j, day_j))
+        if date_hans is not None:
+            print(f"[Date (Chinese)]   {date_hans['formatted']}")
+    print(f"[Location]         lat/lng = {lat:.3f}/{lng:.3f}")
+    print(f"[Celestial Object] {star_str}")
 
     # Write the SVG data to a file
     filename = f'sp_{results["diagram_id"]}.svg'
