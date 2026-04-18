@@ -194,9 +194,6 @@ def diagram():
             )  # 12:00:00
             cal_other = JULIAN
             year_other, month_other, day_other = year_j, month_j, day_j
-
-        # Convert to Chinese calendar
-        date_hans, date_hant = get_cc_date((year, month, day), (year_j, month_j, day_j))
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
@@ -215,6 +212,15 @@ def diagram():
             tz_id = get_tzid_by_tzfpy(lat=lat, lng=lng)
 
         results = get_diagram(year, month, day, lat=lat, lng=lng, tz_id=tz_id, **obj)
+
+        # Convert to Chinese calendar if in UTC+8
+        offset_in_hours = results['offset'] / 60
+        date_hans = None
+        date_hant = None
+        if f"{offset_in_hours:.2f}" == '8.00':
+            date_hans, date_hant = get_cc_date(
+                (year, month, day), (year_j, month_j, day_j)
+            )
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
@@ -224,8 +230,8 @@ def diagram():
                 "lat": lat,  # keep as a number
                 "lng": lng,  # keep as a number
                 "tz": tz_id,
-                "tzname": results["tz_name"],
-                "offset": results["offset"] / 60,  # decimal hours, keep as a number
+                "tzname": results['tz_name'],
+                "offset": offset_in_hours,  # decimal hours, keep as a number
                 "year": year_other,  # in the other calendar, keep as a number
                 "month": month_other,  # in the other calendar, keep as a number
                 "day": day_other,  # in the other calendar, keep as a number
@@ -235,9 +241,9 @@ def diagram():
                 "hip": str(hip) if hip else None,
                 "ra": ra,  # keep as a number
                 "dec": dec,  # keep as a number
-                "diagramId": str(results["diagram_id"]),
+                "diagramId": str(results['diagram_id']),
                 "svgData": results["svg_data"],
-                "annotations": results["annotations"],
+                "annotations": results['annotations'],
                 "eqxSolTime": [],  # unused
                 "date_cc": {"zh": date_hans, "zhHK": date_hant},
             }
