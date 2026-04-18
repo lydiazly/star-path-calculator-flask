@@ -17,7 +17,17 @@ from skyfield.data import hipparcos
 
 from config import EPH_DATA_FILE, HIP_DATA_FILE
 
-__all__ = ["DATA_DIR", "load", "timescale", "eph", "earth", "hip_df", "load_data"]
+__all__ = [
+    "DATA_DIR",
+    "load",
+    "timescale",
+    "eph",
+    "earth",
+    "hip_df",
+    "load_data",
+    "cal_hans",
+    "cal_hant",
+]
 
 # Load variables from .env into os.environ
 try:
@@ -44,6 +54,15 @@ earth = None
 """The Earth object."""
 hip_df = None
 """The Hipparcos Catalogue dataframe."""
+
+try:
+    import ChineseCalendar_py.calendar_conversion as ccal
+
+    cal_hans = ccal.calendar_conversion('ChiS')
+    cal_hant = ccal.calendar_conversion('ChiT')
+except Exception:
+    cal_hans = None
+    cal_hant = None
 
 
 def load_data() -> None:

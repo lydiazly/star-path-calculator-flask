@@ -1,3 +1,4 @@
 README.md merge=ours
 .python-version merge=ours
 pyproject.toml merge=ours
+uv.lock merge=ours

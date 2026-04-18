@@ -4,10 +4,11 @@
 
 # from typing import Tuple
 from datetime import datetime, timedelta
-from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 import juliandate
+from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
-from core.data_loader import timescale
+from config import CC_YEAR_RANGE
+from core.data_loader import timescale, cal_hans, cal_hant
 
 __all__ = [
     "get_tzid_by_tzfpy",
@@ -16,6 +17,7 @@ __all__ = [
     "ut1_to_local_mean_time",
     "julian_to_gregorian",
     "gregorian_to_julian",
+    "get_cc_date",
 ]
 
 
@@ -132,3 +134,84 @@ def gregorian_to_julian(t_gregorian: tuple) -> tuple:
     t_julian = juliandate.to_julian(juliandate.from_gregorian(*t_gregorian))
     t_julian = (*map(int, t_julian[0:5]), float(t_julian[-2] + t_julian[-1] / 1e6))
     return t_julian
+
+
+def parse_cc_date(d: dict[str, str]) -> str:
+    # e.g., d = cal_hans.western_to_chinese_date(445, 2, 25)
+    reign = d.get('reign/era', None)
+    year = d.get('sexagenary year', None)
+    date = d.get('cdate', None)
+    if year is None or date is None:
+        raise ValueError("No 'sexagenary year' or 'cdate' returned.")
+    try:
+        year_gz = year[0]
+        shengxiao = year[1] if len(year) > 1 else None
+        month_gz = d.get('jian', [''])[0].replace('建', '')
+        day_gz = d.get('sexagenary date', [''])[0]
+    except Exception:
+        raise ValueError(f"Incomplete data returned: {d}")
+    # 宋文帝元嘉二十二年 (乙酉) 二月初三 (己卯月·癸亥日)
+    date_gz = '·'.join(
+        [*([f"{month_gz}月"] if month_gz else []), *([f"{day_gz}日"] if day_gz else [])]
+    )
+    formatted = (
+        (f"{reign} ({year_gz}) " if reign is not None else f"{year_gz}年")
+        + f"{date}"
+        + (f" ({date_gz})" if date_gz else '')
+    )
+    return {
+        'reign': reign,  # 宋文帝元嘉二十二年
+        'date': date,  # 二月初三
+        'sexagenary': {  # 干支三柱
+            'year': year_gz,  # 乙酉
+            'month': month_gz,  # 己卯
+            'day': day_gz,  # 癸亥
+        },
+        'meta': {
+            'period': d.get('period', None),  # 南北朝 (420 - 580)
+            'chinese_calendar': d.get('Chinese calendar', None),  # 元嘉历
+            'western_calendar': d.get('Western calendar', None),  # 儒略历
+            'jdn': d.get('JDN', None),  # 1883650
+            'shengxiao': shengxiao,  # 鸡
+        },
+        'formatted': formatted,
+    }
+
+
+def get_cc_date(
+    d_g: tuple[int, int, int], d_j: tuple[int, int, int]
+) -> tuple[dict, dict] | None:
+    """Converts a Gregorian/Julian calendar date into a Chinese calendar date.
+    Use the date in Julian calendar before `1582-10-15`, otherwise use the date in Gregorian calendar.
+
+    Args:
+        d_g (tuple[int, int, int]): `(year, month, day)` in Gregorian calendar
+        d_j (tuple[int, int, int]): `(year, month, day)` in Julian calendar
+
+    Returns:
+        tuple | (None, None): `(None, None)` if N/A, or a tuple containing:
+            date_hans (dict): the date object in Simplified Chinese
+            date_hant (dict): the date object in Traditional Chinese
+
+    Reference:
+        Package tutorial:
+        https://github.com/ytliu0/ChineseCalendar-python/blob/master/tutorial/simplified_Chinese/tutorial.ipynb
+        Calendars:
+        https://ytliu0.github.io/ChineseCalendar-python/tutorial/simplified_Chinese/default_calendar.html
+    """
+    if d_j[0] < CC_YEAR_RANGE[0] or d_g[0] > CC_YEAR_RANGE[1]:
+        return None, None
+    year, month, day = d_g
+    if (
+        year < 1582
+        or (year == 1582 and month < 10)
+        or (year == 1582 and month == 10 and day < 15)
+    ):
+        year, month, day = d_j
+    try:
+        date_hans = parse_cc_date(cal_hans.western_to_chinese_date(year, month, day))
+        date_hant = parse_cc_date(cal_hant.western_to_chinese_date(year, month, day))
+    except Exception as e:
+        print(f"Error converting to Chinese calendar: {str(e)}")
+        return None, None
+    return date_hans, date_hant

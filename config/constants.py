@@ -7,6 +7,7 @@ __all__ = [
     "HIP_IDENT_FILE",
     "EPH_DATE_MIN",
     "EPH_DATE_MAX",
+    "CC_YEAR_RANGE",
 ]
 
 
@@ -24,3 +25,6 @@ HIP_IDENT_FILE = "hip_ident.csv"  # merged
 # Ephemeris date range
 EPH_DATE_MIN = [-3000, 1, 29]  # 29 January 3001 BCE (Gregorian)
 EPH_DATE_MAX = [3000, 5, 6]  # 6 May 3000 CE
+
+# The available year range in Chinese calendar
+CC_YEAR_RANGE = [-721, 2200]

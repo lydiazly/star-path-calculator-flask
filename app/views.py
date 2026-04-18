@@ -10,6 +10,7 @@ from utils.time_utils import (
     ut1_to_standard_time,
     julian_to_gregorian,
     gregorian_to_julian,
+    get_cc_date,
 )
 
 EQX_SOL_KEYS = {
@@ -178,8 +179,26 @@ def diagram():
         return (jsonify({"error": STAR_MISSING_MSG}), 400)
 
     # Convert to Gregorian if the request is in Julian
-    if cal == JULIAN:
-        year, month, day, *_ = julian_to_gregorian((year, month, day, 12))  # 12:00:00
+    try:
+        if cal == JULIAN:
+            year_j, month_j, day_j = year, month, day
+            year, month, day, *_ = julian_to_gregorian(
+                (year_j, month_j, day_j, 12)
+            )  # 12:00:00
+            cal_other = GREGORIAN
+            year_other, month_other, day_other = year, month, day
+        # Convert to Julian if the request is in Gregorian
+        else:
+            year_j, month_j, day_j, *_ = gregorian_to_julian(
+                (year, month, day, 12)
+            )  # 12:00:00
+            cal_other = JULIAN
+            year_other, month_other, day_other = year_j, month_j, day_j
+
+        # Convert to Chinese calendar
+        date_hans, date_hant = get_cc_date((year, month, day), (year_j, month_j, day_j))
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
     # Get the equinox/solstice times
     # eqx_sol_time = []
@@ -196,16 +215,6 @@ def diagram():
             tz_id = get_tzid_by_tzfpy(lat=lat, lng=lng)
 
         results = get_diagram(year, month, day, lat=lat, lng=lng, tz_id=tz_id, **obj)
-
-        if cal == JULIAN:
-            # The results are already in Gregorian
-            cal = GREGORIAN
-        else:
-            # Convert to Julian if the original request was in Gregorian
-            year, month, day, *_ = gregorian_to_julian(
-                (year, month, day, 12)
-            )  # 12:00:00
-            cal = JULIAN
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
@@ -217,11 +226,11 @@ def diagram():
                 "tz": tz_id,
                 "tzname": results["tz_name"],
                 "offset": results["offset"] / 60,  # decimal hours, keep as a number
-                "year": year,  # in the other calendar, keep as a number
-                "month": month,  # in the other calendar, keep as a number
-                "day": day,  # in the other calendar, keep as a number
+                "year": year_other,  # in the other calendar, keep as a number
+                "month": month_other,  # in the other calendar, keep as a number
+                "day": day_other,  # in the other calendar, keep as a number
                 "flag": flag,
-                "cal": cal,  # the other calendar
+                "cal": cal_other,  # the other calendar
                 "name": name,
                 "hip": str(hip) if hip else None,
                 "ra": ra,  # keep as a number
@@ -230,6 +239,7 @@ def diagram():
                 "svgData": results["svg_data"],
                 "annotations": results["annotations"],
                 "eqxSolTime": [],  # unused
+                "date_cc": {"zh": date_hans, "zhHK": date_hant},
             }
         ),
         200,

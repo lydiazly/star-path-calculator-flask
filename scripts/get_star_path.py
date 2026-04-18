@@ -13,6 +13,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from core.star_path import get_diagram
 from utils.script_utils import format_datetime, format_datetime_iso, validate_datetime, format_timezone, EPH_DATE_MIN_STR, EPH_DATE_MAX_STR
+from utils.time_utils import julian_to_gregorian, gregorian_to_julian, get_cc_date
 
 
 prog = f"python3 {os.path.basename(__file__)}"
@@ -77,19 +78,27 @@ def main():
             print(f"Invalid month name: '{args.month}'", file=sys.stderr)
             sys.exit(1)
 
-    # Convert from Julian to Gregorian ----------------------------------------|
+    # Convert from Julian to Gregorian --------------------------------|
     if args.julian:
-        from utils.time_utils import julian_to_gregorian
-        year, month, day, *_ = julian_to_gregorian((year, month, day, 12))  # 12:00:00
+        year_j, month_j, day_j = year, month, day
+        year, month, day, *_ = julian_to_gregorian((year_j, month_j, day_j, 12))  # 12:00:00
+    else:
+        year_j, month_j, day_j, *_ = gregorian_to_julian((year, month, day, 12))  # 12:00:00
+
+    # Convert to Chinese calendar -------------------------------------|
+    date_hans, date_hant = get_cc_date((year, month, day), (year_j, month_j, day_j))
 
     print(f"[Date (Gregorian)] {format_datetime(year, month, day)[0]}")
+    print(f"[Date (Julian)]    {format_datetime(year_j, month_j, day_j)[0]}")
+    if date_hans is not None:
+        print(f"[Date (Chinese)]   {date_hans['formatted']}")
 
-    # Set location ------------------------------------------------------------|
+    # Set location ----------------------------------------------------|
     lat = args.lat
     lng = args.lng
     print(f"[Location]         lat/lng = {lat:.3f}/{lng:.3f}")
 
-    # Set the celestial object ------------------------------------------------|
+    # Set the celestial object ----------------------------------------|
     name, hip, radec = [None, -1, None]
     print("[Celestial Object]", end=" ")
     if ',' in args.obj:
@@ -114,7 +123,7 @@ def main():
         name = args.obj.lower()
         print(f"{name.capitalize()}")
 
-    # Plot star path ---------------------------------------------------------|
+    # Plot star path --------------------------------------------------|
     try:
         from utils.time_utils import get_tzid_by_tzfpy
         tz_id = get_tzid_by_tzfpy(lat=lat, lng=lng)
