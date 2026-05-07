@@ -5,7 +5,7 @@
 import pandas as pd
 from pathlib import Path
 
-from starpathcalculator.core.data_loader import DATA_DIR
+from spcalc.core.data_loader import DATA_DIR
 
 
 __all__ = []

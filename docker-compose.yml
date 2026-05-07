@@ -1,14 +1,14 @@
-name: starpathcalculator
+name: spcalc
 
 services:
   run:
-    image: starpathcalculator:run
+    image: spcalc:run
     pull_policy: build
     build:
       context: .
       dockerfile: docker/Dockerfile
       target: runtime
-    container_name: starpathcalculator
+    container_name: spcalc
     environment:
       - STAR_PATH_DATA_DIR=/app/data
     volumes:

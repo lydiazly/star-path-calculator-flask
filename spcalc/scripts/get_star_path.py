@@ -11,9 +11,9 @@ import os
 from pathlib import Path
 import sys
 
-from starpathcalculator.config import POINTS
-from starpathcalculator.core.star_path import get_diagram
-from starpathcalculator.utils.script_utils import (
+from spcalc.config import POINTS
+from spcalc.core.star_path import get_diagram
+from spcalc.utils.script_utils import (
     EPH_DATE_MIN_STR,
     EPH_DATE_MAX_STR,
     format_datetime,
@@ -21,7 +21,7 @@ from starpathcalculator.utils.script_utils import (
     validate_datetime,
     format_timezone,
 )
-from starpathcalculator.utils.time_utils import julian_to_gregorian, gregorian_to_julian, get_cc_date
+from spcalc.utils.time_utils import julian_to_gregorian, gregorian_to_julian, get_cc_date
 
 # prog = f"python3 {os.path.basename(__file__)}"
 prog = 'get-star-path'
@@ -162,7 +162,7 @@ def main():
         # Hipparcos Catalogue number
         hip = int(args.obj)
         if print_hip_name:
-            from starpathcalculator.utils.star_utils import hip_to_name
+            from spcalc.utils.star_utils import hip_to_name
 
             hip_name = hip_to_name(hip)
             if hip_name:
@@ -175,7 +175,7 @@ def main():
 
     # Plot star path --------------------------------------------------|
     try:
-        from starpathcalculator.utils.time_utils import get_tzid_by_tzfpy
+        from spcalc.utils.time_utils import get_tzid_by_tzfpy
 
         tz_id = get_tzid_by_tzfpy(lat=lat, lng=lng)
         # tz_id = "America/Vancouver"

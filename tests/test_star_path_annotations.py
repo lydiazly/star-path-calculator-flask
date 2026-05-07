@@ -8,8 +8,8 @@ import platform
 import pytest
 import skyfield
 
-from starpathcalculator import __version__
-from starpathcalculator.core.star_path import StarObject, get_diagram
+from spcalc import __version__
+from spcalc.core.star_path import StarObject, get_diagram
 from helpers import assert_iterable_equal
 
 # Skip every test in this module

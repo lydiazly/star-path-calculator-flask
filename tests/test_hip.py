@@ -4,8 +4,8 @@ import numpy as np
 from pathlib import Path
 import pytest
 
-import starpathcalculator.core.data_loader as dl
-from starpathcalculator.utils.star_utils import hip_to_name
+import spcalc.core.data_loader as dl
+from spcalc.utils.star_utils import hip_to_name
 
 
 # https://www.cosmos.esa.int/web/hipparcos/catalogues

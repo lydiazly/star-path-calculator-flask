@@ -3,7 +3,7 @@
 """Functions to plot star paths.
 
 Refer to the global variables `eph`, `earth`, `hip_df`, and `timescale` by:
->>> import starpathcalculator.core.data_loader as dl
+>>> import spcalc.core.data_loader as dl
 >>> eph = dl.eph
 >>> earth = dl.earth
 >>> hip_df = dl.hip_df
@@ -36,8 +36,8 @@ from skyfield.timelib import Time
 from skyfield.units import Angle
 from typing import TypeAlias
 
-import starpathcalculator.core.data_loader as dl
-from starpathcalculator.utils.time_utils import (
+import spcalc.core.data_loader as dl
+from spcalc.utils.time_utils import (
     get_standard_offset_by_id,
     ut1_to_standard_time,
     ut1_to_local_mean_time,

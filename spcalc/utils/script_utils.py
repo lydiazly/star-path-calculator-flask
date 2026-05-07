@@ -5,7 +5,7 @@
 # from typing import List
 import calendar
 
-from starpathcalculator.config import EPH_DATE_MIN, EPH_DATE_MAX
+from spcalc.config import EPH_DATE_MIN, EPH_DATE_MAX
 
 __all__ = [
     "format_datetime",

@@ -85,7 +85,7 @@ Install this package in editable mode:
 
 ```sh
 python3 -m pip install -e .
-python3 -c "import starpathcalculator; print(starpathcalculator.__version__)"
+python3 -c "import spcalc; print(spcalc.__version__)"
 ```
 
 ### Set up `STAR_PATH_DATA_DIR`
@@ -98,13 +98,13 @@ Defaults to a subfolder `data/` in the current working directory.
 
 If using `uv`, use `uv run` or activate the virtual environment to run scripts.
 
-If you prefer running a script without installing the package, run by `python3 -m starpathcalculator.scripts.<module_name>`
+If you prefer running a script without installing the package, run by `python3 -m spcalc.scripts.<module_name>`
 
 ### 1. Get times and coordinates of the equinoxes and solstices in a given year
 
 Command: `get-equinoxes-solstices`
 
-Module: [starpathcalculator.scripts.get_equinoxes_solstices](./starpathcalculator/scripts/get_equinoxes_solstices.py)
+Module: [spcalc.scripts.get_equinoxes_solstices](./spcalc/scripts/get_equinoxes_solstices.py)
 
 Example:
 
@@ -162,7 +162,7 @@ examples:
 
 Command: `get-star-path`
 
-Module: [starpathcalculator.scripts.get_star_path](./starpathcalculator/scripts/get_star_path.py)
+Module: [spcalc.scripts.get_star_path](./spcalc/scripts/get_star_path.py)
 
 > :bulb: The [atmospheric refraction](https://en.wikipedia.org/wiki/Atmospheric_refraction) has been taken into account in the calculation.
 

@@ -13,6 +13,6 @@ Functions:
     load_data: Loads the ephemeris data and the Hipparcos Catalogue.
 """
 
-# from starpathcalculator.core.data_loader import load_data
+# from spcalc.core.data_loader import load_data
 
 # load_data()

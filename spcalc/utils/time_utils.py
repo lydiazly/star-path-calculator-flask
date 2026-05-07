@@ -6,8 +6,8 @@ from datetime import datetime, timedelta
 import juliandate
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
-from starpathcalculator.config import CC_YEAR_RANGE
-from starpathcalculator.core.data_loader import timescale, cal_hans, cal_hant
+from spcalc.config import CC_YEAR_RANGE
+from spcalc.core.data_loader import timescale, cal_hans, cal_hant
 
 __all__ = [
     "get_tzid_by_tzfpy",
