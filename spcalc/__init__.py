@@ -7,6 +7,6 @@ __author__ = 'Stardial'
 try:
     from importlib.metadata import version, PackageNotFoundError
 
-    __version__ = version('star-path-calculator')
+    __version__ = version('star-path-calculator-flask')
 except PackageNotFoundError:
     __version__ = 'dev'

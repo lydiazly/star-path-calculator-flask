@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "star-path-calculator-flask"
-version = "0.1.0"
+version = "0.1.1"
 authors = [{ name = "Stardial" }]
 description = "The Flask server of star-path-calculator"
 readme = "README.md"
