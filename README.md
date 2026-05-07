@@ -17,7 +17,7 @@ The Flask server of our [Star Path Viewer](https://star-path-viewer.pages.dev/) 
 
 [→ Source code](https://github.com/claude-hao/star-path-calculator)
 
-[→ React client](https://github.com/stardial-astro/star-path-viewer)
+[→ React app](https://github.com/stardial-astro/star-path-viewer)
 
 ## Table of Contents<!-- omit in toc -->
 
