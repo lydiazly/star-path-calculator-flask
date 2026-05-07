@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 # tests/test_star_path_annotations.py
-from importlib.metadata import version, PackageNotFoundError
 import json
 import numpy
 from packaging.version import Version
@@ -9,6 +8,7 @@ import platform
 import pytest
 import skyfield
 
+from starpathcalculator import __version__
 from starpathcalculator.core.star_path import StarObject, get_diagram
 from helpers import assert_iterable_equal
 
@@ -19,11 +19,6 @@ from helpers import assert_iterable_equal
 rel_tol = 3e-9  # for compatibility
 abs_tol = 1e-5
 abs_tol_thred = 5e-5
-
-try:
-    __version__ = version('star-path-calculator')
-except PackageNotFoundError:
-    __version__ = ''
 
 # if Version(numpy.__version__) < Version('2.0.0'):
 #     rel_tol = 5e-9 if Version(skyfield.__version__) <= Version('1.49') else 5e-8

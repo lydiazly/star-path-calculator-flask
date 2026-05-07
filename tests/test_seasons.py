@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 # tests/test_seasons.py
-from importlib.metadata import version, PackageNotFoundError
 import json
 import numpy
 from packaging.version import Version
@@ -9,16 +8,12 @@ import platform
 import pytest
 import skyfield
 
+from starpathcalculator import __version__
 from starpathcalculator.core.seasons import get_coords, get_seasons
 from helpers import assert_iterable_equal
 
 # Docker results (same as local tests)
 cases_filename = 'cases/seasons_skyfield1.49_docker.json'
-
-try:
-    __version__ = version('star-path-calculator')
-except PackageNotFoundError:
-    __version__ = ''
 
 rel_tol = 1e-9  # default in math.isclose()
 if Version(skyfield.__version__) > Version('1.49'):
