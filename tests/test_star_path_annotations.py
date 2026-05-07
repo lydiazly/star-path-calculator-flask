@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 # tests/test_star_path_annotations.py
+from importlib.metadata import version, PackageNotFoundError
 import json
 import numpy
 from packaging.version import Version
@@ -7,13 +8,22 @@ from pathlib import Path
 import platform
 import pytest
 import skyfield
-from core.star_path import StarObject, get_diagram
+
+from starpathcalculator.core.star_path import StarObject, get_diagram
 from helpers import assert_iterable_equal
+
+# Skip every test in this module
+# pytestmark = pytest.mark.skip(reason="Cases are outdated, do not run")
 
 # rel_tol = 1e-9  # default in math.isclose()
 rel_tol = 3e-9  # for compatibility
 abs_tol = 1e-5
 abs_tol_thred = 5e-5
+
+try:
+    __version__ = version('star-path-calculator')
+except PackageNotFoundError:
+    __version__ = ''
 
 # if Version(numpy.__version__) < Version('2.0.0'):
 #     rel_tol = 5e-9 if Version(skyfield.__version__) <= Version('1.49') else 5e-8
@@ -21,19 +31,22 @@ if Version(skyfield.__version__) >= Version('1.54'):
     rel_tol = 2e-7
 
 print("\n=== Annotations ===")
+print(f"Package version: {__version__}")
 print(f"python: {platform.python_version()}")
 print(f"numpy: {numpy.__version__}, skyfield: {skyfield.__version__}")
 print(f"Relative tolerance: {rel_tol:.0e}")
 print(f"Absolute tolerance for value <= {abs_tol_thred:.0e}: {abs_tol:.0e}")
 
 if Version(skyfield.__version__) <= Version('1.49'):
-    cases_filename = 'cases/cases_path_skyfield1.49_docker.json'
-    print("Test cases (docker): python 3.12.3, numpy 2.2.3, skyfield 1.49")
+    cases_filename = 'cases/anno_skyfield1.49_docker.json'
+    print("Test cases (docker): 0.1.0, python 3.12.3, numpy 2.2.3, skyfield 1.49")
 else:
-    # cases_filename = 'cases/cases_path_skyfield1.49_docker.json'
+    # cases_filename = 'cases/anno_skyfield1.49_docker.json'
     # print("Test cases (docker): python 3.12.3, numpy 2.2.3, skyfield 1.49")
-    cases_filename = 'cases/cases_path_skyfield1.51_docker.json'
-    print("Test cases (docker): python 3.12.3, numpy 2.2.3, skyfield 1.51")
+    # cases_filename = 'cases/anno_skyfield1.51_docker.json'
+    # print("Test cases (docker): 0.1.0, python 3.12.3, numpy 2.2.3, skyfield 1.51")
+    cases_filename = 'cases/anno_skyfield1.54_0.1.1_docker.json'
+    print("Test cases (docker): 0.1.1, python 3.12.3, numpy 2.4.4, skyfield 1.54")
 
 print(f"Loading '{cases_filename}'")
 
@@ -58,14 +71,7 @@ def test_annotations(case):
     )
 
 
-test_date_coords_dict = {
-    'year': -2000,
-    'month': 3,
-    'day': 1,
-    'lat': 40.19,
-    'lng': 116.41,
-    'tz_id': 'Asia/Shanghai',
-}
+test_date_coords_dict = {'year': -2000, 'month': 3, 'day': 1, 'lat': 40.19, 'lng': 116.41, 'tz_id': 'Asia/Shanghai'}  # fmt: skip
 
 invalid_cases = [
     (test_date_coords_dict, r"^Invalid celestial object\.$"),

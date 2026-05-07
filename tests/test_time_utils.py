@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 # tests/test_time_utils.py
 import pytest
-from core.data_loader import timescale
-from utils.time_utils import (
+
+from starpathcalculator.core.data_loader import timescale
+from starpathcalculator.utils.time_utils import (
     get_tzid_by_tzfpy,
     get_standard_offset_by_id,
     ut1_to_standard_time,
@@ -16,22 +17,22 @@ from utils.time_utils import (
 @pytest.mark.parametrize(
     "lat, lng, tz_expected",
     [
-        (0, 0, 'Etc/GMT'),  # GMT
-        (40, -180, 'Etc/GMT+12'),  # Etc/GMT±12
-        (40, 180, 'Etc/GMT-12'),  # Etc/GMT±12
-        (40, -179.9999, 'Etc/GMT+12'),  # Etc/GMT+12
-        (47.650499, -122.350070, 'America/Los_Angeles'),  # Los Angeles
-        (49.3, -123.1, 'America/Vancouver'),  # Vancouver
-        (43.839319, 87.526148, 'Asia/Shanghai'),  # Ürümqi
-        (47.8, 88.1, 'Asia/Shanghai'),  # Altay
-        (22.598127, 120.347287, "Asia/Taipei"),  # Taipei
-        (53.3, -110.0, 'America/Edmonton'),  # Lloydminster, Alberta
-        (-33.8698439, 151.2082848, 'Australia/Sydney'),  # Sydney
-        # (45.036933, 12.826174, 'Asia/Riyadh'),  # 'Europe/Rome' (incorrect) Aden International Airport
-        (91, 0, ''),  # Invalid
-        (0, 181, ''),  # Invalid
+        (  0,         0,      'Etc/GMT'),  # GMT
+        ( 40,      -180,      'Etc/GMT+12'),  # Etc/GMT±12
+        ( 40,       180,      'Etc/GMT-12'),  # Etc/GMT±12
+        ( 40,      -179.9999, 'Etc/GMT+12'),  # Etc/GMT+12
+        ( 47.6505, -122.3500, 'America/Los_Angeles'),  # Los Angeles
+        ( 49.3,    -123.1,    'America/Vancouver'),  # Vancouver
+        ( 43.8393,   87.5261, 'Asia/Shanghai'),  # Ürümqi
+        ( 47.8,      88.1,    'Asia/Shanghai'),  # Altay
+        ( 22.5981,  120.3473, 'Asia/Taipei'),  # Taipei
+        ( 53.3,    -110.0,    'America/Edmonton'),  # Lloydminster, Alberta
+        (-33.8698,  151.2083, 'Australia/Sydney'),  # Sydney
+        # ( 45.0369,   12.8262, 'Asia/Riyadh'),  # 'Europe/Rome' (incorrect) Aden International Airport
+        ( 91,         0,      ''),  # Invalid
+        (  0,       181,      ''),  # Invalid
     ],
-)
+)  # fmt: skip
 def test_timezone(lat, lng, tz_expected):
     """Tests the time zone ID finder."""
     assert get_tzid_by_tzfpy(lat, lng) == tz_expected
@@ -40,14 +41,14 @@ def test_timezone(lat, lng, tz_expected):
 @pytest.mark.parametrize(
     "tz_id, offset_in_hours_expected, tzname_expected",
     [
-        ('Europe/London', '0.0', 'GMT'),
+        ('Europe/London',      '0.0', 'GMT'),
         ('America/Vancouver', '-8.0', 'PST'),
-        ('Asia/Shanghai', '8.0', 'CST'),
-        ('Asia/Urumqi', '6.0', '+06'),
-        ('America/New_York', '-5.0', 'EST'),
-        ('Australia/Sydney', '10.0', 'AEST'),
+        ('Asia/Shanghai',      '8.0', 'CST'),
+        ('Asia/Urumqi',        '6.0', '+06'),
+        ('America/New_York',  '-5.0', 'EST'),
+        ('Australia/Sydney',  '10.0', 'AEST'),
     ],
-)
+)  # fmt: skip
 def test_standard_offset(tz_id, offset_in_hours_expected, tzname_expected):
     """Tests getting the Standard Time offset."""
     offset_in_minutes, tz_name = get_standard_offset_by_id(tz_id)
@@ -56,10 +57,10 @@ def test_standard_offset(tz_id, offset_in_hours_expected, tzname_expected):
 
 
 test_times = [
-    ((2000, 1, 1, 12, 0, 0), -8, -120, (2000, 1, 1, 4, 0, 0)),
-    ((2000, 1, 1, 12, 0, 0), -7.5, -112.5, (2000, 1, 1, 4, 30, 0)),
-    ((2000, 1, 1, 12, 0, 0), 5.5, 82.5, (2000, 1, 1, 17, 30, 0)),
-]
+    ((2000, 1, 1, 12, 0, 0), -8,   -120,   (2000, 1, 1,  4,  0, 0)),
+    ((2000, 1, 1, 12, 0, 0), -7.5, -112.5, (2000, 1, 1,  4, 30, 0)),
+    ((2000, 1, 1, 12, 0, 0),  5.5,   82.5, (2000, 1, 1, 17, 30, 0)),
+]  # fmt: skip
 
 
 @pytest.mark.parametrize("t_ut1, offset_in_hours, _, t_standard_expected", test_times)

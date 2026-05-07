@@ -2,10 +2,11 @@
 # core/seasons.py
 """Functions to calculate the time and coordinates of equinoxes and solstices.
 
-Refer to the global variables `eph` and `earth` by:
->>> import core.data_loader as dl
+Refer to the global variables `eph`, `earth`, and `timescale` by:
+>>> import starpathcalculator.core.data_loader as dl
 >>> eph = dl.eph
 >>> earth = dl.earth
+>>> timescale = dl.timescale
 """
 
 import numpy as np
@@ -13,7 +14,7 @@ from numpy.typing import NDArray
 from skyfield.almanac import find_discrete, seasons
 from skyfield.timelib import Time
 
-import core.data_loader as dl
+import starpathcalculator.core.data_loader as dl
 
 __all__ = ["get_coords", "get_seasons"]
 
@@ -63,7 +64,7 @@ def get_coords(year: int) -> dict[str, float | tuple[int | float, ...]]:
 
     coord_icrs = []
     for ti in ts:
-        astrometric = dl.earth.at(ti).observe(sun)  # type: ignore[attr-defined]
+        astrometric = dl.earth.at(ti).observe(sun)  # type: ignore[union-attr]
         ra_icrs, dec_icrs, _ = astrometric.radec()
         coord_icrs.append([ra_icrs._degrees, dec_icrs._degrees])
 
@@ -127,7 +128,6 @@ def get_seasons(year: int) -> dict[str, tuple[int | float, ...]]:
 
 def plot_ve_ra(year_start: int, year_end: int, step: int = 1) -> None:
     """Plots the right ascensions of vernal equinoxes from `year_start` to `year_end`."""
-    import numpy as np
     import matplotlib.pyplot as plt
 
     year_list = list(range(year_start, year_end + 1, step))

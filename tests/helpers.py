@@ -185,7 +185,13 @@ def iterable_diff(
                     differences.append(f"+{full_path}: {repr(d2[k])}")
                     continue
                 nested_diff = iterable_diff(
-                    d1[k], d2[k], full_path, include_keys, rel_tol, abs_tol, abs_tol_thred
+                    d1[k],
+                    d2[k],
+                    full_path,
+                    include_keys,
+                    rel_tol,
+                    abs_tol,
+                    abs_tol_thred,
                 )
                 differences.extend(nested_diff)
             # Recursively handle nested dicts
@@ -196,7 +202,13 @@ def iterable_diff(
                     differences.append(f"+{full_path}: {repr(d2[k])}")
                     continue
                 nested_diff = iterable_diff(
-                    d1[k], d2[k], full_path, include_keys, rel_tol, abs_tol, abs_tol_thred
+                    d1[k],
+                    d2[k],
+                    full_path,
+                    include_keys,
+                    rel_tol,
+                    abs_tol,
+                    abs_tol_thred,
                 )
                 differences.extend(nested_diff)
             # Other types
