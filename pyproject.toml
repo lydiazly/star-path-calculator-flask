@@ -38,15 +38,15 @@ pinyin = [
 ]
 
 [project.scripts]
-get-equinoxes-solstices = "starpathcalculator.scripts.get_equinoxes_solstices:main"
-get-star-path = "starpathcalculator.scripts.get_star_path:main"
+get-equinoxes-solstices = "spcalc.scripts.get_equinoxes_solstices:main"
+get-star-path = "spcalc.scripts.get_star_path:main"
 
 [project.urls]
 "Homepage" = "https://github.com/lydiazly/star-path-calculator-flask"
 "Bug Tracker" = "https://github.com/lydiazly/star-path-calculator-flask/issues"
 
 [tool.hatch.build.targets.wheel]
-packages = ["starpathcalculator"]
+packages = ["spcalc"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

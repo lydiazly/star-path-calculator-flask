@@ -2,7 +2,7 @@
 from flask import Flask
 from flask_cors import CORS
 
-from starpathcalculator.core.data_loader import load_data
+from spcalc.core.data_loader import load_data
 
 
 def create_app():

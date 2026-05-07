@@ -3,9 +3,9 @@ from flask import request, jsonify, render_template, current_app as app
 
 # from flask_limiter import Limiter
 # from flask_limiter.util import get_remote_address
-from starpathcalculator.core.seasons import get_seasons
-from starpathcalculator.core.star_path import get_diagram
-from starpathcalculator.utils.time_utils import (
+from spcalc.core.seasons import get_seasons
+from spcalc.core.star_path import get_diagram
+from spcalc.utils.time_utils import (
     get_standard_offset_by_id,
     ut1_to_standard_time,
     julian_to_gregorian,
@@ -52,7 +52,7 @@ FLAG_INVALID_MSG = "Equinox or solstice not specified or invalid."
 # @limiter.limit("6/second", override_defaults=False)
 def seasons():
     # [Gregorian]
-    from starpathcalculator.core.seasons import get_coords
+    from spcalc.core.seasons import get_coords
 
     lat = request.args.get("lat", default=None, type=float)
     lng = request.args.get("lng", default=None, type=float)
@@ -66,7 +66,7 @@ def seasons():
         if not tz_id:
             if lat is None or lng is None:
                 return (jsonify({"error": LOCATION_MISSING_MSG}), 400)
-            from starpathcalculator.utils.time_utils import get_tzid_by_tzfpy
+            from spcalc.utils.time_utils import get_tzid_by_tzfpy
 
             tz_id = get_tzid_by_tzfpy(lat=lat, lng=lng)
 
@@ -116,7 +116,7 @@ def equinox():
         if not tz_id:
             if lat is None or lng is None:
                 return (jsonify({"error": LOCATION_MISSING_MSG}), 400)
-            from starpathcalculator.utils.time_utils import get_tzid_by_tzfpy
+            from spcalc.utils.time_utils import get_tzid_by_tzfpy
 
             tz_id = get_tzid_by_tzfpy(lat=lat, lng=lng)
 
@@ -171,7 +171,7 @@ def diagram():
         obj = {"name": name.lower()}
     elif hip is not None:
         obj = {"hip": hip}
-        # from starpathcalculator.utils.star_utils import hip_to_name
+        # from spcalc.utils.star_utils import hip_to_name
         # name = hip_to_name(hip)
     elif ra is not None and dec is not None:
         obj = {"radec": (ra, dec)}
@@ -207,7 +207,7 @@ def diagram():
 
     try:
         if not tz_id:
-            from starpathcalculator.utils.time_utils import get_tzid_by_tzfpy
+            from spcalc.utils.time_utils import get_tzid_by_tzfpy
 
             tz_id = get_tzid_by_tzfpy(lat=lat, lng=lng)
 

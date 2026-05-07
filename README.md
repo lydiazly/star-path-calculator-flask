@@ -28,7 +28,7 @@ The Flask server of our [Star Path Viewer](https://star-path-viewer.pages.dev/) 
 
 ## Endpoints
 
-Base URL: <https://teststarpathcalculator.pythonanywhere.com> (*new*)
+Base URL: <https://starpathcalculator.pythonanywhere.com>
 
 ### 1. Seasons
 
