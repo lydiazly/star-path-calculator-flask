@@ -30,7 +30,7 @@ def parse_hip_from_file(filename):
 
     To generate the file, in the root dir:
     ```
-    python -c "from utils.data_utils import hip_validation; hip_validation()" > cases/hip_invalid.txt
+    python -c "from spcalc.utils.data_utils import hip_validation; hip_validation()" > cases/hip_invalid.txt
     ```
     """
     hip_missing, hip_invalid = [], []

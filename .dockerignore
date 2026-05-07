@@ -8,4 +8,3 @@
 !docker/*.sh
 !spcalc/*
 !tests/*
-!cases/*
