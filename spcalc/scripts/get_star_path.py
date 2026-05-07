@@ -39,7 +39,6 @@ examples:
 
 # Read from env or in a subfolder 'data/' in the working directory
 OUTPUT_DIR: Path = Path(os.getenv('OUTPUT_DIR', "./output"))
-OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 # print(f"[Output Location] {OUTPUT_DIR}")
 
 
@@ -217,6 +216,7 @@ def main():
 
     # Write the SVG data to a file ------------------------------------|
     if args.svg:
+        OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
         file_path = OUTPUT_DIR / f'sp_{results["diagram_id"]}.svg'
         # Decode the base64 data to get the SVG content
         svg_data = base64.b64decode(results["svg_data"]).decode('utf-8')
