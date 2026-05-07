@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "star-path-calculator"
-version = "0.1.0"
+version = "0.1.1"
 authors = [{ name = "Stardial" }]
 description = "Astronomical tool for tracing the apparent motions of planets and stars observed from any location on any chosen date."
 readme = "README.md"

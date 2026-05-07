@@ -10,7 +10,7 @@
 [![tzfpy](https://img.shields.io/badge/tzfpy-1.3.1-blue)](https://github.com/ringsaturn/tzfpy)
 [![great-circle-calculator](https://img.shields.io/badge/Great_Circle_Calculator-1.3.1-brightgreen)](https://github.com/seangrogan/great_circle_calculator)
 
-This repository contains the source code of our [Star Path Viewer](https://star-path-viewer.pages.dev/) website, along with Python scripts for executing the code.
+This repository contains the source code of our [Star Path Viewer](https://star-path-viewer.pages.dev/) website, along with CLI scripts.
 
 [→ Team: Stardial](https://github.com/stardial-astro)
 
