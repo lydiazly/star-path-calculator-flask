@@ -28,12 +28,12 @@ dev = [
     "pytest",
     "mypy",
 ]
-pinyin = [
-    "opencc",
-    "pypinyin",
-    "pypinyin-dict",
-    "python-docx",
-]
+# pinyin = [
+#     "opencc",
+#     "pypinyin",
+#     "pypinyin-dict",
+#     "python-docx",
+# ]
 
 [project.scripts]
 get-equinoxes-solstices = "spcalc.scripts.get_equinoxes_solstices:main"
