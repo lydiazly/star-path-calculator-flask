@@ -4,5 +4,5 @@
 from importlib.metadata import version
 
 __all__ = ['run']
-__version__ = version('star-path-calculator')
+__version__ = version('star-path-calculator-flask')
 __author__ = 'Stardial'

@@ -1,13 +1,13 @@
 # Star Path Calculator - Flask
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
-[![python](https://img.shields.io/badge/Python-3.11-3776AB?logo=python&logoColor=white)](https://www.python.org)
+[![python](https://img.shields.io/badge/Python-3.11,3.12-3776AB?logo=python&logoColor=white)](https://www.python.org)
 [![numpy](https://img.shields.io/badge/Numpy-2.4.4-013243?logo=numpy&logoColor=white)](https://numpy.org)
 [![pandas](https://img.shields.io/badge/Pandas-3.0.2-150458?logo=Pandas&logoColor=white)](https://pandas.pydata.org)
 [![matplotlib](https://img.shields.io/badge/Matplotlib-3.10.8-12557C)](https://matplotlib.org)
 [![skyfield](https://img.shields.io/badge/Skyfield-1.54-BD9354)](https://rhodesmill.org/skyfield)
 [![juliandate](https://img.shields.io/badge/Juliandate-1.0.5-BD9354)](https://pypi.org/project/juliandate)
-[![tzfpy](https://img.shields.io/badge/tzfpy-0.16.4-blue)](https://github.com/ringsaturn/tzfpy)
+[![tzfpy](https://img.shields.io/badge/tzfpy-1.3.1-blue)](https://github.com/ringsaturn/tzfpy)
 [![great-circle-calculator](https://img.shields.io/badge/Great_Circle_Calculator-1.3.1-brightgreen)](https://github.com/seangrogan/great_circle_calculator)
 [![Flask](https://img.shields.io/badge/Flask-3.1.3-39A6BD?logo=flask&logoColor=white)](https://flask.palletsprojects.com)
 
@@ -22,15 +22,17 @@ The Flask server of our [Star Path Viewer](https://star-path-viewer.pages.dev/) 
 ## Table of Contents<!-- omit in toc -->
 
 - [Endpoints](#endpoints)
-  - [1. Get dates, times, and and RA/Dec coordinates of equinoxes and solstices by specifying a year and location](#1-get-dates-times-and-and-radec-coordinates-of-equinoxes-and-solstices-by-specifying-a-year-and-location)
-  - [2. Get only the date of one of the equinoxes and solstices](#2-get-only-the-date-of-one-of-the-equinoxes-and-solstices)
-  - [3. Plot the star path and calculates the rising/setting times and twilight stages](#3-plot-the-star-path-and-calculates-the-risingsetting-times-and-twilight-stages)
+  - [1. Seasons](#1-seasons)
+  - [2. Equinoxes and Solstices](#2-equinoxes-and-solstices)
+  - [3. Diagram](#3-diagram)
 
 ## Endpoints
 
 Base URL: <https://teststarpathcalculator.pythonanywhere.com> (*new*)
 
-### 1. Get dates, times, and and RA/Dec coordinates of equinoxes and solstices by specifying a year and location
+### 1. Seasons
+
+Get dates, times, and and RA/Dec coordinates of equinoxes and solstices by specifying a year and a location.
 
 `/seasons`
 
@@ -73,7 +75,9 @@ Example:
 }
 ```
 
-### 2. Get only the date of one of the equinoxes and solstices
+### 2. Equinoxes and Solstices
+
+Get only the date of one of the equinoxes and solstices.
 
 `/equinox`
 
@@ -106,7 +110,9 @@ Example:
 }
 ```
 
-### 3. Plot the star path and calculates the rising/setting times and twilight stages
+### 3. Diagram
+
+Plot the star path and calculates the times and target positions of rising/setting/transit and twilights.
 
 `/diagram`
 
