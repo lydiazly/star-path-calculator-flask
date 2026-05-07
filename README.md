@@ -1,24 +1,18 @@
 # Star Path Calculator
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
-[![python](https://img.shields.io/badge/Python-3.11-3776AB?logo=python&logoColor=white)](https://www.python.org)
+[![python](https://img.shields.io/badge/Python-3.11,3.12-3776AB?logo=python&logoColor=white)](https://www.python.org)
 [![numpy](https://img.shields.io/badge/Numpy-2.4.4-013243?logo=numpy&logoColor=white)](https://numpy.org)
 [![pandas](https://img.shields.io/badge/Pandas-3.0.2-150458?logo=Pandas&logoColor=white)](https://pandas.pydata.org)
 [![matplotlib](https://img.shields.io/badge/Matplotlib-3.10.8-12557C)](https://matplotlib.org)
 [![skyfield](https://img.shields.io/badge/Skyfield-1.54-BD9354)](https://rhodesmill.org/skyfield)
 [![juliandate](https://img.shields.io/badge/Juliandate-1.0.5-BD9354)](https://pypi.org/project/juliandate)
-[![tzfpy](https://img.shields.io/badge/tzfpy-0.16.4-blue)](https://github.com/ringsaturn/tzfpy)
+[![tzfpy](https://img.shields.io/badge/tzfpy-1.3.1-blue)](https://github.com/ringsaturn/tzfpy)
 [![great-circle-calculator](https://img.shields.io/badge/Great_Circle_Calculator-1.3.1-brightgreen)](https://github.com/seangrogan/great_circle_calculator)
 
 This repository contains the source code of our [Star Path Viewer](https://star-path-viewer.pages.dev/) website, along with Python scripts for executing the code.
 
 [→ Team: Stardial](https://github.com/stardial-astro)
-
-[→ Flask server](https://github.com/lydiazly/star-path-calculator-flask)
-
-[→ React client](https://github.com/stardial-astro/star-path-viewer)
-
-[→ Hosted data (star names)](https://github.com/stardial-astro/star-path-data)
 
 ## Table of Contents<!-- omit in toc -->
 
@@ -33,7 +27,6 @@ This repository contains the source code of our [Star Path Viewer](https://star-
 - [Testing](#testing)
 - [Resources](#resources)
 - [References](#references)
-- [Changelog](#changelog)
 
 ## Overview
 
@@ -46,16 +39,16 @@ We are aiming to develop a user-friendly app to facilitate the research in histo
 - :sunrise: Calculates the star's **rising/setting/meridian-transit times** based on the provided date, location, and star.
 - :sunrise_over_mountains: Marks the [civil and nautical twilights](https://en.wikipedia.org/wiki/Twilight).
 - :classical_building: Covers dates from **3001 BCE to 3000 CE**.
-- :ringed_planet: Utilizes [JPL DE406 ephemeris](https://ssd.jpl.nasa.gov/planets/eph_export.html) and [Hipparcos Catalogue](https://www.cosmos.esa.int/web/hipparcos/home) to calculate positions of planets and stars for any given time.
+- :ringed_planet: Utilizes [JPL DE406 ephemeris](https://ssd.jpl.nasa.gov/planets/eph_export.html) and [Hipparcos Catalogue](https://www.cosmos.esa.int/web/hipparcos/home) to calculate the positions of planets and stars for any given time.
 - :telescope: Includes [proper motion](https://en.wikipedia.org/wiki/Proper_motion) of a star if the Hipparcos Catalogue number is provided.
-- :calendar: Accepts the **[Gregorian](https://en.wikipedia.org/wiki/Gregorian_calendar)** or **[Julian](https://en.wikipedia.org/wiki/Julian_calendar)** calendar date input.
-- :star: Supports star or planet input by **name**, **Hipparcos Catalogue number**, or [ICRS coordinates](https://en.wikipedia.org/wiki/International_Celestial_Reference_System_and_its_realizations) **(RA, Dec)**.
-- :night_with_stars: Displays star paths with distinct line styles for daytime, twilight stages, and nighttime.
-- :clock1: Provides **[Standard Time](https://en.wikipedia.org/wiki/Standard_time)**, **[Local Mean Time (LMT)](https://en.wikipedia.org/wiki/Local_mean_time)**, and **[UT1](https://en.wikipedia.org/wiki/Universal_Time)** in the results for the user's reference.
+- :calendar: Supports date input in either **[Gregorian](https://en.wikipedia.org/wiki/Gregorian_calendar)** or **[Julian](https://en.wikipedia.org/wiki/Julian_calendar)** calendar.
+- :star: Supports **name**, **Hipparcos Catalogue number**, or [ICRS coordinates](https://en.wikipedia.org/wiki/International_Celestial_Reference_System_and_its_realizations) **(RA, Dec)** to specify a star.
+- :night_with_stars: Displays star paths with distinct line styles for daytime, twilight transitions, and nighttime.
+- :clock1: Offers **[Standard Time](https://en.wikipedia.org/wiki/Standard_time)**, **[Local Mean Time (LMT)](https://en.wikipedia.org/wiki/Local_mean_time)**, and **[UT1](https://en.wikipedia.org/wiki/Universal_Time)** results for the user's reference.
 
-  ***Note:** The offset represents the Standard Time in the current time zone of a specific location, indicating that Daylight Saving Time (DST) is not in effect.*
+  ***Note:** Standard Time here reflects the current local time zone, without Daylight Saving Time (DST) adjustment.*
 
-> See the [Guides](https://github.com/stardial-astro/star-path-viewer/wiki/1.-Guides) of our web app for more details.
+> See the [Documentation](https://star-path-docs.pages.dev/) of our web app for more details.
 
 ## Installation
 
@@ -88,27 +81,35 @@ Install requirements:
 python3 -m pip install -r requirements.txt
 ```
 
+Install this package in editable mode:
+
+```sh
+python3 -m pip install -e .
+python3 -c "import starpathcalculator; print(starpathcalculator.__version__)"
+```
+
 ### Set up `STAR_PATH_DATA_DIR`
 
-Set up the environment variable `STAR_PATH_DATA_DIR` (e.g., define in `.env`) before running scripts.
+Set up the environment variable `STAR_PATH_DATA_DIR` (e.g., define in `.env`) before running any script.
 The ephemeris data and the Hipparcos Catalogue will be downloaded to and read from this location.
 Defaults to a subfolder `data/` in the current working directory.
 
 ## Scripts
 
+If using `uv`, use `uv run` or activate the virtual environment to run scripts.
+
+If you prefer running a script without installing the package, run by `python3 -m starpathcalculator.scripts.<module_name>`
+
 ### 1. Get times and coordinates of the equinoxes and solstices in a given year
 
-[scripts/get_equinoxes_solstices.py](./scripts/get_equinoxes_solstices.py)
+Command: `get-equinoxes-solstices`
+
+Module: [starpathcalculator.scripts.get_equinoxes_solstices](./starpathcalculator/scripts/get_equinoxes_solstices.py)
 
 Example:
 
 ```sh
-# Using uv
-uv run get-equinoxes-solstices -2000
-
-# or
-python3 ./scripts/get_equinoxes_solstices.py -2000
-```
+get-equinoxes-solstices -2000
 
 <details>
 <summary>Output</summary>
@@ -135,7 +136,7 @@ Dates, times, and ICRS coordinates (J2000) of the equinoxes and solstices in 200
 <summary>Usage</summary>
 
 ```text
-usage: python3 get_equinoxes_solstices.py [-h] [year]
+usage: get-equinoxes-solstices [-h] [year]
 
 Specify a year to obtain the dates, times, and coordinates in RA and Dec of the equinoxes and solstices in that year.
 
@@ -149,26 +150,26 @@ year range:
   -2999/+2999 (Gregorian)
 examples:
   # The current year:
-  python3 get_equinoxes_solstices.py
+  get-equinoxes-solstices
 
   # The equinoxes and solstices of 2001 BCE:
-  python3 get_equinoxes_solstices.py -2000
+  get-equinoxes-solstices -2000
 ```
 
 </details>
 
 ### 2. Plot a star's path on a given date at a given location
 
-[scripts/get_star_path.py](./scripts/get_star_path.py)
+Command: `get-star-path`
+
+Module: [starpathcalculator.scripts.get_star_path](./starpathcalculator/scripts/get_star_path.py)
+
+> :bulb: The [atmospheric refraction](https://en.wikipedia.org/wiki/Atmospheric_refraction) has been taken into account in the calculation.
 
 Example:
 
 ```sh
-# Using uv
-uv run get-star-path -2000 3 1 --lat 40 --lng 116 -o "jupiter"
-
-# or
-python3 ./scripts/get_star_path.py -2000 3 1 --lat 40 --lng 116 -o "jupiter"
+get-star-path -2000 3 1 --lat 40 --lng 116 -o "jupiter"
 ```
 
 <details>
@@ -180,74 +181,86 @@ python3 ./scripts/get_star_path.py -2000 3 1 --lat 40 --lng 116 -o "jupiter"
 [Location]         lat/lng = 40.000/116.000
 [Celestial Object] Jupiter
 
-[Point Details]
-R:
-  alt = 0.000
-  az  = 122.000
-  time_local_mean (Gregorian) = -2000-03-01T03:25:22
-  time_ut1        (Gregorian) = -2000-02-29T19:41:22
-  time_standard   (Gregorian) = -2000-03-01T03:41:22+08:00
-  time_local_mean (Julian)    = -2000-03-18T03:25:22
-  time_ut1        (Julian)    = -2000-03-17T19:41:22
-  time_standard   (Julian)    = -2000-03-18T03:41:22+08:00
-D1:
-  alt = 17.774
-  az  = 146.437
-  time_local_mean (Gregorian) = -2000-03-01T05:38:05
-  time_ut1        (Gregorian) = -2000-02-29T21:54:05
-  time_standard   (Gregorian) = -2000-03-01T05:54:05+08:00
-  time_local_mean (Julian)    = -2000-03-18T05:38:05
-  time_ut1        (Julian)    = -2000-03-17T21:54:05
-  time_standard   (Julian)    = -2000-03-18T05:54:05+08:00
-D2:
-  alt = 20.787
-  az  = 153.305
-  time_local_mean (Gregorian) = -2000-03-01T06:09:25
-  time_ut1        (Gregorian) = -2000-02-29T22:25:25
-  time_standard   (Gregorian) = -2000-03-01T06:25:25+08:00
-  time_local_mean (Julian)    = -2000-03-18T06:09:25
-  time_ut1        (Julian)    = -2000-03-17T22:25:25
-  time_standard   (Julian)    = -2000-03-18T06:25:25+08:00
-D3:
-  alt = 22.868
-  az  = 159.596
-  time_local_mean (Gregorian) = -2000-03-01T06:36:35
-  time_ut1        (Gregorian) = -2000-02-29T22:52:35
-  time_standard   (Gregorian) = -2000-03-01T06:52:35+08:00
-  time_local_mean (Julian)    = -2000-03-18T06:36:35
-  time_ut1        (Julian)    = -2000-03-17T22:52:35
-  time_standard   (Julian)    = -2000-03-18T06:52:35+08:00
-T:
-  alt = 25.682
-  az  = 180.000
-  time_local_mean (Gregorian) = -2000-03-01T07:59:01
-  time_ut1        (Gregorian) = -2000-03-01T00:15:01
-  time_standard   (Gregorian) = -2000-03-01T08:15:01+08:00
-  time_local_mean (Julian)    = -2000-03-18T07:59:01
-  time_ut1        (Julian)    = -2000-03-18T00:15:01
-  time_standard   (Julian)    = -2000-03-18T08:15:01+08:00
-S:
-  alt = 0.000
-  az  = 238.003
-  time_local_mean (Gregorian) = -2000-03-01T12:32:40
-  time_ut1        (Gregorian) = -2000-03-01T04:48:40
-  time_standard   (Gregorian) = -2000-03-01T12:48:40+08:00
-  time_local_mean (Julian)    = -2000-03-18T12:32:40
-  time_ut1        (Julian)    = -2000-03-18T04:48:40
-  time_standard   (Julian)    = -2000-03-18T12:48:40+08:00
+---------------------- [R] Rising ----------------------
+alt = 0.000
+az  = 122.000
+time_local_mean (Gregorian) = -2000-03-01T03:25:22
+time_ut1        (Gregorian) = -2000-02-29T19:41:22
+time_standard   (Gregorian) = -2000-03-01T03:41:22+08:00
+time_local_mean (Julian)    = -2000-03-18T03:25:22
+time_ut1        (Julian)    = -2000-03-17T19:41:22
+time_standard   (Julian)    = -2000-03-18T03:41:22+08:00
+------------ [D3] Astronomical dawn starts -------------
+alt = 14.185
+az  = 140.011
+time_local_mean (Gregorian) = -2000-03-01T05:06:45
+time_ut1        (Gregorian) = -2000-02-29T21:22:45
+time_standard   (Gregorian) = -2000-03-01T05:22:45+08:00
+time_local_mean (Julian)    = -2000-03-18T05:06:45
+time_ut1        (Julian)    = -2000-03-17T21:22:45
+time_standard   (Julian)    = -2000-03-18T05:22:45+08:00
+-------------- [D2] Nautical dawn starts ---------------
+alt = 17.774
+az  = 146.437
+time_local_mean (Gregorian) = -2000-03-01T05:38:05
+time_ut1        (Gregorian) = -2000-02-29T21:54:05
+time_standard   (Gregorian) = -2000-03-01T05:54:05+08:00
+time_local_mean (Julian)    = -2000-03-18T05:38:05
+time_ut1        (Julian)    = -2000-03-17T21:54:05
+time_standard   (Julian)    = -2000-03-18T05:54:05+08:00
+---------------- [D1] Civil dawn starts ----------------
+alt = 20.787
+az  = 153.305
+time_local_mean (Gregorian) = -2000-03-01T06:09:25
+time_ut1        (Gregorian) = -2000-02-29T22:25:25
+time_standard   (Gregorian) = -2000-03-01T06:25:25+08:00
+time_local_mean (Julian)    = -2000-03-18T06:09:25
+time_ut1        (Julian)    = -2000-03-17T22:25:25
+time_standard   (Julian)    = -2000-03-18T06:25:25+08:00
+--------------------- [D0] Sunrise ---------------------
+alt = 22.868
+az  = 159.596
+time_local_mean (Gregorian) = -2000-03-01T06:36:35
+time_ut1        (Gregorian) = -2000-02-29T22:52:35
+time_standard   (Gregorian) = -2000-03-01T06:52:35+08:00
+time_local_mean (Julian)    = -2000-03-18T06:36:35
+time_ut1        (Julian)    = -2000-03-17T22:52:35
+time_standard   (Julian)    = -2000-03-18T06:52:35+08:00
+----------------- [T] Meridian transit -----------------
+alt = 25.682
+az  = 180.000
+time_local_mean (Gregorian) = -2000-03-01T07:59:01
+time_ut1        (Gregorian) = -2000-03-01T00:15:01
+time_standard   (Gregorian) = -2000-03-01T08:15:01+08:00
+time_local_mean (Julian)    = -2000-03-18T07:59:01
+time_ut1        (Julian)    = -2000-03-18T00:15:01
+time_standard   (Julian)    = -2000-03-18T08:15:01+08:00
+--------------------- [S] Setting ----------------------
+alt = 0.000
+az  = 238.003
+time_local_mean (Gregorian) = -2000-03-01T12:32:40
+time_ut1        (Gregorian) = -2000-03-01T04:48:40
+time_standard   (Gregorian) = -2000-03-01T12:48:40+08:00
+time_local_mean (Julian)    = -2000-03-18T12:32:40
+time_ut1        (Julian)    = -2000-03-18T04:48:40
+time_standard   (Julian)    = -2000-03-18T12:48:40+08:00
+
+SVG has been saved to 'output/sp_1778097158.474.svg'
 ```
 
 </details>
 
-The figure will be saved to `sp_{unix_timestamp}.svg`.
+The default output directory is `./output/` and the filename is `output/sp_{unix_timestamp}.svg`. Assign the environment variable `OUTPUT_DIR` to customize the location, e.g., prepend it before the command:
 
-> :bulb: Note that the [atmospheric refraction](https://en.wikipedia.org/wiki/Atmospheric_refraction) effect has been accounted for.
+```sh
+OUTPUT_DIR='./path/to/svg' get-star-path [opts]
+```
 
 <details>
 <summary>Usage</summary>
 
 ```text
-usage: python3 get_star_path.py [-h] [--lat float] [--lng float] [-o str] [-j] [--name] [--no-svg] [year] [month] [day]
+usage: get-star-path [-h] [--lat float] [--lng float] [-o str] [-j] [--name] [--no-svg] [year] [month] [day]
 
 Specify a local date, location, and celestial object to draw the star path. Daylight Saving Time (DST) is ignored.
 
@@ -270,13 +283,13 @@ date range:
   -3000-01-29/+3000-05-06 (Gregorian)
 examples:
   # Plot the star path of Mars:
-  python3 get_star_path.py -o mars
+  get-star-path -o mars
 
   # Plot the star path of Vega by giving its Hipparcos Catalogue number:
-  python3 get_star_path.py -o 91262
+  get-star-path -o 91262
 
   # Plot the star path by giving the star's ICRS coordinates (RA, Dec):
-  python3 get_star_path.py -o 310.7,-5.1
+  get-star-path -o 310.7,-5.1
 ```
 
 </details>
@@ -316,20 +329,3 @@ uvx tox -e py312
 - [Rise, Set, and Twilight Definitions](https://aa.usno.navy.mil/faq/RST_defs)
 
 - R. Tousey and M. J. Koomen, "The Visibility of Stars and Planets During Twilight," *Journal of the Optical Society of America*, Vol. 43, pp. 177-183, 1953. [Online]. Available: <https://opg.optica.org/josa/viewmedia.cfm?uri=josa-43-3-177&seq=0&html=true>
-
-## Changelog
-
-- 2026-04-17
-  - Added Gregorian/Julian calendar to Chinese calendar conversion.
-
-- 2026-04-14
-  - Migrated to uv.
-
-- 2025-03-09
-  - Removed the r=0 tick to avoid a redundant path in SVG.
-
-- 2024-12-16
-  - Included atmospheric refraction in position calculation.
-
-- 2024-12-08
-  - Added Local Mean Time (LMT).

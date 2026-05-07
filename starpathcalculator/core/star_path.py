@@ -2,11 +2,12 @@
 # core/star_path.py
 """Functions to plot star paths.
 
-Refer to the global variables `eph`, `earth`, and `hip_df` by:
->>> import core.data_loader as dl
+Refer to the global variables `eph`, `earth`, `hip_df`, and `timescale` by:
+>>> import starpathcalculator.core.data_loader as dl
 >>> eph = dl.eph
 >>> earth = dl.earth
 >>> hip_df = dl.hip_df
+>>> timescale = dl.timescale
 """
 
 import matplotlib
@@ -15,7 +16,12 @@ matplotlib.use('Agg')  # Use the Agg backend for non-interactive plotting
 
 import base64
 from datetime import datetime
+from great_circle_calculator.great_circle_calculator import (
+    distance_between_points,
+    intermediate_point,
+)
 import io
+import juliandate
 from matplotlib.figure import Figure
 import matplotlib.patheffects as path_effects
 from matplotlib.projections.polar import PolarAxes
@@ -30,17 +36,13 @@ from skyfield.timelib import Time
 from skyfield.units import Angle
 from typing import TypeAlias
 
-import core.data_loader as dl
-from utils.time_utils import (
+import starpathcalculator.core.data_loader as dl
+from starpathcalculator.utils.time_utils import (
     get_standard_offset_by_id,
     ut1_to_standard_time,
     ut1_to_local_mean_time,
 )
-import juliandate
-from great_circle_calculator.great_circle_calculator import (
-    distance_between_points,
-    intermediate_point,
-)
+
 
 __all__ = ["get_diagram"]
 
@@ -51,6 +53,12 @@ STAR_NEVER_RISES_MSG = "WARNING: This star never rises at this location on this 
 horizon_degrees = -0.5666 - 0.0076
 
 label_fontsize = 10
+
+zorder_labels = 0.5
+zorder_path = 5
+zorder_poles = 6
+zorder_zenith = 7
+zorder_points = 10
 
 timescale = dl.timescale
 
@@ -133,7 +141,7 @@ class StarObject:
         s = None
         if self.name is not None:
             self.name = self.name.lower()
-            if self.name in ['mercury', 'venus', 'mars']:
+            if self.name in ['mercury', 'venus', 'mars', 'sun', 'moon']:
                 # skyfield.vectorlib.VectorSum
                 s = dl.eph[self.name]  # type: ignore[index]
             elif self.name in ['jupiter', 'saturn', 'uranus', 'neptune', 'pluto']:
@@ -147,7 +155,7 @@ class StarObject:
                     "The Hipparcos Catalogue number must be in the range [1, 118322]."
                 )
             try:
-                _s = dl.hip_df.loc[self.hip]  # type: ignore[attr-defined]
+                _s = dl.hip_df.loc[self.hip]  # type: ignore[union-attr]
                 if np.isnan(_s['ra_degrees']):
                     raise ValueError(
                         "WARNING: No RA/Dec data available for this star in the Hipparcos Catalogue."
@@ -324,37 +332,61 @@ class StarObject:
 
         for i in range(1, len(ts) - 1):
             alt, az = self._get_star_altaz(ts[i])
+            event_curr, event_next = events[i - 1 : i + 1]
 
-            if events[i - 1] == 4 and events[i] == 3:
-                names.append('N1')
-                altitudes.append(alt.degrees)
-                azimuths.append(az.degrees)
-                times.append(ts[i])
-            if events[i - 1] == 3 and events[i] == 2:
-                names.append('N2')
-                altitudes.append(alt.degrees)
-                azimuths.append(az.degrees)
-                times.append(ts[i])
-            if events[i - 1] == 2 and events[i] == 1:
-                names.append('N3')
-                altitudes.append(alt.degrees)
-                azimuths.append(az.degrees)
-                times.append(ts[i])
-            if events[i - 1] == 1 and events[i] == 2:
-                names.append('D1')
-                altitudes.append(alt.degrees)
-                azimuths.append(az.degrees)
-                times.append(ts[i])
-            if events[i - 1] == 2 and events[i] == 3:
-                names.append('D2')
-                altitudes.append(alt.degrees)
-                azimuths.append(az.degrees)
-                times.append(ts[i])
-            if events[i - 1] == 3 and events[i] == 4:
-                names.append('D3')
-                altitudes.append(alt.degrees)
-                azimuths.append(az.degrees)
-                times.append(ts[i])
+            if event_curr == 4:
+                if event_next == 3:
+                    names.append('N0')  # Sunset
+                    altitudes.append(alt.degrees)
+                    azimuths.append(az.degrees)
+                    times.append(ts[i])
+                    continue
+            if event_curr == 3:
+                if event_next == 2:
+                    names.append('N1')  # Civil dusk ends
+                    altitudes.append(alt.degrees)
+                    azimuths.append(az.degrees)
+                    times.append(ts[i])
+                    continue
+                if event_next == 4:
+                    names.append('D0')  # Sunrise
+                    altitudes.append(alt.degrees)
+                    azimuths.append(az.degrees)
+                    times.append(ts[i])
+                    continue
+            if event_curr == 2:
+                if event_next == 1:
+                    names.append('N2')  # Nautical dusk ends
+                    altitudes.append(alt.degrees)
+                    azimuths.append(az.degrees)
+                    times.append(ts[i])
+                    continue
+                if event_next == 3:
+                    names.append('D1')  # Civil dawn starts
+                    altitudes.append(alt.degrees)
+                    azimuths.append(az.degrees)
+                    times.append(ts[i])
+                    continue
+            if event_curr == 1:
+                if event_next == 0:
+                    names.append('N3')  # Astronomical dusk ends
+                    altitudes.append(alt.degrees)
+                    azimuths.append(az.degrees)
+                    times.append(ts[i])
+                    continue
+                if event_next == 2:
+                    names.append('D2')  # Nautical dawn starts
+                    altitudes.append(alt.degrees)
+                    azimuths.append(az.degrees)
+                    times.append(ts[i])
+                    continue
+            if event_curr == 0:
+                if event_next == 1:
+                    names.append('D3')  # Astronomical dawn starts
+                    altitudes.append(alt.degrees)
+                    azimuths.append(az.degrees)
+                    times.append(ts[i])
+                    continue
 
         return names, altitudes, azimuths, times
 
@@ -378,14 +410,16 @@ class StarObject:
         r_mesh: NDArray[np.float64] = 90.0 - altitudes
         theta_mesh: NDArray[np.float64] = np.radians(azimuths)
 
-        if event == 0 or event == 1:
-            (line,) = ax.plot(theta_mesh, r_mesh, 'k-', lw=2)
-        elif event == 2:
-            (line,) = ax.plot(theta_mesh, r_mesh, 'k--', lw=2, dashes=[2, 2])
-        elif event == 3:
-            (line,) = ax.plot(theta_mesh, r_mesh, 'k--', lw=2, dashes=[2, 2], alpha=0.4)
-        elif event == 4:
-            (line,) = ax.plot(theta_mesh, r_mesh, 'k--', lw=0.5, dashes=[1, 4])
+        if event == 0:  # Nighttime
+            (line,) = ax.plot(theta_mesh, r_mesh, 'k-', lw=2, zorder=zorder_path)  # fmt: skip
+        elif event == 1:  # Astronomical twilight
+            (line,) = ax.plot( theta_mesh, r_mesh, 'k--', lw=2, dashes=[3, 2], zorder=zorder_path)  # fmt: skip
+        elif event == 2:  # Nautical twilight
+            (line,) = ax.plot( theta_mesh, r_mesh, 'k--', lw=1.8, dashes=[2, 1.7], alpha=0.5, zorder=zorder_path)  # fmt: skip
+        elif event == 3:  # Civil twilight
+            (line,) = ax.plot( theta_mesh, r_mesh, 'k--', lw=1.6, dashes=[1, 0.8], alpha=0.35, zorder=zorder_path)  # fmt: skip
+        elif event == 4:  # Daytime
+            (line,) = ax.plot( theta_mesh, r_mesh, 'k--', lw=0.5, dashes=[1, 4], zorder=zorder_path)  # fmt: skip
 
     def _plot_meridian_transit_points(
         self, ax: PolarAxes, t_transit: Time
@@ -396,7 +430,7 @@ class StarObject:
         r: np.float64 = 90.0 - alt.degrees
         theta: np.float64 = np.radians(az.degrees)
 
-        ax.plot(theta, r, 'ro', ms=6)
+        ax.plot(theta, r, 'ro', ms=6, zorder=zorder_points)
         if self.lat >= 0:
             ax.annotate(
                 'T',
@@ -407,6 +441,7 @@ class StarObject:
                 va='top',
                 fontsize=label_fontsize,
                 color='r',
+                zorder=zorder_points,
             )
         else:
             ax.annotate(
@@ -418,6 +453,7 @@ class StarObject:
                 va='bottom',
                 fontsize=label_fontsize,
                 color='r',
+                zorder=zorder_points,
             )
 
         return alt.degrees, az.degrees
@@ -430,7 +466,7 @@ class StarObject:
         azimuths: list[np.float64],
         names: list[str],
     ) -> None:
-        """Plots twilight transition points as well as their labels."""
+        """Plots twilight transition points and their labels."""
         if len(altitudes) == 0:
             return
 
@@ -438,7 +474,7 @@ class StarObject:
         thetas: NDArray[np.float64] = np.radians(azimuths)
 
         for i, j, k in zip(thetas, rs, names):
-            ax.plot(i, j, 'ro', ms=4)
+            ax.plot(i, j, 'ro', ms=4, zorder=zorder_points)
 
         # The code below is to temporarily draw the labels of twilight transition points with adjust_text:
         # texts = []
@@ -513,6 +549,7 @@ class StarObject:
                 ha='center',
                 fontsize=label_fontsize,
                 color='r',
+                zorder=zorder_points,
             )
 
         ax2.axis('off')
@@ -550,7 +587,7 @@ class StarObject:
         ax2.set_xlim(0, 1)
         ax2.set_ylim(0, 1)
 
-        ax2.plot(x0, y0, 'ro', ms=6)
+        ax2.plot(x0, y0, 'ro', ms=6, zorder=zorder_points)
         ax2.annotate(
             'R',
             (x0, y0),
@@ -560,8 +597,9 @@ class StarObject:
             va='center',
             fontsize=label_fontsize,
             color='r',
+            zorder=zorder_points,
         )
-        ax2.plot(x1, y1, 'ro', ms=6)
+        ax2.plot(x1, y1, 'ro', ms=6, zorder=zorder_points)
         ax2.annotate(
             'S',
             (x1, y1),
@@ -571,6 +609,7 @@ class StarObject:
             va='center',
             fontsize=label_fontsize,
             color='r',
+            zorder=zorder_points,
         )
         ax2.axis('off')
 
@@ -585,7 +624,7 @@ class StarObject:
         if self.lat > 0:
             r = 90 - self.lat
             theta = 0
-            ax.plot(theta, r, 'b+', ms=8)
+            ax.plot(theta, r, 'b+', ms=8, zorder=zorder_poles)
             ax.annotate(
                 'NCP',
                 (theta, r),
@@ -595,11 +634,12 @@ class StarObject:
                 va='center',
                 fontsize=label_fontsize,
                 color='b',
+                zorder=zorder_poles,
             )
         elif self.lat < 0:
             r = 90 + self.lat
             theta = np.radians(180)
-            ax.plot(theta, r, 'b+', ms=8)
+            ax.plot(theta, r, 'b+', ms=8, zorder=zorder_poles)
             ax.annotate(
                 'SCP',
                 (theta, r),
@@ -609,6 +649,7 @@ class StarObject:
                 va='center',
                 fontsize=label_fontsize,
                 color='b',
+                zorder=zorder_poles,
             )
 
     def _get_star_path_diagram(
@@ -704,8 +745,11 @@ class StarObject:
                 va='bottom',
                 fontsize=label_fontsize,
                 color='gray',
+                zorder=zorder_labels,
             )
-        ax.plot(0, 0, 'bo', ms=2, mec='b')
+
+        # Plot the zenith ---------------------------------------------|
+        ax.plot(0, 0, 'bo', ms=2, mec='b', zorder=zorder_zenith)
         ax.annotate(
             'Z',
             (0, 0),
@@ -715,6 +759,7 @@ class StarObject:
             va='center',
             fontsize=label_fontsize,
             color='b',
+            zorder=zorder_zenith,
         )
 
         now = datetime.now()

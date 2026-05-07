@@ -3,8 +3,9 @@
 import numpy as np
 from pathlib import Path
 import pytest
-import core.data_loader as dl
-from utils.star_utils import hip_to_name
+
+import starpathcalculator.core.data_loader as dl
+from starpathcalculator.utils.star_utils import hip_to_name
 
 
 # https://www.cosmos.esa.int/web/hipparcos/catalogues
@@ -12,12 +13,12 @@ from utils.star_utils import hip_to_name
     "hip_valid, radec_expected",
     [
         (87937, "269.454, 4.668"),
-        (8102, "26.021, -15.940"),
+        ( 8102, "26.021, -15.940"),
         (32349, "101.289, -16.713"),
         (71683, "219.920, -60.835"),
         (70890, "217.449, -62.681"),
     ],
-)
+)  # fmt: skip
 def test_hip_valid(hip_valid, radec_expected):
     """Tests valid HIP entries."""
     s = dl.hip_df.loc[hip_valid]
@@ -29,7 +30,7 @@ def parse_hip_from_file(filename):
 
     To generate the file, in the root dir:
     ```
-    python -c "from utils.data_utils import hip_validation; hip_validation()" > cases/cases_hip_invalid.txt
+    python -c "from utils.data_utils import hip_validation; hip_validation()" > cases/hip_invalid.txt
     ```
     """
     hip_missing, hip_invalid = [], []
@@ -46,7 +47,7 @@ def parse_hip_from_file(filename):
 
 
 # Read HIP numbers from the file
-cases_filename = "cases/cases_hip_invalid.txt"
+cases_filename = "cases/hip_invalid.txt"
 hip_invalid, hip_missing = parse_hip_from_file(
     Path(__file__).parent.parent / cases_filename
 )
@@ -69,14 +70,14 @@ def test_hip_no_entry(hip_missing):
 @pytest.mark.parametrize(
     "hip, name_expected",
     [
-        (91262, 'alf_Lyr/3_Lyr/Vega'),
-        (11767, 'alf_UMi/1_UMi/Polaris'),
-        (82080, 'eps_UMi/22_UMi'),
+        ( 91262, 'alf_Lyr/3_Lyr/Vega'),
+        ( 11767, 'alf_UMi/1_UMi/Polaris'),
+        ( 82080, 'eps_UMi/22_UMi'),
         (102098, 'alf_Cyg/50_Cyg/Deneb'),
-        (0, ''),
-        (123, ''),
+        (     0, ''),
+        (   123, ''),
     ],
-)
+)  # fmt: skip
 def test_hip_to_name(hip, name_expected):
     """Tests finding the name of a given HIP."""
     assert hip_to_name(hip) == name_expected

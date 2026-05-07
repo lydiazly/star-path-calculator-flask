@@ -4,7 +4,7 @@
 """Loads data and initiates global variables `eph`, `earth`, and `hip_df`.
 
 Example usage:
->>> import core.data_loader as dl
+>>> import starpathcalculator.core.data_loader as dl
 >>> earth = dl.earth
 >>> earth.target_name
 '399 EARTH'
@@ -14,8 +14,6 @@ import os
 from pathlib import Path
 from skyfield.api import Loader
 from skyfield.data import hipparcos
-
-from config import EPH_DATA_FILE, HIP_DATA_FILE
 
 __all__ = [
     "DATA_DIR",
@@ -37,10 +35,19 @@ try:
 except Exception:
     pass
 
-# Read from env or in a subfolder 'data/' in the working directory
+
+# Ephemeris data (https://ssd.jpl.nasa.gov/planets/eph_export.html)
+EPH_DATA_FILE = "de406.bsp"  # JED 0625360.5 (-3000 FEB 23) to 2816912.50 (+3000 MAY 06)
+# EPH_DATA_FILE = "de422.bsp"  # JED 625648.5, (-3000 DEC 07) to JED 2816816.5, (3000 JAN 30)
+# EPH_DATA_FILE = "de440.bsp"  # JED 2287184.5, (1549 DEC 31) to JED 2688976.5, (2650 JAN 25)
+
+# The Hipparcos and Tycho catalogues (https://cdsarc.cds.unistra.fr/ftp/cats/I/239)
+HIP_DATA_FILE = "hip_main.dat"  # 25-Jun-1997
+
+# Read from env or in a subfolder 'data/' in the current working directory
 DATA_DIR: Path = Path(os.getenv('STAR_PATH_DATA_DIR', Path.cwd() / "data"))
 DATA_DIR.mkdir(parents=True, exist_ok=True)
-# print(f"[Data Location] {DATA_DIR}")
+# print(f"[Data location] {DATA_DIR}")
 
 # Set the loader with the data location
 load = Loader(str(DATA_DIR))
@@ -74,6 +81,8 @@ def load_data() -> None:
         # Load from or download to DATA_DIR
         eph = load(EPH_DATA_FILE)
         earth = eph['earth']
+        if eph is None or earth is None:
+            raise ValueError("Loaded ephemeris data is invalid.")
     except Exception as e:
         raise Exception(f"Failed to load ephemeris data: {str(e)}")
 
@@ -84,5 +93,7 @@ def load_data() -> None:
         # Load from or download to DATA_DIR
         with load.open(url_or_path) as f:
             hip_df = hipparcos.load_dataframe(f)
+        if hip_df is None:
+            raise ValueError("Loaded Hipparcos Catalogue is invalid.")
     except Exception as e:
         raise Exception(f"Failed to load Hipparcos Catalogue: {str(e)}")

@@ -4,9 +4,8 @@
 
 import pandas as pd
 from pathlib import Path
-# import pickle
 
-from core.data_loader import DATA_DIR
+from starpathcalculator.core.data_loader import DATA_DIR
 
 
 __all__ = []

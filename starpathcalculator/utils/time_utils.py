@@ -2,13 +2,12 @@
 # utils/time_utils.py
 """Functions to handle time conversions."""
 
-# from typing import Tuple
 from datetime import datetime, timedelta
 import juliandate
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
-from config import CC_YEAR_RANGE
-from core.data_loader import timescale, cal_hans, cal_hant
+from starpathcalculator.config import CC_YEAR_RANGE
+from starpathcalculator.core.data_loader import timescale, cal_hans, cal_hant
 
 __all__ = [
     "get_tzid_by_tzfpy",
@@ -19,9 +18,6 @@ __all__ = [
     "gregorian_to_julian",
     "get_cc_date",
 ]
-
-
-naive_dt = datetime(2000, 1, 1)
 
 
 # def get_standard_offset(lng: float, lat: float) -> float:
@@ -48,6 +44,12 @@ def get_tzid_by_tzfpy(lat: float, lng: float) -> str:
     from tzfpy import get_tz
 
     tz_id = get_tz(lng=lng, lat=lat)
+    # In recent tzfpy versions, lng=±180 is invalid that returns ''
+    if not tz_id:
+        if round(lng) == 180:
+            tz_id = get_tz(lng=179.9999999999999, lat=lat)
+        elif round(lng) == -180:
+            tz_id = get_tz(lng=-179.9999999999999, lat=lat)
     return tz_id
 
 
@@ -57,6 +59,7 @@ def get_tzid_by_tzfpy(lat: float, lng: float) -> str:
 #     """
 #     from pytz import timezone
 #     tz = timezone(tz_id)
+#     naive_dt = datetime(2000, 1, 1)
 #     local_dt = tz.localize(naive_dt, is_dst=dst)
 #     offset_in_minutes = local_dt.utcoffset().total_seconds() / 60
 #     return offset_in_minutes

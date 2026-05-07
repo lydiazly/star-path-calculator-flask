@@ -13,5 +13,6 @@ services:
       - STAR_PATH_DATA_DIR=/app/data
     volumes:
       - ./data:/app/data:ro
+      - ./output:/app/output
     stdin_open: true  # Keep STDIN open (-i)
     tty: true  # Allocate a pseudo-TTY (-t)

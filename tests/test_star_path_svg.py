@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 # tests/test_star_path_svg.py
 import base64
+from importlib.metadata import version, PackageNotFoundError
 import matplotlib
 import numpy
 from packaging.version import Version
@@ -9,21 +10,33 @@ import platform
 import pytest
 import re
 import skyfield
-from core.star_path import get_diagram
+
+from starpathcalculator.core.star_path import get_diagram
+
+# Skip every test in this module
+# pytestmark = pytest.mark.skip(reason="Cases are outdated, do not run")
+
+try:
+    __version__ = version('star-path-calculator')
+except PackageNotFoundError:
+    __version__ = ''
 
 print("\n=== SVG ===")
+print(f"Package version: {__version__}")
 print(f"python: {platform.python_version()}")
 print(f"numpy: {numpy.__version__}, matplotlib: {matplotlib.__version__}")
 
 if Version(numpy.__version__) < Version('2.0.0'):
-    reference_svg_filename = 'cases/diagram_matplotlib3.5.2.svg'
-    print("Test cases: python 3.10, numpy 2.2.3, matplotlib 3.5.2, skyfield 1.49")
+    reference_svg_filename = 'cases/diagram_mpl3.5.2.svg'
+    print("Test cases: 0.1.0, python 3.10, numpy 2.2.3, matplotlib 3.5.2, skyfield 1.49")
 elif Version(skyfield.__version__) < Version('1.54'):
-    reference_svg_filename = 'cases/diagram_matplotlib3.10.0.svg'
-    print("Test cases: python 3.10, numpy 2.2.3, matplotlib 3.10.0, skyfield 1.49")
+    reference_svg_filename = 'cases/diagram_mpl3.10.0.svg'
+    print("Test cases: 0.1.0, python 3.10, numpy 2.2.3, matplotlib 3.10.0, skyfield 1.49")
 else:
-    reference_svg_filename = 'cases/diagram_matplotlib3.10.8_skyfield1.54.svg'
-    print("Test cases: python 3.12, numpy 2.4.4, matplotlib 3.10.8, skyfield 1.54")
+    # reference_svg_filename = 'cases/diagram_mpl3.10.8_skyfield1.54.svg'
+    # print("Test cases: 0.1.0, python 3.12, numpy 2.4.4, matplotlib 3.10.8, skyfield 1.54")
+    reference_svg_filename = 'cases/diagram_mpl3.10.8_skyfield1.54_0.1.1_docker.svg'
+    print("Test cases (docker): 0.1.1, python 3.12.3, numpy 2.4.4, matplotlib 3.10.8, skyfield 1.54")
 
 
 def normalize_svg_content(svg_content: str) -> str:
@@ -53,15 +66,7 @@ with open(Path(__file__).parent.parent / reference_svg_filename, encoding='utf-8
     SVG_REF = normalize_svg_content(f.read())
 
 
-test_input = {
-    'year': -2000,
-    'month': 3,
-    'day': 1,
-    'lat': 40,
-    'lng': 116,
-    'tz_id': 'Asia/Shanghai',
-    'name': 'jupiter',
-}
+test_input = {'year': -2000, 'month': 3, 'day': 1, 'lat': 40, 'lng': 116, 'tz_id': 'Asia/Shanghai', 'name': 'jupiter'}  # fmt: skip
 
 
 @pytest.mark.parametrize("normalized_reference", [SVG_REF])
