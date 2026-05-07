@@ -285,7 +285,7 @@ def hip_validation(hip_min=None, hip_max=None):
     mag_nan: 1, ra_nan: 263, dec_nan: 263
     """
     import numpy as np
-    import core.data_loader as dl
+    import spcalc.core.data_loader as dl
 
     idx = dl.hip_df.index
     hip_first = dl.hip_df.head(1).index.item()
