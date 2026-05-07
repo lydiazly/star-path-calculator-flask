@@ -8,8 +8,8 @@ from datetime import datetime
 from pathlib import Path
 import sys
 
-from starpathcalculator.core.seasons import get_coords
-from starpathcalculator.utils.script_utils import (
+from spcalc.core.seasons import get_coords
+from spcalc.utils.script_utils import (
     EPH_DATE_MIN,
     EPH_DATE_MAX,
     format_datetime,

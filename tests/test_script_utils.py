@@ -2,7 +2,7 @@
 # tests/test_script_utils.py
 import pytest
 
-from starpathcalculator.utils.script_utils import (
+from spcalc.utils.script_utils import (
     format_datetime,
     format_datetime_iso,
     validate_datetime,

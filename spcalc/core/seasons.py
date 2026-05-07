@@ -3,7 +3,7 @@
 """Functions to calculate the time and coordinates of equinoxes and solstices.
 
 Refer to the global variables `eph`, `earth`, and `timescale` by:
->>> import starpathcalculator.core.data_loader as dl
+>>> import spcalc.core.data_loader as dl
 >>> eph = dl.eph
 >>> earth = dl.earth
 >>> timescale = dl.timescale
@@ -14,7 +14,7 @@ from numpy.typing import NDArray
 from skyfield.almanac import find_discrete, seasons
 from skyfield.timelib import Time
 
-import starpathcalculator.core.data_loader as dl
+import spcalc.core.data_loader as dl
 
 __all__ = ["get_coords", "get_seasons"]
 

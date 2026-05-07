@@ -10,8 +10,8 @@ import pytest
 import re
 import skyfield
 
-from starpathcalculator import __version__
-from starpathcalculator.core.star_path import get_diagram
+from spcalc import __version__
+from spcalc.core.star_path import get_diagram
 
 # Skip every test in this module
 # pytestmark = pytest.mark.skip(reason="Cases are outdated, do not run")

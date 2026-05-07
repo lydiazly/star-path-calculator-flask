@@ -4,7 +4,7 @@
 """Loads data and initiates global variables `eph`, `earth`, and `hip_df`.
 
 Example usage:
->>> import starpathcalculator.core.data_loader as dl
+>>> import spcalc.core.data_loader as dl
 >>> earth = dl.earth
 >>> earth.target_name
 '399 EARTH'

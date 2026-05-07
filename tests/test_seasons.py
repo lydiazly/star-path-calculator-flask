@@ -8,8 +8,8 @@ import platform
 import pytest
 import skyfield
 
-from starpathcalculator import __version__
-from starpathcalculator.core.seasons import get_coords, get_seasons
+from spcalc import __version__
+from spcalc.core.seasons import get_coords, get_seasons
 from helpers import assert_iterable_equal
 
 # Docker results (same as local tests)

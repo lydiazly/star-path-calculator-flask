@@ -4,7 +4,7 @@
 
 import pandas as pd
 
-from starpathcalculator.core.data_loader import DATA_DIR
+from spcalc.core.data_loader import DATA_DIR
 
 __all__ = ["hip_to_name"]
 

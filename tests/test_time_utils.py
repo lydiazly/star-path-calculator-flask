@@ -2,8 +2,8 @@
 # tests/test_time_utils.py
 import pytest
 
-from starpathcalculator.core.data_loader import timescale
-from starpathcalculator.utils.time_utils import (
+from spcalc.core.data_loader import timescale
+from spcalc.utils.time_utils import (
     get_tzid_by_tzfpy,
     get_standard_offset_by_id,
     ut1_to_standard_time,

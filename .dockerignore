@@ -6,6 +6,6 @@
 !uv.lock
 !requirements*.txt
 !docker/*.sh
-!starpathcalculator/*
+!spcalc/*
 !tests/*
 !cases/*
