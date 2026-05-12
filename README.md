@@ -11,7 +11,7 @@
 [![great-circle-calculator](https://img.shields.io/badge/Great_Circle_Calculator-1.3.1-brightgreen)](https://github.com/seangrogan/great_circle_calculator)
 [![Flask](https://img.shields.io/badge/Flask-3.1.3-39A6BD?logo=flask&logoColor=white)](https://flask.palletsprojects.com)
 
-The Flask server of our [Star Path Viewer](https://star-path-viewer.pages.dev/) website.
+The Flask server of our [Star Path Viewer](https://starpathviewer.cc/) website.
 
 [→ Team: Stardial](https://github.com/stardial-astro)
 
